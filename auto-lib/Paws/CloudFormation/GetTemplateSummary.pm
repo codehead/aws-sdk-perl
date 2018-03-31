@@ -1,7 +1,8 @@
 
-package Paws::CloudFormation::GetTemplateSummary {
+package Paws::CloudFormation::GetTemplateSummary;
   use Moose;
   has StackName => (is => 'ro', isa => 'Str');
+  has StackSetName => (is => 'ro', isa => 'Str');
   has TemplateBody => (is => 'ro', isa => 'Str');
   has TemplateURL => (is => 'ro', isa => 'Str');
 
@@ -10,7 +11,6 @@ package Paws::CloudFormation::GetTemplateSummary {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'GetTemplateSummary');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::CloudFormation::GetTemplateSummaryOutput');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'GetTemplateSummaryResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +25,7 @@ This class represents the parameters used for calling the method GetTemplateSumm
 AWS CloudFormation service. Use the attributes of this class
 as arguments to method GetTemplateSummary.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to GetTemplateSummary.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to GetTemplateSummary.
 
 As an example:
 
@@ -35,9 +35,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 StackName => Str
 
-  
+=head2 StackName => Str
 
 The name or the stack ID that is associated with the stack, which are
 not always interchangeable. For running stacks, you can specify either
@@ -45,56 +44,40 @@ the stack's name or its unique stack ID. For deleted stack, you must
 specify the unique stack ID.
 
 Conditional: You must specify only one of the following parameters:
-C<StackName>, C<TemplateBody>, or C<TemplateURL>.
+C<StackName>, C<StackSetName>, C<TemplateBody>, or C<TemplateURL>.
 
 
 
+=head2 StackSetName => Str
 
+The name or unique ID of the stack set from which the stack was
+created.
 
-
-
+Conditional: You must specify only one of the following parameters:
+C<StackName>, C<StackSetName>, C<TemplateBody>, or C<TemplateURL>.
 
 
 
 =head2 TemplateBody => Str
-
-  
 
 Structure containing the template body with a minimum length of 1 byte
 and a maximum length of 51,200 bytes. For more information about
 templates, see Template Anatomy in the AWS CloudFormation User Guide.
 
 Conditional: You must specify only one of the following parameters:
-C<StackName>, C<TemplateBody>, or C<TemplateURL>.
-
-
-
-
-
-
-
+C<StackName>, C<StackSetName>, C<TemplateBody>, or C<TemplateURL>.
 
 
 
 =head2 TemplateURL => Str
 
-  
-
 Location of file containing the template body. The URL must point to a
-template (max size: 460,800 bytes) located in an Amazon S3 bucket. For
-more information about templates, see Template Anatomy in the AWS
-CloudFormation User Guide.
+template (max size: 460,800 bytes) that is located in an Amazon S3
+bucket. For more information about templates, see Template Anatomy in
+the AWS CloudFormation User Guide.
 
 Conditional: You must specify only one of the following parameters:
-C<StackName>, C<TemplateBody>, or C<TemplateURL>.
-
-
-
-
-
-
-
-
+C<StackName>, C<StackSetName>, C<TemplateBody>, or C<TemplateURL>.
 
 
 

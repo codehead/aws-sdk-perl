@@ -1,10 +1,9 @@
 
-package Paws::ElastiCache::CreateReplicationGroupResult {
+package Paws::ElastiCache::CreateReplicationGroupResult;
   use Moose;
-  with 'Paws::API::ResultParser';
   has ReplicationGroup => (is => 'ro', isa => 'Paws::ElastiCache::ReplicationGroup');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,9 +14,13 @@ Paws::ElastiCache::CreateReplicationGroupResult
 
 =head1 ATTRIBUTES
 
-=head2 ReplicationGroup => Paws::ElastiCache::ReplicationGroup
 
-  
+=head2 ReplicationGroup => L<Paws::ElastiCache::ReplicationGroup>
+
+
+
+
+=head2 _request_id => Str
 
 
 =cut

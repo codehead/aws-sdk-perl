@@ -1,14 +1,13 @@
 
-package Paws::ElastiCache::DeleteCacheSubnetGroup {
+package Paws::ElastiCache::DeleteCacheSubnetGroup;
   use Moose;
   has CacheSubnetGroupName => (is => 'ro', isa => 'Str', required => 1);
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DeleteCacheSubnetGroup');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -23,7 +22,7 @@ This class represents the parameters used for calling the method DeleteCacheSubn
 Amazon ElastiCache service. Use the attributes of this class
 as arguments to method DeleteCacheSubnetGroup.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DeleteCacheSubnetGroup.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DeleteCacheSubnetGroup.
 
 As an example:
 
@@ -33,22 +32,13 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> CacheSubnetGroupName => Str
 
-  
+=head2 B<REQUIRED> CacheSubnetGroupName => Str
 
 The name of the cache subnet group to delete.
 
 Constraints: Must contain no more than 255 alphanumeric characters or
 hyphens.
-
-
-
-
-
-
-
-
 
 
 

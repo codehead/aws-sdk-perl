@@ -1,11 +1,10 @@
 
-package Paws::CloudFormation::ListStackResourcesOutput {
+package Paws::CloudFormation::ListStackResourcesOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
   has NextToken => (is => 'ro', isa => 'Str');
   has StackResourceSummaries => (is => 'ro', isa => 'ArrayRef[Paws::CloudFormation::StackResourceSummary]');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -16,35 +15,19 @@ Paws::CloudFormation::ListStackResourcesOutput
 
 =head1 ATTRIBUTES
 
+
 =head2 NextToken => Str
 
-  
-
-String that identifies the start of the next list of stack resources,
-if there is one.
+If the output exceeds 1 MB, a string that identifies the next page of
+stack resources. If no additional page exists, this value is null.
 
 
-
-
-
-
-
-
-
-=head2 StackResourceSummaries => ArrayRef[Paws::CloudFormation::StackResourceSummary]
-
-  
+=head2 StackResourceSummaries => ArrayRef[L<Paws::CloudFormation::StackResourceSummary>]
 
 A list of C<StackResourceSummary> structures.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

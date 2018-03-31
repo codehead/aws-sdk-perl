@@ -1,10 +1,9 @@
 
-package Paws::DirectConnect::VirtualGateways {
+package Paws::DirectConnect::VirtualGateways;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has virtualGateways => (is => 'ro', isa => 'ArrayRef[Paws::DirectConnect::VirtualGateway]');
+  has VirtualGateways => (is => 'ro', isa => 'ArrayRef[Paws::DirectConnect::VirtualGateway]', traits => ['NameInRequest'], request_name => 'virtualGateways' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::DirectConnect::VirtualGateways
 
 =head1 ATTRIBUTES
 
-=head2 virtualGateways => ArrayRef[Paws::DirectConnect::VirtualGateway]
 
-  
+=head2 VirtualGateways => ArrayRef[L<Paws::DirectConnect::VirtualGateway>]
 
 A list of virtual private gateways.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

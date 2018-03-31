@@ -1,6 +1,7 @@
 
-package Paws::SSM::DescribeDocument {
+package Paws::SSM::DescribeDocument;
   use Moose;
+  has DocumentVersion => (is => 'ro', isa => 'Str');
   has Name => (is => 'ro', isa => 'Str', required => 1);
 
   use MooseX::ClassAttribute;
@@ -8,7 +9,6 @@ package Paws::SSM::DescribeDocument {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeDocument');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::SSM::DescribeDocumentResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -20,10 +20,10 @@ Paws::SSM::DescribeDocument - Arguments for method DescribeDocument on Paws::SSM
 =head1 DESCRIPTION
 
 This class represents the parameters used for calling the method DescribeDocument on the 
-Amazon Simple Systems Management Service service. Use the attributes of this class
+Amazon Simple Systems Manager (SSM) service. Use the attributes of this class
 as arguments to method DescribeDocument.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeDocument.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeDocument.
 
 As an example:
 
@@ -33,19 +33,17 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
+
+=head2 DocumentVersion => Str
+
+The document version for which you want information. Can be a specific
+version or the default version.
+
+
+
 =head2 B<REQUIRED> Name => Str
 
-  
-
-The name of the configuration document.
-
-
-
-
-
-
-
-
+The name of the Systems Manager document.
 
 
 

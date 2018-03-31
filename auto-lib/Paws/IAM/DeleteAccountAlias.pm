@@ -1,14 +1,13 @@
 
-package Paws::IAM::DeleteAccountAlias {
+package Paws::IAM::DeleteAccountAlias;
   use Moose;
   has AccountAlias => (is => 'ro', isa => 'Str', required => 1);
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DeleteAccountAlias');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -23,7 +22,7 @@ This class represents the parameters used for calling the method DeleteAccountAl
 AWS Identity and Access Management service. Use the attributes of this class
 as arguments to method DeleteAccountAlias.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DeleteAccountAlias.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DeleteAccountAlias.
 
 As an example:
 
@@ -33,19 +32,14 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> AccountAlias => Str
 
-  
+=head2 B<REQUIRED> AccountAlias => Str
 
 The name of the account alias to delete.
 
-
-
-
-
-
-
-
+This parameter allows (per its regex pattern) a string of characters
+consisting of lowercase letters, digits, and dashes. You cannot start
+or finish with a dash, nor can you have two dashes in a row.
 
 
 

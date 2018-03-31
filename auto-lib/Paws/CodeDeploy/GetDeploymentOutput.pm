@@ -1,10 +1,9 @@
 
-package Paws::CodeDeploy::GetDeploymentOutput {
+package Paws::CodeDeploy::GetDeploymentOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has deploymentInfo => (is => 'ro', isa => 'Paws::CodeDeploy::DeploymentInfo');
+  has DeploymentInfo => (is => 'ro', isa => 'Paws::CodeDeploy::DeploymentInfo', traits => ['NameInRequest'], request_name => 'deploymentInfo' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::CodeDeploy::GetDeploymentOutput
 
 =head1 ATTRIBUTES
 
-=head2 deploymentInfo => Paws::CodeDeploy::DeploymentInfo
 
-  
+=head2 DeploymentInfo => L<Paws::CodeDeploy::DeploymentInfo>
 
 Information about the deployment.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

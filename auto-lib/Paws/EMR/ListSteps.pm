@@ -1,17 +1,16 @@
 
-package Paws::EMR::ListSteps {
+package Paws::EMR::ListSteps;
   use Moose;
   has ClusterId => (is => 'ro', isa => 'Str', required => 1);
   has Marker => (is => 'ro', isa => 'Str');
-  has StepIds => (is => 'ro', isa => 'ArrayRef[Str]');
-  has StepStates => (is => 'ro', isa => 'ArrayRef[Str]');
+  has StepIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
+  has StepStates => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'ListSteps');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::EMR::ListStepsOutput');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -26,7 +25,7 @@ This class represents the parameters used for calling the method ListSteps on th
 Amazon Elastic MapReduce service. Use the attributes of this class
 as arguments to method ListSteps.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to ListSteps.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to ListSteps.
 
 As an example:
 
@@ -36,65 +35,29 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> ClusterId => Str
 
-  
+=head2 B<REQUIRED> ClusterId => Str
 
 The identifier of the cluster for which to list the steps.
 
 
 
-
-
-
-
-
-
-
 =head2 Marker => Str
-
-  
 
 The pagination token that indicates the next set of results to
 retrieve.
 
 
 
-
-
-
-
-
-
-
-=head2 StepIds => ArrayRef[Str]
-
-  
+=head2 StepIds => ArrayRef[Str|Undef]
 
 The filter to limit the step list based on the identifier of the steps.
 
 
 
-
-
-
-
-
-
-
-=head2 StepStates => ArrayRef[Str]
-
-  
+=head2 StepStates => ArrayRef[Str|Undef]
 
 The filter to limit the step list based on certain states.
-
-
-
-
-
-
-
-
 
 
 

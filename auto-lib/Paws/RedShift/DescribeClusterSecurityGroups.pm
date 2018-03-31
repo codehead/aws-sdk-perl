@@ -1,18 +1,17 @@
 
-package Paws::RedShift::DescribeClusterSecurityGroups {
+package Paws::RedShift::DescribeClusterSecurityGroups;
   use Moose;
   has ClusterSecurityGroupName => (is => 'ro', isa => 'Str');
   has Marker => (is => 'ro', isa => 'Str');
   has MaxRecords => (is => 'ro', isa => 'Int');
-  has TagKeys => (is => 'ro', isa => 'ArrayRef[Str]');
-  has TagValues => (is => 'ro', isa => 'ArrayRef[Str]');
+  has TagKeys => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
+  has TagValues => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeClusterSecurityGroups');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::RedShift::ClusterSecurityGroupMessage');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'DescribeClusterSecurityGroupsResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -27,7 +26,7 @@ This class represents the parameters used for calling the method DescribeCluster
 Amazon Redshift service. Use the attributes of this class
 as arguments to method DescribeClusterSecurityGroups.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeClusterSecurityGroups.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeClusterSecurityGroups.
 
 As an example:
 
@@ -37,9 +36,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 ClusterSecurityGroupName => Str
 
-  
+=head2 ClusterSecurityGroupName => Str
 
 The name of a cluster security group for which you are requesting
 details. You can specify either the B<Marker> parameter or a
@@ -49,16 +47,7 @@ Example: C<securitygroup1>
 
 
 
-
-
-
-
-
-
-
 =head2 Marker => Str
-
-  
 
 An optional parameter that specifies the starting point to return a set
 of response records. When the results of a
@@ -73,16 +62,7 @@ parameter or the B<Marker> parameter, but not both.
 
 
 
-
-
-
-
-
-
-
 =head2 MaxRecords => Int
-
-  
 
 The maximum number of response records to return in each call. If the
 number of remaining response records exceeds the specified
@@ -96,16 +76,7 @@ Constraints: minimum 20, maximum 100.
 
 
 
-
-
-
-
-
-
-
-=head2 TagKeys => ArrayRef[Str]
-
-  
+=head2 TagKeys => ArrayRef[Str|Undef]
 
 A tag key or keys for which you want to return all matching cluster
 security groups that are associated with the specified key or keys. For
@@ -117,16 +88,7 @@ with them.
 
 
 
-
-
-
-
-
-
-
-=head2 TagValues => ArrayRef[Str]
-
-  
+=head2 TagValues => ArrayRef[Str|Undef]
 
 A tag value or values for which you want to return all matching cluster
 security groups that are associated with the specified tag value or
@@ -135,14 +97,6 @@ tagged with values called C<admin> and C<test>. If you specify both of
 these tag values in the request, Amazon Redshift returns a response
 with the security groups that have either or both of these tag values
 associated with them.
-
-
-
-
-
-
-
-
 
 
 

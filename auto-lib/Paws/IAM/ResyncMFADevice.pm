@@ -1,5 +1,5 @@
 
-package Paws::IAM::ResyncMFADevice {
+package Paws::IAM::ResyncMFADevice;
   use Moose;
   has AuthenticationCode1 => (is => 'ro', isa => 'Str', required => 1);
   has AuthenticationCode2 => (is => 'ro', isa => 'Str', required => 1);
@@ -9,9 +9,8 @@ package Paws::IAM::ResyncMFADevice {
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'ResyncMFADevice');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -26,7 +25,7 @@ This class represents the parameters used for calling the method ResyncMFADevice
 AWS Identity and Access Management service. Use the attributes of this class
 as arguments to method ResyncMFADevice.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to ResyncMFADevice.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to ResyncMFADevice.
 
 As an example:
 
@@ -36,64 +35,40 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> AuthenticationCode1 => Str
 
-  
+=head2 B<REQUIRED> AuthenticationCode1 => Str
 
 An authentication code emitted by the device.
 
-
-
-
-
-
-
+The format for this parameter is a sequence of six digits.
 
 
 
 =head2 B<REQUIRED> AuthenticationCode2 => Str
 
-  
-
 A subsequent authentication code emitted by the device.
 
-
-
-
-
-
-
+The format for this parameter is a sequence of six digits.
 
 
 
 =head2 B<REQUIRED> SerialNumber => Str
 
-  
-
 Serial number that uniquely identifies the MFA device.
 
-
-
-
-
-
-
+This parameter allows (per its regex pattern) a string of characters
+consisting of upper and lowercase alphanumeric characters with no
+spaces. You can also include any of the following characters: =,.@-
 
 
 
 =head2 B<REQUIRED> UserName => Str
 
-  
-
 The name of the user whose MFA device you want to resynchronize.
 
-
-
-
-
-
-
-
+This parameter allows (per its regex pattern) a string of characters
+consisting of upper and lowercase alphanumeric characters with no
+spaces. You can also include any of the following characters: =,.@-
 
 
 

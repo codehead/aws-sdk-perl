@@ -1,7 +1,7 @@
 
-package Paws::EC2::DescribeAccountAttributes {
+package Paws::EC2::DescribeAccountAttributes;
   use Moose;
-  has AttributeNames => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'attributeName' );
+  has AttributeNames => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'attributeName' );
   has DryRun => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'dryRun' );
 
   use MooseX::ClassAttribute;
@@ -9,7 +9,6 @@ package Paws::EC2::DescribeAccountAttributes {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeAccountAttributes');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::EC2::DescribeAccountAttributesResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -24,7 +23,7 @@ This class represents the parameters used for calling the method DescribeAccount
 Amazon Elastic Compute Cloud service. Use the attributes of this class
 as arguments to method DescribeAccountAttributes.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeAccountAttributes.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeAccountAttributes.
 
 As an example:
 
@@ -34,37 +33,19 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 AttributeNames => ArrayRef[Str]
 
-  
+=head2 AttributeNames => ArrayRef[Str|Undef]
 
 One or more account attribute names.
 
 
 
-
-
-
-
-
-
-
 =head2 DryRun => Bool
-
-  
 
 Checks whether you have the required permissions for the action,
 without actually making the request, and provides an error response. If
 you have the required permissions, the error response is
 C<DryRunOperation>. Otherwise, it is C<UnauthorizedOperation>.
-
-
-
-
-
-
-
-
 
 
 

@@ -1,10 +1,9 @@
 
-package Paws::EC2::AcceptVpcPeeringConnectionResult {
+package Paws::EC2::AcceptVpcPeeringConnectionResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has VpcPeeringConnection => (is => 'ro', isa => 'Paws::EC2::VpcPeeringConnection', xmlname => 'vpcPeeringConnection', traits => ['Unwrapped',]);
+  has VpcPeeringConnection => (is => 'ro', isa => 'Paws::EC2::VpcPeeringConnection', request_name => 'vpcPeeringConnection', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::EC2::AcceptVpcPeeringConnectionResult
 
 =head1 ATTRIBUTES
 
-=head2 VpcPeeringConnection => Paws::EC2::VpcPeeringConnection
 
-  
+=head2 VpcPeeringConnection => L<Paws::EC2::VpcPeeringConnection>
 
 Information about the VPC peering connection.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

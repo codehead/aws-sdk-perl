@@ -1,11 +1,10 @@
 
-package Paws::SimpleWorkflow::PendingTaskCount {
+package Paws::SimpleWorkflow::PendingTaskCount;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has count => (is => 'ro', isa => 'Int', required => 1);
-  has truncated => (is => 'ro', isa => 'Bool');
+  has Count => (is => 'ro', isa => 'Int', traits => ['NameInRequest'], request_name => 'count' , required => 1);
+  has Truncated => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'truncated' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -15,36 +14,20 @@ Paws::SimpleWorkflow::PendingTaskCount
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> count => Int
 
-  
+=head2 B<REQUIRED> Count => Int
 
 The number of tasks in the task list.
 
 
-
-
-
-
-
-
-
-=head2 truncated => Bool
-
-  
+=head2 Truncated => Bool
 
 If set to true, indicates that the actual count was more than the
 maximum supported by this API and the count returned is the truncated
 value.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

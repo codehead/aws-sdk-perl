@@ -1,12 +1,11 @@
 
-package Paws::StorageGateway::ListVolumesOutput {
+package Paws::StorageGateway::ListVolumesOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
   has GatewayARN => (is => 'ro', isa => 'Str');
   has Marker => (is => 'ro', isa => 'Str');
   has VolumeInfos => (is => 'ro', isa => 'ArrayRef[Paws::StorageGateway::VolumeInfo]');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -16,15 +15,23 @@ Paws::StorageGateway::ListVolumesOutput
 
 =head1 ATTRIBUTES
 
+
 =head2 GatewayARN => Str
 
-  
+
+
+
 =head2 Marker => Str
 
-  
-=head2 VolumeInfos => ArrayRef[Paws::StorageGateway::VolumeInfo]
 
-  
+
+
+=head2 VolumeInfos => ArrayRef[L<Paws::StorageGateway::VolumeInfo>]
+
+
+
+
+=head2 _request_id => Str
 
 
 =cut

@@ -1,10 +1,9 @@
 
-package Paws::ECS::DeleteClusterResponse {
+package Paws::ECS::DeleteClusterResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has cluster => (is => 'ro', isa => 'Paws::ECS::Cluster');
+  has Cluster => (is => 'ro', isa => 'Paws::ECS::Cluster', traits => ['NameInRequest'], request_name => 'cluster' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::ECS::DeleteClusterResponse
 
 =head1 ATTRIBUTES
 
-=head2 cluster => Paws::ECS::Cluster
 
-  
+=head2 Cluster => L<Paws::ECS::Cluster>
 
 The full description of the deleted cluster.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

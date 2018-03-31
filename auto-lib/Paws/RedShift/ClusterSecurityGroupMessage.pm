@@ -1,11 +1,10 @@
 
-package Paws::RedShift::ClusterSecurityGroupMessage {
+package Paws::RedShift::ClusterSecurityGroupMessage;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has ClusterSecurityGroups => (is => 'ro', isa => 'ArrayRef[Paws::RedShift::ClusterSecurityGroup]', xmlname => 'ClusterSecurityGroup', traits => ['Unwrapped',]);
+  has ClusterSecurityGroups => (is => 'ro', isa => 'ArrayRef[Paws::RedShift::ClusterSecurityGroup]', request_name => 'ClusterSecurityGroup', traits => ['NameInRequest',]);
   has Marker => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -16,23 +15,13 @@ Paws::RedShift::ClusterSecurityGroupMessage
 
 =head1 ATTRIBUTES
 
-=head2 ClusterSecurityGroups => ArrayRef[Paws::RedShift::ClusterSecurityGroup]
 
-  
+=head2 ClusterSecurityGroups => ArrayRef[L<Paws::RedShift::ClusterSecurityGroup>]
 
 A list of ClusterSecurityGroup instances.
 
 
-
-
-
-
-
-
-
 =head2 Marker => Str
-
-  
 
 A value that indicates the starting point for the next set of response
 records in a subsequent request. If a value is returned in a response,
@@ -42,13 +31,7 @@ the C<Marker> field is empty, all response records have been retrieved
 for the request.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

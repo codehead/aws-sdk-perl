@@ -1,7 +1,6 @@
-package Paws::Credential::InstanceProfile {
-  use JSON;
+package Paws::Credential::InstanceProfile;
+  use JSON::MaybeXS;
   use Moose;
-  use DateTime;
   use DateTime::Format::ISO8601;
   with 'Paws::Credential';
 
@@ -28,10 +27,8 @@ package Paws::Credential::InstanceProfile {
 
   has expiration => (
     is => 'rw',
-    isa => 'DateTime',
-    default => sub {
-      DateTime->from_epoch(epoch => 0); # need a better way to do this
-    }
+    isa => 'Int',
+    default => sub { 0 }
   );
 
   has actual_creds => (is => 'rw', default => sub { {} });
@@ -58,7 +55,7 @@ package Paws::Credential::InstanceProfile {
   sub _refresh {
     my $self = shift;
 
-    return if (($self->expiration - DateTime->now())->is_positive);
+    return if $self->expiration >= time;
 
     my $ua = $self->ua;
     my $r = $ua->get($self->metadata_url);
@@ -68,14 +65,53 @@ package Paws::Credential::InstanceProfile {
     $r = $ua->get($self->metadata_url . $r->{content});
     return unless $r->{success};
 
-    my $json = eval { from_json($r->{content}) };
+    my $json = eval { decode_json($r->{content}) };
     if ($@) { die "Error in JSON from metadata URL" }
 
     $self->actual_creds($json);
-    $self->expiration(DateTime::Format::ISO8601->parse_datetime($json->{Expiration}));
+    $self->expiration(DateTime::Format::ISO8601->parse_datetime($json->{Expiration})->epoch);
   }
 
   no Moose;
-}
-
 1;
+### main pod documentation begin ###
+
+=encoding UTF-8
+
+=head1 NAME
+
+Paws::Credential::InstanceProfile
+
+=head1 SYNOPSIS
+
+  use Paws::Credential::InstanceProfile;
+
+  my $paws = Paws->new(config => {
+    credentials => Paws::Credential::InstanceProfile->new(
+      metadata_url => 'http://localhost:8000/security-credentials',
+      timeout => 5,
+    )
+  });
+
+=head1 DESCRIPTION
+
+The InstanceProfile credential provider is used to call retrieve AWS credentials from instances running on AWS
+
+When running on an instance in AWS, if said instance has a Role attached to it (also named InstanceProfile), Paws
+can retrieve short-term credentials (and refresh them when needed) from the AWS provided "metadata service".
+
+=head2 metadata_url: Str
+
+The section in the ini file where credentials will be looked up:
+
+=head2 timetout: Int
+
+Number of seconds to wait before timinig out a connection to the metadata service. It defaults to 1 second, as
+the metadata service is almost local, and very fast responding. Note that if set too high, and the metadata
+service is not present (not running on an AWS instance), the connection has to time out
+
+=head2 ua
+
+A user agent that has a C<get> method. Defaults to HTTP::Tiny
+
+=cut

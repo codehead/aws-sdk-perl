@@ -1,11 +1,10 @@
 
-package Paws::CodeDeploy::StopDeploymentOutput {
+package Paws::CodeDeploy::StopDeploymentOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has status => (is => 'ro', isa => 'Str');
-  has statusMessage => (is => 'ro', isa => 'Str');
+  has Status => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'status' );
+  has StatusMessage => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'statusMessage' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -15,42 +14,31 @@ Paws::CodeDeploy::StopDeploymentOutput
 
 =head1 ATTRIBUTES
 
-=head2 status => Str
 
-  
+=head2 Status => Str
 
 The status of the stop deployment operation:
 
 =over
 
-=item * Pending: The stop operation is pending.
+=item *
 
-=item * Succeeded: The stop operation succeeded.
+Pending: The stop operation is pending.
+
+=item *
+
+Succeeded: The stop operation was successful.
 
 =back
 
 
-
-
-
-
-
-
-
-=head2 statusMessage => Str
-
-  
+Valid values are: C<"Pending">, C<"Succeeded">
+=head2 StatusMessage => Str
 
 An accompanying status message.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

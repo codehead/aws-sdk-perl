@@ -1,10 +1,10 @@
 
-package Paws::EC2::ModifyVpcEndpoint {
+package Paws::EC2::ModifyVpcEndpoint;
   use Moose;
-  has AddRouteTableIds => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'AddRouteTableId' );
+  has AddRouteTableIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'AddRouteTableId' );
   has DryRun => (is => 'ro', isa => 'Bool');
   has PolicyDocument => (is => 'ro', isa => 'Str');
-  has RemoveRouteTableIds => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'RemoveRouteTableId' );
+  has RemoveRouteTableIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'RemoveRouteTableId' );
   has ResetPolicy => (is => 'ro', isa => 'Bool');
   has VpcEndpointId => (is => 'ro', isa => 'Str', required => 1);
 
@@ -13,7 +13,6 @@ package Paws::EC2::ModifyVpcEndpoint {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'ModifyVpcEndpoint');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::EC2::ModifyVpcEndpointResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -28,7 +27,7 @@ This class represents the parameters used for calling the method ModifyVpcEndpoi
 Amazon Elastic Compute Cloud service. Use the attributes of this class
 as arguments to method ModifyVpcEndpoint.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to ModifyVpcEndpoint.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to ModifyVpcEndpoint.
 
 As an example:
 
@@ -38,24 +37,14 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 AddRouteTableIds => ArrayRef[Str]
 
-  
+=head2 AddRouteTableIds => ArrayRef[Str|Undef]
 
 One or more route tables IDs to associate with the endpoint.
 
 
 
-
-
-
-
-
-
-
 =head2 DryRun => Bool
-
-  
 
 Checks whether you have the required permissions for the action,
 without actually making the request, and provides an error response. If
@@ -64,73 +53,29 @@ C<DryRunOperation>. Otherwise, it is C<UnauthorizedOperation>.
 
 
 
-
-
-
-
-
-
-
 =head2 PolicyDocument => Str
-
-  
 
 A policy document to attach to the endpoint. The policy must be in
 valid JSON format.
 
 
 
-
-
-
-
-
-
-
-=head2 RemoveRouteTableIds => ArrayRef[Str]
-
-  
+=head2 RemoveRouteTableIds => ArrayRef[Str|Undef]
 
 One or more route table IDs to disassociate from the endpoint.
 
 
 
-
-
-
-
-
-
-
 =head2 ResetPolicy => Bool
-
-  
 
 Specify C<true> to reset the policy document to the default policy. The
 default policy allows access to the service.
 
 
 
-
-
-
-
-
-
-
 =head2 B<REQUIRED> VpcEndpointId => Str
 
-  
-
 The ID of the endpoint.
-
-
-
-
-
-
-
-
 
 
 

@@ -1,16 +1,15 @@
 
-package Paws::ECS::ListServices {
+package Paws::ECS::ListServices;
   use Moose;
-  has cluster => (is => 'ro', isa => 'Str');
-  has maxResults => (is => 'ro', isa => 'Int');
-  has nextToken => (is => 'ro', isa => 'Str');
+  has Cluster => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'cluster' );
+  has MaxResults => (is => 'ro', isa => 'Int', traits => ['NameInRequest'], request_name => 'maxResults' );
+  has NextToken => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'nextToken' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'ListServices');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::ECS::ListServicesResponse');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method ListServices on
 Amazon EC2 Container Service service. Use the attributes of this class
 as arguments to method ListServices.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to ListServices.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to ListServices.
 
 As an example:
 
@@ -35,26 +34,16 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 cluster => Str
 
-  
+=head2 Cluster => Str
 
 The short name or full Amazon Resource Name (ARN) of the cluster that
-hosts the services you want to list. If you do not specify a cluster,
-the default cluster is assumed..
+hosts the services to list. If you do not specify a cluster, the
+default cluster is assumed.
 
 
 
-
-
-
-
-
-
-
-=head2 maxResults => Int
-
-  
+=head2 MaxResults => Int
 
 The maximum number of container instance results returned by
 C<ListServices> in paginated output. When this parameter is used,
@@ -62,21 +51,12 @@ C<ListServices> only returns C<maxResults> results in a single page
 along with a C<nextToken> response element. The remaining results of
 the initial request can be seen by sending another C<ListServices>
 request with the returned C<nextToken> value. This value can be between
-1 and 100. If this parameter is not used, then C<ListServices> returns
-up to 100 results and a C<nextToken> value if applicable.
+1 and 10. If this parameter is not used, then C<ListServices> returns
+up to 10 results and a C<nextToken> value if applicable.
 
 
 
-
-
-
-
-
-
-
-=head2 nextToken => Str
-
-  
+=head2 NextToken => Str
 
 The C<nextToken> value returned from a previous paginated
 C<ListServices> request where C<maxResults> was used and the results
@@ -84,13 +64,9 @@ exceeded the value of that parameter. Pagination continues from the end
 of the previous results that returned the C<nextToken> value. This
 value is C<null> when there are no more results to return.
 
-
-
-
-
-
-
-
+This token should be treated as an opaque identifier that is only used
+to retrieve the next items in a list and not for other programmatic
+purposes.
 
 
 

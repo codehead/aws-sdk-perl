@@ -1,5 +1,5 @@
 
-package Paws::EC2::ModifyVpcAttribute {
+package Paws::EC2::ModifyVpcAttribute;
   use Moose;
   has EnableDnsHostnames => (is => 'ro', isa => 'Paws::EC2::AttributeBooleanValue');
   has EnableDnsSupport => (is => 'ro', isa => 'Paws::EC2::AttributeBooleanValue');
@@ -8,9 +8,8 @@ package Paws::EC2::ModifyVpcAttribute {
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'ModifyVpcAttribute');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method ModifyVpcAttrib
 Amazon Elastic Compute Cloud service. Use the attributes of this class
 as arguments to method ModifyVpcAttribute.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to ModifyVpcAttribute.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to ModifyVpcAttribute.
 
 As an example:
 
@@ -35,28 +34,20 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 EnableDnsHostnames => Paws::EC2::AttributeBooleanValue
 
-  
+=head2 EnableDnsHostnames => L<Paws::EC2::AttributeBooleanValue>
 
 Indicates whether the instances launched in the VPC get DNS hostnames.
 If enabled, instances in the VPC get DNS hostnames; otherwise, they do
 not.
 
-You can only enable DNS hostnames if you also enable DNS support.
+You cannot modify the DNS resolution and DNS hostnames attributes in
+the same request. Use separate requests for each attribute. You can
+only enable DNS hostnames if you've enabled DNS support.
 
 
 
-
-
-
-
-
-
-
-=head2 EnableDnsSupport => Paws::EC2::AttributeBooleanValue
-
-  
+=head2 EnableDnsSupport => L<Paws::EC2::AttributeBooleanValue>
 
 Indicates whether the DNS resolution is supported for the VPC. If
 enabled, queries to the Amazon provided DNS server at the
@@ -65,28 +56,14 @@ the VPC network range "plus two" will succeed. If disabled, the Amazon
 provided DNS service in the VPC that resolves public DNS hostnames to
 IP addresses is not enabled.
 
-
-
-
-
-
-
+You cannot modify the DNS resolution and DNS hostnames attributes in
+the same request. Use separate requests for each attribute.
 
 
 
 =head2 B<REQUIRED> VpcId => Str
 
-  
-
 The ID of the VPC.
-
-
-
-
-
-
-
-
 
 
 

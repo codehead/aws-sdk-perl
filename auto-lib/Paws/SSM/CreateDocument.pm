@@ -1,7 +1,8 @@
 
-package Paws::SSM::CreateDocument {
+package Paws::SSM::CreateDocument;
   use Moose;
   has Content => (is => 'ro', isa => 'Str', required => 1);
+  has DocumentType => (is => 'ro', isa => 'Str');
   has Name => (is => 'ro', isa => 'Str', required => 1);
 
   use MooseX::ClassAttribute;
@@ -9,7 +10,6 @@ package Paws::SSM::CreateDocument {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'CreateDocument');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::SSM::CreateDocumentResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -21,10 +21,10 @@ Paws::SSM::CreateDocument - Arguments for method CreateDocument on Paws::SSM
 =head1 DESCRIPTION
 
 This class represents the parameters used for calling the method CreateDocument on the 
-Amazon Simple Systems Management Service service. Use the attributes of this class
+Amazon Simple Systems Manager (SSM) service. Use the attributes of this class
 as arguments to method CreateDocument.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to CreateDocument.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to CreateDocument.
 
 As an example:
 
@@ -34,35 +34,23 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
+
 =head2 B<REQUIRED> Content => Str
 
-  
-
-A valid JSON file. For more information about the contents of this
-file, see Configuration Document.
+A valid JSON string.
 
 
 
+=head2 DocumentType => Str
 
+The type of document to create. Valid document types include: Policy,
+Automation, and Command.
 
-
-
-
-
+Valid values are: C<"Command">, C<"Policy">, C<"Automation">
 
 =head2 B<REQUIRED> Name => Str
 
-  
-
-A name for the configuration document.
-
-
-
-
-
-
-
-
+A name for the Systems Manager document.
 
 
 

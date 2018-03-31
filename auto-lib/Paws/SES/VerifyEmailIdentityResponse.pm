@@ -1,9 +1,8 @@
 
-package Paws::SES::VerifyEmailIdentityResponse {
+package Paws::SES::VerifyEmailIdentityResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -14,6 +13,8 @@ Paws::SES::VerifyEmailIdentityResponse
 
 =head1 ATTRIBUTES
 
+
+=head2 _request_id => Str
 
 
 =cut

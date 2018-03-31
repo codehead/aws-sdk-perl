@@ -1,7 +1,7 @@
 
-package Paws::EC2::DescribeCustomerGateways {
+package Paws::EC2::DescribeCustomerGateways;
   use Moose;
-  has CustomerGatewayIds => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'CustomerGatewayId' );
+  has CustomerGatewayIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'CustomerGatewayId' );
   has DryRun => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'dryRun' );
   has Filters => (is => 'ro', isa => 'ArrayRef[Paws::EC2::Filter]', traits => ['NameInRequest'], request_name => 'Filter' );
 
@@ -10,7 +10,6 @@ package Paws::EC2::DescribeCustomerGateways {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeCustomerGateways');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::EC2::DescribeCustomerGatewaysResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method DescribeCustome
 Amazon Elastic Compute Cloud service. Use the attributes of this class
 as arguments to method DescribeCustomerGateways.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeCustomerGateways.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeCustomerGateways.
 
 As an example:
 
@@ -35,9 +34,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 CustomerGatewayIds => ArrayRef[Str]
 
-  
+=head2 CustomerGatewayIds => ArrayRef[Str|Undef]
 
 One or more customer gateway IDs.
 
@@ -45,16 +43,7 @@ Default: Describes all your customer gateways.
 
 
 
-
-
-
-
-
-
-
 =head2 DryRun => Bool
-
-  
 
 Checks whether you have the required permissions for the action,
 without actually making the request, and provides an error response. If
@@ -63,16 +52,7 @@ C<DryRunOperation>. Otherwise, it is C<UnauthorizedOperation>.
 
 
 
-
-
-
-
-
-
-
-=head2 Filters => ArrayRef[Paws::EC2::Filter]
-
-  
+=head2 Filters => ArrayRef[L<Paws::EC2::Filter>]
 
 One or more filters.
 
@@ -105,7 +85,10 @@ type is C<ipsec.1>.
 =item *
 
 C<tag>:I<key>=I<value> - The key/value combination of a tag assigned to
-the resource.
+the resource. Specify the key of the tag in the filter name and the
+value of the tag in the filter value. For example, for the tag
+Purpose=X, specify C<tag:Purpose> for the filter name and C<X> for the
+filter value.
 
 =item *
 
@@ -123,13 +106,6 @@ C<tag-value> - The value of a tag assigned to the resource. This filter
 is independent of the C<tag-key> filter.
 
 =back
-
-
-
-
-
-
-
 
 
 

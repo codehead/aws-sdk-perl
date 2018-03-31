@@ -1,15 +1,16 @@
 
-package Paws::ElasticBeanstalk::DescribeApplicationVersions {
+package Paws::ElasticBeanstalk::DescribeApplicationVersions;
   use Moose;
   has ApplicationName => (is => 'ro', isa => 'Str');
-  has VersionLabels => (is => 'ro', isa => 'ArrayRef[Str]');
+  has MaxRecords => (is => 'ro', isa => 'Int');
+  has NextToken => (is => 'ro', isa => 'Str');
+  has VersionLabels => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeApplicationVersions');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::ElasticBeanstalk::ApplicationVersionDescriptionsMessage');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'DescribeApplicationVersionsResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -24,7 +25,7 @@ This class represents the parameters used for calling the method DescribeApplica
 AWS Elastic Beanstalk service. Use the attributes of this class
 as arguments to method DescribeApplicationVersions.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeApplicationVersions.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeApplicationVersions.
 
 As an example:
 
@@ -34,37 +35,37 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
+
 =head2 ApplicationName => Str
 
-  
-
-If specified, AWS Elastic Beanstalk restricts the returned descriptions
-to only include ones that are associated with the specified
+Specify an application name to show only application versions for that
 application.
 
 
 
+=head2 MaxRecords => Int
+
+For a paginated request. Specify a maximum number of application
+versions to include in each response.
+
+If no C<MaxRecords> is specified, all available application versions
+are retrieved in a single response.
 
 
 
+=head2 NextToken => Str
+
+For a paginated request. Specify a token from a previous response page
+to retrieve the next response page. All other parameter values must be
+identical to the ones specified in the initial request.
+
+If no C<NextToken> is specified, the first page is retrieved.
 
 
 
+=head2 VersionLabels => ArrayRef[Str|Undef]
 
-=head2 VersionLabels => ArrayRef[Str]
-
-  
-
-If specified, restricts the returned descriptions to only include ones
-that have the specified version labels.
-
-
-
-
-
-
-
-
+Specify a version label to show a specific application version.
 
 
 

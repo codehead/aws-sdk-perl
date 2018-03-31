@@ -1,14 +1,13 @@
 
-package Paws::AutoScaling::DeleteTags {
+package Paws::AutoScaling::DeleteTags;
   use Moose;
   has Tags => (is => 'ro', isa => 'ArrayRef[Paws::AutoScaling::Tag]', required => 1);
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DeleteTags');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -23,7 +22,7 @@ This class represents the parameters used for calling the method DeleteTags on t
 Auto Scaling service. Use the attributes of this class
 as arguments to method DeleteTags.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DeleteTags.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DeleteTags.
 
 As an example:
 
@@ -33,22 +32,10 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> Tags => ArrayRef[Paws::AutoScaling::Tag]
 
-  
+=head2 B<REQUIRED> Tags => ArrayRef[L<Paws::AutoScaling::Tag>]
 
-Each tag should be defined by its resource type, resource ID, key,
-value, and a propagate flag. Valid values are: Resource type =
-I<auto-scaling-group>, Resource ID = I<AutoScalingGroupName>,
-key=I<value>, value=I<value>, propagate=I<true> or I<false>.
-
-
-
-
-
-
-
-
+One or more tags.
 
 
 

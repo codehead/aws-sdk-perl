@@ -1,7 +1,7 @@
 
-package Paws::OpsWorks::DescribeLayers {
+package Paws::OpsWorks::DescribeLayers;
   use Moose;
-  has LayerIds => (is => 'ro', isa => 'ArrayRef[Str]');
+  has LayerIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
   has StackId => (is => 'ro', isa => 'Str');
 
   use MooseX::ClassAttribute;
@@ -9,7 +9,6 @@ package Paws::OpsWorks::DescribeLayers {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeLayers');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::OpsWorks::DescribeLayersResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -24,7 +23,7 @@ This class represents the parameters used for calling the method DescribeLayers 
 AWS OpsWorks service. Use the attributes of this class
 as arguments to method DescribeLayers.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeLayers.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeLayers.
 
 As an example:
 
@@ -34,9 +33,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 LayerIds => ArrayRef[Str]
 
-  
+=head2 LayerIds => ArrayRef[Str|Undef]
 
 An array of layer IDs that specify the layers to be described. If you
 omit this parameter, C<DescribeLayers> returns a description of every
@@ -44,26 +42,9 @@ layer in the specified stack.
 
 
 
-
-
-
-
-
-
-
 =head2 StackId => Str
 
-  
-
 The stack ID.
-
-
-
-
-
-
-
-
 
 
 

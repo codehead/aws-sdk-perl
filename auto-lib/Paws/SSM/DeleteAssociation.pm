@@ -1,15 +1,15 @@
 
-package Paws::SSM::DeleteAssociation {
+package Paws::SSM::DeleteAssociation;
   use Moose;
-  has InstanceId => (is => 'ro', isa => 'Str', required => 1);
-  has Name => (is => 'ro', isa => 'Str', required => 1);
+  has AssociationId => (is => 'ro', isa => 'Str');
+  has InstanceId => (is => 'ro', isa => 'Str');
+  has Name => (is => 'ro', isa => 'Str');
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DeleteAssociation');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::SSM::DeleteAssociationResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -21,10 +21,10 @@ Paws::SSM::DeleteAssociation - Arguments for method DeleteAssociation on Paws::S
 =head1 DESCRIPTION
 
 This class represents the parameters used for calling the method DeleteAssociation on the 
-Amazon Simple Systems Management Service service. Use the attributes of this class
+Amazon Simple Systems Manager (SSM) service. Use the attributes of this class
 as arguments to method DeleteAssociation.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DeleteAssociation.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DeleteAssociation.
 
 As an example:
 
@@ -34,34 +34,22 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> InstanceId => Str
 
-  
+=head2 AssociationId => Str
+
+The association ID that you want to delete.
+
+
+
+=head2 InstanceId => Str
 
 The ID of the instance.
 
 
 
+=head2 Name => Str
 
-
-
-
-
-
-
-=head2 B<REQUIRED> Name => Str
-
-  
-
-The name of the configuration document.
-
-
-
-
-
-
-
-
+The name of the Systems Manager document.
 
 
 

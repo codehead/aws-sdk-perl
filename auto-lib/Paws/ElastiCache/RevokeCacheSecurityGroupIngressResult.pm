@@ -1,10 +1,9 @@
 
-package Paws::ElastiCache::RevokeCacheSecurityGroupIngressResult {
+package Paws::ElastiCache::RevokeCacheSecurityGroupIngressResult;
   use Moose;
-  with 'Paws::API::ResultParser';
   has CacheSecurityGroup => (is => 'ro', isa => 'Paws::ElastiCache::CacheSecurityGroup');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,9 +14,13 @@ Paws::ElastiCache::RevokeCacheSecurityGroupIngressResult
 
 =head1 ATTRIBUTES
 
-=head2 CacheSecurityGroup => Paws::ElastiCache::CacheSecurityGroup
 
-  
+=head2 CacheSecurityGroup => L<Paws::ElastiCache::CacheSecurityGroup>
+
+
+
+
+=head2 _request_id => Str
 
 
 =cut

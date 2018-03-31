@@ -1,5 +1,5 @@
 
-package Paws::RDS::ApplyPendingMaintenanceAction {
+package Paws::RDS::ApplyPendingMaintenanceAction;
   use Moose;
   has ApplyAction => (is => 'ro', isa => 'Str', required => 1);
   has OptInType => (is => 'ro', isa => 'Str', required => 1);
@@ -10,7 +10,6 @@ package Paws::RDS::ApplyPendingMaintenanceAction {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'ApplyPendingMaintenanceAction');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::RDS::ApplyPendingMaintenanceActionResult');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'ApplyPendingMaintenanceActionResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method ApplyPendingMai
 Amazon Relational Database Service service. Use the attributes of this class
 as arguments to method ApplyPendingMaintenanceAction.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to ApplyPendingMaintenanceAction.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to ApplyPendingMaintenanceAction.
 
 As an example:
 
@@ -35,24 +34,16 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> ApplyAction => Str
 
-  
+=head2 B<REQUIRED> ApplyAction => Str
 
 The pending maintenance action to apply to this resource.
 
-
-
-
-
-
-
+Valid values: C<system-update>, C<db-upgrade>
 
 
 
 =head2 B<REQUIRED> OptInType => Str
-
-  
 
 A value that specifies the type of opt-in request, or undoes an opt-in
 request. An opt-in request of type C<immediate> cannot be undone.
@@ -61,12 +52,18 @@ Valid values:
 
 =over
 
-=item * C<immediate> - Apply the maintenance action immediately.
+=item *
 
-=item * C<next-maintenance> - Apply the maintenance action during the
-next maintenance window for the resource.
+C<immediate> - Apply the maintenance action immediately.
 
-=item * C<undo-opt-in> - Cancel any existing C<next-maintenance> opt-in
+=item *
+
+C<next-maintenance> - Apply the maintenance action during the next
+maintenance window for the resource.
+
+=item *
+
+C<undo-opt-in> - Cancel any existing C<next-maintenance> opt-in
 requests.
 
 =back
@@ -74,25 +71,11 @@ requests.
 
 
 
-
-
-
-
-
-
 =head2 B<REQUIRED> ResourceIdentifier => Str
 
-  
-
-The ARN of the resource that the pending maintenance action applies to.
-
-
-
-
-
-
-
-
+The RDS Amazon Resource Name (ARN) of the resource that the pending
+maintenance action applies to. For information about creating an ARN,
+see Constructing an RDS Amazon Resource Name (ARN).
 
 
 

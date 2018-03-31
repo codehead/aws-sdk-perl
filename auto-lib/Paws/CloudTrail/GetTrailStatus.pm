@@ -1,5 +1,5 @@
 
-package Paws::CloudTrail::GetTrailStatus {
+package Paws::CloudTrail::GetTrailStatus;
   use Moose;
   has Name => (is => 'ro', isa => 'Str', required => 1);
 
@@ -8,7 +8,6 @@ package Paws::CloudTrail::GetTrailStatus {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'GetTrailStatus');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::CloudTrail::GetTrailStatusResponse');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -23,7 +22,7 @@ This class represents the parameters used for calling the method GetTrailStatus 
 AWS CloudTrail service. Use the attributes of this class
 as arguments to method GetTrailStatus.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to GetTrailStatus.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to GetTrailStatus.
 
 As an example:
 
@@ -33,19 +32,15 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
+
 =head2 B<REQUIRED> Name => Str
 
-  
+Specifies the name or the CloudTrail ARN of the trail for which you are
+requesting status. To get the status of a shadow trail (a replication
+of the trail in another region), you must specify its ARN. The format
+of a trail ARN is:
 
-The name of the trail for which you are requesting the current status.
-
-
-
-
-
-
-
-
+C<arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail>
 
 
 

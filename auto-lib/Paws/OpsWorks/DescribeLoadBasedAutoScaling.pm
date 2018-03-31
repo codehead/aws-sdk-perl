@@ -1,14 +1,13 @@
 
-package Paws::OpsWorks::DescribeLoadBasedAutoScaling {
+package Paws::OpsWorks::DescribeLoadBasedAutoScaling;
   use Moose;
-  has LayerIds => (is => 'ro', isa => 'ArrayRef[Str]', required => 1);
+  has LayerIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]', required => 1);
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeLoadBasedAutoScaling');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::OpsWorks::DescribeLoadBasedAutoScalingResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -23,7 +22,7 @@ This class represents the parameters used for calling the method DescribeLoadBas
 AWS OpsWorks service. Use the attributes of this class
 as arguments to method DescribeLoadBasedAutoScaling.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeLoadBasedAutoScaling.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeLoadBasedAutoScaling.
 
 As an example:
 
@@ -33,19 +32,10 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> LayerIds => ArrayRef[Str]
 
-  
+=head2 B<REQUIRED> LayerIds => ArrayRef[Str|Undef]
 
 An array of layer IDs.
-
-
-
-
-
-
-
-
 
 
 

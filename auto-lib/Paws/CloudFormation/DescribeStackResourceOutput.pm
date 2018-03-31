@@ -1,10 +1,9 @@
 
-package Paws::CloudFormation::DescribeStackResourceOutput {
+package Paws::CloudFormation::DescribeStackResourceOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
   has StackResourceDetail => (is => 'ro', isa => 'Paws::CloudFormation::StackResourceDetail');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,21 +14,14 @@ Paws::CloudFormation::DescribeStackResourceOutput
 
 =head1 ATTRIBUTES
 
-=head2 StackResourceDetail => Paws::CloudFormation::StackResourceDetail
 
-  
+=head2 StackResourceDetail => L<Paws::CloudFormation::StackResourceDetail>
 
 A C<StackResourceDetail> structure containing the description of the
 specified resource in the specified stack.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

@@ -1,5 +1,5 @@
 
-package Paws::CloudHSM::ModifyHsm {
+package Paws::CloudHSM::ModifyHsm;
   use Moose;
   has EniIp => (is => 'ro', isa => 'Str');
   has ExternalId => (is => 'ro', isa => 'Str');
@@ -13,7 +13,6 @@ package Paws::CloudHSM::ModifyHsm {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'ModifyHsm');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::CloudHSM::ModifyHsmResponse');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -28,7 +27,7 @@ This class represents the parameters used for calling the method ModifyHsm on th
 Amazon CloudHSM service. Use the attributes of this class
 as arguments to method ModifyHsm.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to ModifyHsm.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to ModifyHsm.
 
 As an example:
 
@@ -38,95 +37,47 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
+
 =head2 EniIp => Str
 
-  
+The new IP address for the elastic network interface (ENI) attached to
+the HSM.
 
-The new IP address for the elastic network interface attached to the
-HSM.
-
-
-
-
-
-
-
+If the HSM is moved to a different subnet, and an IP address is not
+specified, an IP address will be randomly chosen from the CIDR range of
+the new subnet.
 
 
 
 =head2 ExternalId => Str
 
-  
-
 The new external ID.
-
-
-
-
-
-
-
 
 
 
 =head2 B<REQUIRED> HsmArn => Str
 
-  
-
 The ARN of the HSM to modify.
-
-
-
-
-
-
-
 
 
 
 =head2 IamRoleArn => Str
 
-  
-
 The new IAM role ARN.
-
-
-
-
-
-
-
 
 
 
 =head2 SubnetId => Str
 
-  
-
-The new identifier of the subnet that the HSM is in.
-
-
-
-
-
-
-
+The new identifier of the subnet that the HSM is in. The new subnet
+must be in the same Availability Zone as the current subnet.
 
 
 
 =head2 SyslogIp => Str
 
-  
-
-The new IP address for the syslog monitoring server.
-
-
-
-
-
-
-
-
+The new IP address for the syslog monitoring server. The AWS CloudHSM
+service only supports one syslog monitoring server.
 
 
 

@@ -1,11 +1,10 @@
 
-package Paws::RedShift::ClusterParameterGroupNameMessage {
+package Paws::RedShift::ClusterParameterGroupNameMessage;
   use Moose;
-  with 'Paws::API::ResultParser';
   has ParameterGroupName => (is => 'ro', isa => 'Str');
   has ParameterGroupStatus => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -16,36 +15,20 @@ Paws::RedShift::ClusterParameterGroupNameMessage
 
 =head1 ATTRIBUTES
 
-=head2 ParameterGroupName => Str
 
-  
+=head2 ParameterGroupName => Str
 
 The name of the cluster parameter group.
 
 
-
-
-
-
-
-
-
 =head2 ParameterGroupStatus => Str
-
-  
 
 The status of the parameter group. For example, if you made a change to
 a parameter group name-value pair, then the change could be pending a
 reboot of an associated cluster.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

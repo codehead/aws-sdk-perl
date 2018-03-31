@@ -1,10 +1,26 @@
-package Paws::Net::V2Signature {
+package Paws::Net::V2Signature;
   use Moose::Role;
   use Digest::SHA qw(hmac_sha256);
   use MIME::Base64 qw(encode_base64);
   use Carp;
   use URI;
   use POSIX qw/strftime/;
+
+  sub BUILD {
+    my $self = shift;
+
+    # These calls are here so that when you construct
+    # the object the endpoint information and the _region_for_signature
+    # are calculated during construction. This is to avoid the fact that 
+    # these attributes are lazy (because they depend on other attributes) 
+    # and they don't get used until the first method is called, so if
+    # they are incorrect, they don't throw until the first method is called.
+    # It's much better to have them throw when $paws->service('...') is called
+    # as this is the point where the user had specified "incorrect" information,
+    # instead of the problem happening in the first method call.
+    $self->endpoint;
+    $self->_region_for_signature;
+  }
 
 has 'base_url'           => ( 
     is          => 'ro', 
@@ -57,7 +73,7 @@ sub sign {
 
     $request->parameters->{ SignatureVersion } = "2";
     $request->parameters->{ SignatureMethod } = "HmacSHA256";
-    $request->parameters->{ Timestamp } = strftime("%Y-%m-%dT%H:%M:%SZ",gmtime);
+    $request->parameters->{ Timestamp } //= strftime("%Y-%m-%dT%H:%M:%SZ",gmtime);
     $request->parameters->{ AWSAccessKeyId } = $self->access_key;
 
     if ($self->session_token) {
@@ -72,14 +88,11 @@ sub sign {
 
     $sign_this .= $self->www_form_urlencode(\%sign_hash);
 
-    warn "QUERY TO SIGN: $sign_this" if ($self->debug);
-
     my $encoded = encode_base64(hmac_sha256($sign_this, $self->secret_key), '');
 
     $request->parameters->{ Signature } = $encoded;
 
-    #Since the parameters and the signing goes into the content, we have
-    $request->generate_content_from_parameters;
+    $request->content($self->generate_content_from_parameters($request));
 }
 
 
@@ -110,14 +123,7 @@ our $unsafe_char = qr/[^A-Za-z0-9\-\._~]/;
 
 sub _uri_escape {
     my ($self, $str) = @_;
-    if ( $] ge '5.008' ) {
-        utf8::encode($str);
-    }
-    else {
-        $str = pack("U*", unpack("C*", $str)) # UTF-8 encode a byte string
-            if ( length $str == do { use bytes; length $str } );
-        $str = pack("C*", unpack("C*", $str)); # clear UTF-8 flag
-    }
+    utf8::encode($str);
     $str =~ s/($unsafe_char)/$escapes{$1}/ge;
     $str =~ s/ /+/go;
     return $str;
@@ -128,8 +134,6 @@ sub _request {
     my $params = shift;
 
     return $self->ua->post_form( $self->base_url, $params );
-}
-
 }
 
 1;

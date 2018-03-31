@@ -1,10 +1,9 @@
 
-package Paws::CodeDeploy::GetApplicationOutput {
+package Paws::CodeDeploy::GetApplicationOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has application => (is => 'ro', isa => 'Paws::CodeDeploy::ApplicationInfo');
+  has Application => (is => 'ro', isa => 'Paws::CodeDeploy::ApplicationInfo', traits => ['NameInRequest'], request_name => 'application' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::CodeDeploy::GetApplicationOutput
 
 =head1 ATTRIBUTES
 
-=head2 application => Paws::CodeDeploy::ApplicationInfo
 
-  
+=head2 Application => L<Paws::CodeDeploy::ApplicationInfo>
 
 Information about the application.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

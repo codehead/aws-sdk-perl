@@ -1,9 +1,8 @@
 
-package Paws::DS::UpdateRadiusResult {
+package Paws::DS::UpdateRadiusResult;
   use Moose;
-  with 'Paws::API::ResultParser';
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -13,6 +12,8 @@ Paws::DS::UpdateRadiusResult
 
 =head1 ATTRIBUTES
 
+
+=head2 _request_id => Str
 
 
 =cut

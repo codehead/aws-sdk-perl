@@ -1,11 +1,10 @@
 
-package Paws::EC2::CreateVpcEndpointResult {
+package Paws::EC2::CreateVpcEndpointResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has ClientToken => (is => 'ro', isa => 'Str', xmlname => 'clientToken', traits => ['Unwrapped',]);
-  has VpcEndpoint => (is => 'ro', isa => 'Paws::EC2::VpcEndpoint', xmlname => 'vpcEndpoint', traits => ['Unwrapped',]);
+  has ClientToken => (is => 'ro', isa => 'Str', request_name => 'clientToken', traits => ['NameInRequest',]);
+  has VpcEndpoint => (is => 'ro', isa => 'Paws::EC2::VpcEndpoint', request_name => 'vpcEndpoint', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -16,35 +15,19 @@ Paws::EC2::CreateVpcEndpointResult
 
 =head1 ATTRIBUTES
 
-=head2 ClientToken => Str
 
-  
+=head2 ClientToken => Str
 
 Unique, case-sensitive identifier you provide to ensure the idempotency
 of the request.
 
 
-
-
-
-
-
-
-
-=head2 VpcEndpoint => Paws::EC2::VpcEndpoint
-
-  
+=head2 VpcEndpoint => L<Paws::EC2::VpcEndpoint>
 
 Information about the endpoint.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

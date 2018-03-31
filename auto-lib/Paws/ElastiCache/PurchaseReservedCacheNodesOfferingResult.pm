@@ -1,10 +1,9 @@
 
-package Paws::ElastiCache::PurchaseReservedCacheNodesOfferingResult {
+package Paws::ElastiCache::PurchaseReservedCacheNodesOfferingResult;
   use Moose;
-  with 'Paws::API::ResultParser';
   has ReservedCacheNode => (is => 'ro', isa => 'Paws::ElastiCache::ReservedCacheNode');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,9 +14,13 @@ Paws::ElastiCache::PurchaseReservedCacheNodesOfferingResult
 
 =head1 ATTRIBUTES
 
-=head2 ReservedCacheNode => Paws::ElastiCache::ReservedCacheNode
 
-  
+=head2 ReservedCacheNode => L<Paws::ElastiCache::ReservedCacheNode>
+
+
+
+
+=head2 _request_id => Str
 
 
 =cut

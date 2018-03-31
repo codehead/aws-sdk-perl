@@ -1,14 +1,13 @@
 
-package Paws::OpsWorks::DescribeStacks {
+package Paws::OpsWorks::DescribeStacks;
   use Moose;
-  has StackIds => (is => 'ro', isa => 'ArrayRef[Str]');
+  has StackIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeStacks');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::OpsWorks::DescribeStacksResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -23,7 +22,7 @@ This class represents the parameters used for calling the method DescribeStacks 
 AWS OpsWorks service. Use the attributes of this class
 as arguments to method DescribeStacks.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeStacks.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeStacks.
 
 As an example:
 
@@ -33,21 +32,12 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 StackIds => ArrayRef[Str]
 
-  
+=head2 StackIds => ArrayRef[Str|Undef]
 
 An array of stack IDs that specify the stacks to be described. If you
 omit this parameter, C<DescribeStacks> returns a description of every
 stack.
-
-
-
-
-
-
-
-
 
 
 

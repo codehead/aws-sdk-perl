@@ -1,11 +1,10 @@
 
-package Paws::Glacier::InitiateJobOutput {
+package Paws::Glacier::InitiateJobOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has jobId => (is => 'ro', isa => 'Str');
-  has location => (is => 'ro', isa => 'Str');
+  has JobId => (is => 'ro', isa => 'Str', traits => ['ParamInHeader'], header_name => 'jobId');
+  has Location => (is => 'ro', isa => 'Str', traits => ['ParamInHeader'], header_name => 'location');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -16,34 +15,18 @@ Paws::Glacier::InitiateJobOutput
 
 =head1 ATTRIBUTES
 
-=head2 jobId => Str
 
-  
+=head2 JobId => Str
 
 The ID of the job.
 
 
-
-
-
-
-
-
-
-=head2 location => Str
-
-  
+=head2 Location => Str
 
 The relative URI path of the job.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

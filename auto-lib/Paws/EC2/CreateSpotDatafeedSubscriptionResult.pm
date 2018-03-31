@@ -1,10 +1,9 @@
 
-package Paws::EC2::CreateSpotDatafeedSubscriptionResult {
+package Paws::EC2::CreateSpotDatafeedSubscriptionResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has SpotDatafeedSubscription => (is => 'ro', isa => 'Paws::EC2::SpotDatafeedSubscription', xmlname => 'spotDatafeedSubscription', traits => ['Unwrapped',]);
+  has SpotDatafeedSubscription => (is => 'ro', isa => 'Paws::EC2::SpotDatafeedSubscription', request_name => 'spotDatafeedSubscription', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::EC2::CreateSpotDatafeedSubscriptionResult
 
 =head1 ATTRIBUTES
 
-=head2 SpotDatafeedSubscription => Paws::EC2::SpotDatafeedSubscription
 
-  
+=head2 SpotDatafeedSubscription => L<Paws::EC2::SpotDatafeedSubscription>
 
-The Spot Instance data feed subscription.
-
+The Spot instance data feed subscription.
 
 
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

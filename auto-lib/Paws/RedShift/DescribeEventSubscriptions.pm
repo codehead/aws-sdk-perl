@@ -1,16 +1,17 @@
 
-package Paws::RedShift::DescribeEventSubscriptions {
+package Paws::RedShift::DescribeEventSubscriptions;
   use Moose;
   has Marker => (is => 'ro', isa => 'Str');
   has MaxRecords => (is => 'ro', isa => 'Int');
   has SubscriptionName => (is => 'ro', isa => 'Str');
+  has TagKeys => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
+  has TagValues => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeEventSubscriptions');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::RedShift::EventSubscriptionsMessage');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'DescribeEventSubscriptionsResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +26,7 @@ This class represents the parameters used for calling the method DescribeEventSu
 Amazon Redshift service. Use the attributes of this class
 as arguments to method DescribeEventSubscriptions.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeEventSubscriptions.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeEventSubscriptions.
 
 As an example:
 
@@ -35,9 +36,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 Marker => Str
 
-  
+=head2 Marker => Str
 
 An optional parameter that specifies the starting point to return a set
 of response records. When the results of a DescribeEventSubscriptions
@@ -48,16 +48,7 @@ C<Marker> parameter and retrying the request.
 
 
 
-
-
-
-
-
-
-
 =head2 MaxRecords => Int
-
-  
 
 The maximum number of response records to return in each call. If the
 number of remaining response records exceeds the specified
@@ -71,27 +62,34 @@ Constraints: minimum 20, maximum 100.
 
 
 
-
-
-
-
-
-
-
 =head2 SubscriptionName => Str
-
-  
 
 The name of the Amazon Redshift event notification subscription to be
 described.
 
 
 
+=head2 TagKeys => ArrayRef[Str|Undef]
+
+A tag key or keys for which you want to return all matching event
+notification subscriptions that are associated with the specified key
+or keys. For example, suppose that you have subscriptions that are
+tagged with keys called C<owner> and C<environment>. If you specify
+both of these tag keys in the request, Amazon Redshift returns a
+response with the subscriptions that have either or both of these tag
+keys associated with them.
 
 
 
+=head2 TagValues => ArrayRef[Str|Undef]
 
-
+A tag value or values for which you want to return all matching event
+notification subscriptions that are associated with the specified tag
+value or values. For example, suppose that you have subscriptions that
+are tagged with values called C<admin> and C<test>. If you specify both
+of these tag values in the request, Amazon Redshift returns a response
+with the subscriptions that have either or both of these tag values
+associated with them.
 
 
 

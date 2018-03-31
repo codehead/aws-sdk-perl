@@ -1,10 +1,9 @@
 
-package Paws::KMS::CreateKeyResponse {
+package Paws::KMS::CreateKeyResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has KeyMetadata => (is => 'ro', isa => 'Paws::KMS::KeyMetadata');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::KMS::CreateKeyResponse
 
 =head1 ATTRIBUTES
 
-=head2 KeyMetadata => Paws::KMS::KeyMetadata
 
-  
+=head2 KeyMetadata => L<Paws::KMS::KeyMetadata>
 
-Metadata associated with the key.
-
+Metadata associated with the CMK.
 
 
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

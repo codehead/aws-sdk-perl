@@ -1,11 +1,10 @@
 
-package Paws::ECS::ListTaskDefinitionsResponse {
+package Paws::ECS::ListTaskDefinitionsResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has nextToken => (is => 'ro', isa => 'Str');
-  has taskDefinitionArns => (is => 'ro', isa => 'ArrayRef[Str]');
+  has NextToken => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'nextToken' );
+  has TaskDefinitionArns => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'taskDefinitionArns' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -15,9 +14,8 @@ Paws::ECS::ListTaskDefinitionsResponse
 
 =head1 ATTRIBUTES
 
-=head2 nextToken => Str
 
-  
+=head2 NextToken => Str
 
 The C<nextToken> value to include in a future C<ListTaskDefinitions>
 request. When the results of a C<ListTaskDefinitions> request exceed
@@ -26,28 +24,13 @@ results. This value is C<null> when there are no more results to
 return.
 
 
-
-
-
-
-
-
-
-=head2 taskDefinitionArns => ArrayRef[Str]
-
-  
+=head2 TaskDefinitionArns => ArrayRef[Str|Undef]
 
 The list of task definition Amazon Resource Name (ARN) entries for the
-C<ListTaskDefintions> request.
+C<ListTaskDefinitions> request.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

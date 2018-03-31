@@ -1,16 +1,15 @@
 
-package Paws::SDB::DomainMetadataResult {
+package Paws::SDB::DomainMetadataResult;
   use Moose;
-  with 'Paws::API::ResultParser';
   has AttributeNameCount => (is => 'ro', isa => 'Int');
-  has AttributeNamesSizeBytes => (is => 'ro', isa => 'Num');
+  has AttributeNamesSizeBytes => (is => 'ro', isa => 'Int');
   has AttributeValueCount => (is => 'ro', isa => 'Int');
-  has AttributeValuesSizeBytes => (is => 'ro', isa => 'Num');
+  has AttributeValuesSizeBytes => (is => 'ro', isa => 'Int');
   has ItemCount => (is => 'ro', isa => 'Int');
-  has ItemNamesSizeBytes => (is => 'ro', isa => 'Num');
+  has ItemNamesSizeBytes => (is => 'ro', isa => 'Int');
   has Timestamp => (is => 'ro', isa => 'Int');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -21,105 +20,44 @@ Paws::SDB::DomainMetadataResult
 
 =head1 ATTRIBUTES
 
-=head2 AttributeNameCount => Int
 
-  
+=head2 AttributeNameCount => Int
 
 The number of unique attribute names in the domain.
 
 
-
-
-
-
-
-
-
-=head2 AttributeNamesSizeBytes => Num
-
-  
+=head2 AttributeNamesSizeBytes => Int
 
 The total size of all unique attribute names in the domain, in bytes.
 
 
-
-
-
-
-
-
-
 =head2 AttributeValueCount => Int
-
-  
 
 The number of all attribute name/value pairs in the domain.
 
 
-
-
-
-
-
-
-
-=head2 AttributeValuesSizeBytes => Num
-
-  
+=head2 AttributeValuesSizeBytes => Int
 
 The total size of all attribute values in the domain, in bytes.
 
 
-
-
-
-
-
-
-
 =head2 ItemCount => Int
-
-  
 
 The number of all items in the domain.
 
 
-
-
-
-
-
-
-
-=head2 ItemNamesSizeBytes => Num
-
-  
+=head2 ItemNamesSizeBytes => Int
 
 The total size of all item names in the domain, in bytes.
 
 
-
-
-
-
-
-
-
 =head2 Timestamp => Int
-
-  
 
 The data and time when metadata was calculated, in Epoch (UNIX)
 seconds.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

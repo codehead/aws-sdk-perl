@@ -9,12 +9,6 @@ package Paws::API::Builder::EC2 {
 
   extends 'Paws::API::Builder';
 
-  has service => (is => 'ro', lazy => 1, default => sub { $_[0]->api_struct->{metadata}->{ endpointPrefix } });
-  has version => (is => 'ro', lazy => 1, default => sub { $_[0]->api_struct->{metadata}->{ apiVersion } });
-  has endpoint_role => (is => 'ro', lazy => 1, default => sub { defined $_[0]->api_struct->{metadata}->{ globalEndpoint } ? 
-                                                                   'Paws::API::SingleEndpointCaller':
-                                                                   'Paws::API::RegionalEndpointCaller' 
-                                                              } );
   has response_role  => (is => 'ro', lazy => 1, default => sub { 'Paws::Net::XMLResponse' });
 
   has '+parameter_role' => (
@@ -28,20 +22,23 @@ package Paws::API::Builder::EC2 {
   has callargs_class_template => (is => 'ro', isa => 'Str', default => q#
 [%- operation = c.operation(op_name) %]
 [%- shape = c.input_for_operation(op_name) %]
-package [% c.api %]::[% operation.name %] {
+package [% c.api %]::[% operation.name %];
   use Moose;
 [% FOREACH param_name IN shape.members.keys.sort -%]
   [%- member = c.shape(shape.members.$param_name.shape) -%]
   has [% param_name %] => (is => 'ro', isa => '[% member.perl_type %]'
   [%- IF (shape.members.${param_name}.locationName) %], traits => ['NameInRequest'], request_name => '[% shape.members.${param_name}.locationName %]' [% END %]
+  [%- IF (shape.members.$param_name.streaming == 1) %], traits => ['ParamInBody'][% END %]
   [%- IF (c.required_in_shape(shape,param_name)) %], required => 1[% END %]);
 [% END %]
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => '[% op_name %]');
-  class_has _returns => (isa => 'Str', is => 'ro'[% IF (operation.output.keys.size) %], default => '[% c.api %]::[% c.shapename_for_operation_output(op_name) %]'[% END %]);
+  class_has _returns => (isa => 'Str', is => 'ro', default => '
+    [%- IF (operation.output.keys.size) -%]
+      [%- c.api %]::[% c.shapename_for_operation_output(op_name) -%]
+    [%- ELSE -%]Paws::API::Response[% END -%]');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 [% c.callclass_documentation_template | eval %]
 #);
@@ -50,21 +47,21 @@ package [% c.api %]::[% operation.name %] {
 [%- operation = c.result_for_operation(op_name) %]
 [%- shape = c.result_for_operation(op_name) %]
 [%- IF (shape) %]
-package [% c.api %]::[% c.shapename_for_operation_output(op_name) %] {
+package [% c.api %]::[% c.shapename_for_operation_output(op_name) %];
   use Moose;
-  with 'Paws::API::UnwrappedParser';
 [% FOREACH param_name IN shape.members.keys.sort -%]
   [%- traits = [] -%]
   [%- member_shape_name = shape.members.$param_name.shape %]
   [%- member = c.shape(member_shape_name) -%]
   has [% param_name %] => (is => 'ro', isa => '[% member.perl_type %]'
-  [%- IF (shape.members.${param_name}.locationName); traits.push('Unwrapped') %], xmlname => '[% shape.members.${param_name}.locationName %]'[% END %]
+  [%- IF (shape.members.${param_name}.locationName); traits.push('NameInRequest') %], request_name => '[% shape.members.${param_name}.locationName %]'[% END %]
+  [%- IF (shape.members.$param_name.streaming == 1); traits.push('ParamInBody'); END %]
   [%- encoder = c.encoders_struct.$member_shape_name; IF (encoder); traits.push('Base64Attribute') %], decode_as => '[% encoder.encoding %]', method => '[% param_name %]'[% END %]
-  [%- IF (member.members.xmlname and (member.members.xmlname != 'item')) %], traits => ['Unwrapped'], xmlname => '[% member.members.xmlname %]'[% END %]
+  [%- IF (member.members.xmlname and (member.members.xmlname != 'item')) %], traits => ['NameInRequest'], request_name => '[% member.members.xmlname %]'[% END %]
   [%- IF (traits.size) %], traits => [[% FOREACH trait=traits %]'[% trait %]',[% END %]][% END -%]
   [%- IF (c.required_in_shape(shape,param_name)) %], required => 1[% END %]);
 [% END %]
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 [%- END %]
 1;
 [% c.class_documentation_template | eval %]
@@ -77,14 +74,31 @@ use Moose::Util::TypeConstraints;
 enum '[% enum_name %]', [[% FOR val IN c.enums.$enum_name %]'[% val %]',[% END %]];
 [%- END %]
 [%- END -%]
-package [% c.api %] {
+package [% c.api %];
   use Moose;
   sub service { '[% c.service %]' }
   sub version { '[% c.version %]' }
   sub flattened_arrays { [% c.flattened_arrays %] }
+  has max_attempts => (is => 'ro', isa => 'Int', default => [% c.service_max_attempts %]);
+  has retry => (is => 'ro', isa => 'HashRef', default => sub {
+    { base => '[% c.service_retry.base %]', type => '[% c.service_retry.type %]', growth_factor => [% c.service_retry.growth_factor %] }
+  });
+  has retriables => (is => 'ro', isa => 'ArrayRef', default => sub { [
+  [%- FOREACH key IN c.retry.policies.keys %]
+     [%- policy = c.retry.policies.$key.applies_when.response %]
+     [%- IF (policy.service_error_code) %]
+       sub { defined $_[0]->http_status and $_[0]->http_status == [% policy.http_status_code %] and $_[0]->code eq '[% policy.service_error_code %]' },
+     [%- ELSIF (policy.crc32body) %]
+       sub { $_[0]->code eq 'Crc32Error' },
+     [%- ELSE %]
+       [% THROW 'Unknown retry type' %]
+     [%- END %]
+  [%- END %]
+  ] });
 
   with 'Paws::API::Caller', '[% c.endpoint_role %]', '[% c.signature_role %]', '[% c.parameter_role %]', '[% c.response_role %]';
 
+  [%- c.service_endpoint_rules %]
   [% FOR op IN c.api_struct.operations.keys.sort %]
   [%- op_name = c.api_struct.operations.$op.name %]
   sub [% op_name %] {
@@ -93,92 +107,35 @@ package [% c.api %] {
     return $self->caller->do_call($self, $call_object);
   }
   [%- END %]
-  [%- FOR op IN c.paginators_struct.keys.sort %]
-  sub [% c.get_paginator_name(op) %] {
-    [%- paginator = c.paginators_struct.$op %]
-    my $self = shift;
+  [%- c.paginator_template | eval %]
 
-    my $result = $self->[% op %](@_);
-    my $array = [];
-    push @$array, @{ $result->[% paginator.result_key %] };
+  sub operations { qw/[% FOR op IN c.api_struct.operations.keys.sort; op _ ' '; END %]/ }
 
-    while ($result->[% paginator.output_token %]) {
-      $result = $self->[% op %](@_, [% paginator.input_token %] => $result->[% paginator.output_token %]);
-      push @$array, @{ $result->[% paginator.result_key %] };
-    }
-
-    return '[% c.api %]::[% op %]'->_returns->new([% paginator.result_key %] => $array);
-  }
-  [%- END %]
-}
 1;
 [% c.service_documentation_template | eval %]
 #);
 
+  has object_template => (is => 'ro', isa => 'Str', default => q#
+[%- -%]
+package [% inner_class %];
+  use Moose;
+[% FOREACH param_name IN shape.members.keys.sort -%]
+  [%- traits = [] -%]
+  [%- member_shape_name = shape.members.$param_name.shape %]
+  [%- member = c.shape(member_shape_name) -%]
+  has [% param_name %] => (is => 'ro', isa => '[% member.perl_type %]'
+  [%- IF (shape.members.${param_name}.locationName); traits.push('NameInRequest') %], request_name => '[% shape.members.${param_name}.locationName %]'[% END %]
+  [%- IF (shape.members.$param_name.streaming == 1); traits.push('ParamInBody'); END %]
+  [%- encoder = c.encoders_struct.$member_shape_name; IF (encoder); traits.push('Base64Attribute') %], decode_as => '[% encoder.encoding %]', method => '[% encoder.alias %]'[% END %]
+  [%- IF (member.members.xmlname and (member.members.xmlname != 'item')) %], traits => ['NameInRequest'], request_name => '[% member.members.xmlname %]'[% END %]
+  [%- IF (traits.size) %], traits => [[% FOREACH trait=traits %]'[% trait %]'[% IF (NOT loop.last) %],[% END %][% END %]][% END -%]
+  [%- IF (c.required_in_shape(shape,param_name)) %], required => 1[% END %]);
+[% END -%]
+1;
+[% c.innerclass_documentation_template | eval %]
+[%- -%]
+#);
 
-  sub make_inner_class {
-    my $self = shift;
-    my $iclass = shift;
-    my $inner_class = shift;
-  
-      my $output = '';
-      if ($iclass->{type} eq 'map'){
-        my $keys_shape = $self->shape($iclass->{key}->{shape});
-        $output .= "package $inner_class {\n";
-        $output .= "  use Moose;\n";
-        $output .= "  with 'Paws::API::MapParser';\n";
-        my $type = $self->get_caller_class_type($self->inner_classes->{ $inner_class }->{members});
-        my $members = $keys_shape->{enum};
-        next if (not defined $members);
-        foreach my $param_name (sort @$members){
-          $output .= "  has $param_name => (is => 'ro', isa => '$type'";
-          $output .= ");\n";
-        }
-        $output .= "}\n1;\n";
-        $self->save_class($inner_class, $output);
-      } elsif($iclass->{type} eq 'structure') {
-        $output .= "package $inner_class {\n";
-        $output .= "  use Moose;\n";
- 
-        my $members = $iclass->{members};
-        foreach my $param_name (sort keys %$members){
-          my $member_shape_name = $members->{ $param_name }->{ shape };
-          my $param_props = $self->shape($members->{ $param_name }->{ shape });
-
-          my $callit = $self->get_caller_class_type($members->{ $param_name }->{ shape });
-          $self->make_inner_class($param_props,$callit);
-
-          my $type;
-          if ($param_props->{enum}) {
-            # Enums passed to Str because documentation tends to have inconsistencies 
-            #$type = $self->api . "::" . $param_props->{shape_name};
-            #$self->register_enum($type, $param_props->{enum});
-            $type = 'Str';
-          } else {
-            $type = eval { $self->get_caller_class_type($members->{ $param_name }->{ shape }) };
-            if ($@) { die "In Inner Class: $inner_class: $@"; }
-          }
-
-          my $traits = [];
-          $output .= "  has $param_name => (is => 'ro', isa => '$type'";
-          if (defined $members->{ $param_name }->{locationName}) {
-            push @$traits, 'Unwrapped';
-            $output .= ", xmlname => '$members->{ $param_name }->{locationName}'";
-          }
-          if (defined $self->encoders_struct and my $encoder = $self->encoders_struct->{ $member_shape_name }) {
-            push @$traits, 'Base64Attribute';
-            $output .= ", decode_as => '$encoder->{ encoding }', method => '$encoder->{ alias }'";
-          }
-          if (@$traits) {
-            $output .= ", traits => [" . (join ',', map { "'$_'" } @$traits) . "]";
-          }
-          $output .= ", required => 1" if ($self->required_in_shape($iclass,$param_name));
-          $output .= ");\n";
-        }
-        $output .= "}\n1;\n";
-        $self->save_class($inner_class, $output);
-      }
-    }
 }
 
 1;

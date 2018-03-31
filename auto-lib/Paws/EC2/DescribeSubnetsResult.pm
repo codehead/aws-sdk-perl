@@ -1,10 +1,9 @@
 
-package Paws::EC2::DescribeSubnetsResult {
+package Paws::EC2::DescribeSubnetsResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has Subnets => (is => 'ro', isa => 'ArrayRef[Paws::EC2::Subnet]', xmlname => 'subnetSet', traits => ['Unwrapped',]);
+  has Subnets => (is => 'ro', isa => 'ArrayRef[Paws::EC2::Subnet]', request_name => 'subnetSet', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::EC2::DescribeSubnetsResult
 
 =head1 ATTRIBUTES
 
-=head2 Subnets => ArrayRef[Paws::EC2::Subnet]
 
-  
+=head2 Subnets => ArrayRef[L<Paws::EC2::Subnet>]
 
 Information about one or more subnets.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

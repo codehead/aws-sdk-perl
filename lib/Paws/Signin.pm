@@ -1,35 +1,59 @@
-package Paws::Signin {
+package Paws::Signin;
   use Moose;
-  sub service { 'signin.aws' }
+  use JSON::MaybeXS;
+  use URI;
+  sub service { 'signin' }
   sub version { '2010-05-08' }
   sub flattened_arrays { 0 }
+  has max_attempts => (is => 'ro', isa => 'Int', default => 5);
+  has retry => (is => 'ro', isa => 'HashRef', default => sub {
+    { base => 'rand', type => 'exponential', growth_factor => 2 }
+  });
+  has retriables => (is => 'ro', isa => 'ArrayRef', default => sub { [
+  ] });
 
-  with 'Paws::API::Caller', 'Paws::API::SigninEndpointCaller', 'Paws::Net::NoSignature', 'Paws::Net::SigninCaller', 'Paws::Net::JsonResponse';
-  
+
+  with 'Paws::API::Caller', 'Paws::API::EndpointResolver', 'Paws::Net::NoSignature', 'Paws::Net::SigninCaller', 'Paws::Net::JsonResponse';
+ 
+  has '+region_rules' => (default => sub {
+    my $regioninfo;
+    $regioninfo = [
+    {
+      uri => 'https://signin.aws.amazon.com'
+    }
+    ];
+    return $regioninfo;
+  });
+
+  sub operations { qw/GetSigninToken Login/ }
+ 
   sub GetSigninToken {
     my $self = shift;
     my $call_object = $self->new_with_coercions('Paws::Signin::GetSigninToken', @_);
     return $self->caller->do_call($self, $call_object);
   }
 
+  # This method doesn't do an HTTP call. It uses prepare_request_for_call to get a requestObj
+  # that is manipulated to construct the URL in Step6 of 
+  # http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-custom-url.html
   sub Login {
     my $self = shift;
-
     my $call_object = $self->new_with_coercions('Paws::Signin::Login', @_);
-    my $requestObj = $self->prepare_request_for_call($call_object); 
 
-    my $url = $requestObj->url;
-    my @param;
-    for my $p (keys %{ $requestObj->parameters }) {
-      push @param , join '=' , map { $self->caller->_uri_escape($_,"^A-Za-z0-9\-_.~") } ($p, $requestObj->parameters->{$p});
-    }
-    $url .= '?' . (join '&', @param) if (@param);
-    $requestObj->url($url);
+    my $params = {
+      Action => $call_object->_api_call,
+      Destination => $call_object->Destination,
+      Issuer => $call_object->Issuer,
+      SigninToken => $call_object->SigninToken
+    };
 
+    my $url = URI->new($self->endpoint);
+    $url->path('/federation');
+    $url->query_form($params);
 
-    return $self->response_to_object({ URL => $requestObj->url }, $call_object);
+    return $self->response_to_object($call_object, 200, encode_json({ URL => $url->as_string }), {});
   }
-}
+
 1;
 
 ### main pod documentation begin ###

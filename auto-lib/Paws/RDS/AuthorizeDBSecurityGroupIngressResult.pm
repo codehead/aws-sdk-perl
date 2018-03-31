@@ -1,10 +1,9 @@
 
-package Paws::RDS::AuthorizeDBSecurityGroupIngressResult {
+package Paws::RDS::AuthorizeDBSecurityGroupIngressResult;
   use Moose;
-  with 'Paws::API::ResultParser';
   has DBSecurityGroup => (is => 'ro', isa => 'Paws::RDS::DBSecurityGroup');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,9 +14,13 @@ Paws::RDS::AuthorizeDBSecurityGroupIngressResult
 
 =head1 ATTRIBUTES
 
-=head2 DBSecurityGroup => Paws::RDS::DBSecurityGroup
 
-  
+=head2 DBSecurityGroup => L<Paws::RDS::DBSecurityGroup>
+
+
+
+
+=head2 _request_id => Str
 
 
 =cut

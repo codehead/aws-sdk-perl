@@ -1,13 +1,12 @@
 
-package Paws::IAM::GetOpenIDConnectProviderResponse {
+package Paws::IAM::GetOpenIDConnectProviderResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has ClientIDList => (is => 'ro', isa => 'ArrayRef[Str]');
+  has ClientIDList => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
   has CreateDate => (is => 'ro', isa => 'Str');
-  has ThumbprintList => (is => 'ro', isa => 'ArrayRef[Str]');
+  has ThumbprintList => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
   has Url => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -18,68 +17,34 @@ Paws::IAM::GetOpenIDConnectProviderResponse
 
 =head1 ATTRIBUTES
 
-=head2 ClientIDList => ArrayRef[Str]
 
-  
+=head2 ClientIDList => ArrayRef[Str|Undef]
 
 A list of client IDs (also known as audiences) that are associated with
-the specified IAM OpenID Connect provider. For more information, see
-CreateOpenIDConnectProvider.
-
-
-
-
-
-
-
+the specified IAM OIDC provider resource object. For more information,
+see CreateOpenIDConnectProvider.
 
 
 =head2 CreateDate => Str
 
-  
-
-The date and time when the IAM OpenID Connect provider entity was
+The date and time when the IAM OIDC provider resource object was
 created in the AWS account.
 
 
-
-
-
-
-
-
-
-=head2 ThumbprintList => ArrayRef[Str]
-
-  
+=head2 ThumbprintList => ArrayRef[Str|Undef]
 
 A list of certificate thumbprints that are associated with the
-specified IAM OpenID Connect provider. For more information, see
+specified IAM OIDC provider resource object. For more information, see
 CreateOpenIDConnectProvider.
-
-
-
-
-
-
-
 
 
 =head2 Url => Str
 
-  
-
-The URL that the IAM OpenID Connect provider is associated with. For
-more information, see CreateOpenIDConnectProvider.
+The URL that the IAM OIDC provider resource object is associated with.
+For more information, see CreateOpenIDConnectProvider.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

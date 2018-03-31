@@ -1,10 +1,9 @@
 
-package Paws::EC2::StopInstancesResult {
+package Paws::EC2::StopInstancesResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has StoppingInstances => (is => 'ro', isa => 'ArrayRef[Paws::EC2::InstanceStateChange]', xmlname => 'instancesSet', traits => ['Unwrapped',]);
+  has StoppingInstances => (is => 'ro', isa => 'ArrayRef[Paws::EC2::InstanceStateChange]', request_name => 'instancesSet', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::EC2::StopInstancesResult
 
 =head1 ATTRIBUTES
 
-=head2 StoppingInstances => ArrayRef[Paws::EC2::InstanceStateChange]
 
-  
+=head2 StoppingInstances => ArrayRef[L<Paws::EC2::InstanceStateChange>]
 
 Information about one or more stopped instances.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

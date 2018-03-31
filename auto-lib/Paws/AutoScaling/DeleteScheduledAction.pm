@@ -1,15 +1,14 @@
 
-package Paws::AutoScaling::DeleteScheduledAction {
+package Paws::AutoScaling::DeleteScheduledAction;
   use Moose;
-  has AutoScalingGroupName => (is => 'ro', isa => 'Str');
+  has AutoScalingGroupName => (is => 'ro', isa => 'Str', required => 1);
   has ScheduledActionName => (is => 'ro', isa => 'Str', required => 1);
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DeleteScheduledAction');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -24,7 +23,7 @@ This class represents the parameters used for calling the method DeleteScheduled
 Auto Scaling service. Use the attributes of this class
 as arguments to method DeleteScheduledAction.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DeleteScheduledAction.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DeleteScheduledAction.
 
 As an example:
 
@@ -34,34 +33,16 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 AutoScalingGroupName => Str
 
-  
+=head2 B<REQUIRED> AutoScalingGroupName => Str
 
 The name of the Auto Scaling group.
 
 
 
-
-
-
-
-
-
-
 =head2 B<REQUIRED> ScheduledActionName => Str
 
-  
-
 The name of the action to delete.
-
-
-
-
-
-
-
-
 
 
 

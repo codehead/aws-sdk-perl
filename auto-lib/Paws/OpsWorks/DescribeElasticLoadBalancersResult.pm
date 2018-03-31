@@ -1,10 +1,9 @@
 
-package Paws::OpsWorks::DescribeElasticLoadBalancersResult {
+package Paws::OpsWorks::DescribeElasticLoadBalancersResult;
   use Moose;
-  with 'Paws::API::ResultParser';
   has ElasticLoadBalancers => (is => 'ro', isa => 'ArrayRef[Paws::OpsWorks::ElasticLoadBalancer]');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,21 +13,14 @@ Paws::OpsWorks::DescribeElasticLoadBalancersResult
 
 =head1 ATTRIBUTES
 
-=head2 ElasticLoadBalancers => ArrayRef[Paws::OpsWorks::ElasticLoadBalancer]
 
-  
+=head2 ElasticLoadBalancers => ArrayRef[L<Paws::OpsWorks::ElasticLoadBalancer>]
 
 A list of C<ElasticLoadBalancer> objects that describe the specified
 Elastic Load Balancing instances.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

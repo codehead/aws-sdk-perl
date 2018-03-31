@@ -1,10 +1,9 @@
 
-package Paws::RedShift::EnableSnapshotCopyResult {
+package Paws::RedShift::EnableSnapshotCopyResult;
   use Moose;
-  with 'Paws::API::ResultParser';
   has Cluster => (is => 'ro', isa => 'Paws::RedShift::Cluster');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,9 +14,13 @@ Paws::RedShift::EnableSnapshotCopyResult
 
 =head1 ATTRIBUTES
 
-=head2 Cluster => Paws::RedShift::Cluster
 
-  
+=head2 Cluster => L<Paws::RedShift::Cluster>
+
+
+
+
+=head2 _request_id => Str
 
 
 =cut

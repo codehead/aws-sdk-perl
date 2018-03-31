@@ -1,10 +1,9 @@
 
-package Paws::Route53Domains::CheckDomainAvailabilityResponse {
+package Paws::Route53Domains::CheckDomainAvailabilityResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has Availability => (is => 'ro', isa => 'Str', required => 1);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,55 +13,63 @@ Paws::Route53Domains::CheckDomainAvailabilityResponse
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> Availability => Str
 
-  
+=head2 B<REQUIRED> Availability => Str
 
 Whether the domain name is available for registering.
 
-You can only register domains designated as C<AVAILABLE>.
-
-Type: String
+You can register only domains designated as C<AVAILABLE>.
 
 Valid values:
 
 =over
 
-=item * C<AVAILABLE> E<acirc>E<128>E<147> The domain name is available.
+=item AVAILABLE
 
-=item * C<AVAILABLE_RESERVED> E<acirc>E<128>E<147> The domain name is
-reserved under specific conditions.
+The domain name is available.
 
-=item * C<AVAILABLE_PREORDER> E<acirc>E<128>E<147> The domain name is
-available and can be preordered.
+=item AVAILABLE_RESERVED
 
-=item * C<UNAVAILABLE> E<acirc>E<128>E<147> The domain name is not
-available.
+The domain name is reserved under specific conditions.
 
-=item * C<UNAVAILABLE_PREMIUM> E<acirc>E<128>E<147> The domain name is
-not available.
+=item AVAILABLE_PREORDER
 
-=item * C<UNAVAILABLE_RESTRICTED> E<acirc>E<128>E<147> The domain name
-is forbidden.
+The domain name is available and can be preordered.
 
-=item * C<RESERVED> E<acirc>E<128>E<147> The domain name has been
-reserved for another person or organization.
+=item DONT_KNOW
 
-=item * C<DONT_KNOW> E<acirc>E<128>E<147> The TLD registry didn't reply
-with a definitive answer about whether the domain name is available.
-Amazon Route 53 can return this response for a variety of reasons, for
-example, the registry is performing maintenance. Try again later.
+The TLD registry didn't reply with a definitive answer about whether
+the domain name is available. Amazon Route 53 can return this response
+for a variety of reasons, for example, the registry is performing
+maintenance. Try again later.
+
+=item PENDING
+
+The TLD registry didn't return a response in the expected amount of
+time. When the response is delayed, it usually takes just a few extra
+seconds. You can resubmit the request immediately.
+
+=item RESERVED
+
+The domain name has been reserved for another person or organization.
+
+=item UNAVAILABLE
+
+The domain name is not available.
+
+=item UNAVAILABLE_PREMIUM
+
+The domain name is not available.
+
+=item UNAVAILABLE_RESTRICTED
+
+The domain name is forbidden.
 
 =back
 
 
-
-
-
-
-
-
-
+Valid values are: C<"AVAILABLE">, C<"AVAILABLE_RESERVED">, C<"AVAILABLE_PREORDER">, C<"UNAVAILABLE">, C<"UNAVAILABLE_PREMIUM">, C<"UNAVAILABLE_RESTRICTED">, C<"RESERVED">, C<"DONT_KNOW">
+=head2 _request_id => Str
 
 
 =cut

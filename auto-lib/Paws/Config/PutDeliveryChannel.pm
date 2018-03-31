@@ -1,14 +1,13 @@
 
-package Paws::Config::PutDeliveryChannel {
+package Paws::Config::PutDeliveryChannel;
   use Moose;
   has DeliveryChannel => (is => 'ro', isa => 'Paws::Config::DeliveryChannel', required => 1);
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'PutDeliveryChannel');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -23,7 +22,7 @@ This class represents the parameters used for calling the method PutDeliveryChan
 AWS Config service. Use the attributes of this class
 as arguments to method PutDeliveryChannel.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to PutDeliveryChannel.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to PutDeliveryChannel.
 
 As an example:
 
@@ -33,21 +32,12 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> DeliveryChannel => Paws::Config::DeliveryChannel
 
-  
+=head2 B<REQUIRED> DeliveryChannel => L<Paws::Config::DeliveryChannel>
 
 The configuration delivery channel object that delivers the
 configuration information to an Amazon S3 bucket, and to an Amazon SNS
 topic.
-
-
-
-
-
-
-
-
 
 
 

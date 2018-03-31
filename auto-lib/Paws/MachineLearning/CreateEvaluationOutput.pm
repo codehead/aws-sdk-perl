@@ -1,10 +1,9 @@
 
-package Paws::MachineLearning::CreateEvaluationOutput {
+package Paws::MachineLearning::CreateEvaluationOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
   has EvaluationId => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,22 +13,15 @@ Paws::MachineLearning::CreateEvaluationOutput
 
 =head1 ATTRIBUTES
 
-=head2 EvaluationId => Str
 
-  
+=head2 EvaluationId => Str
 
 The user-supplied ID that uniquely identifies the C<Evaluation>. This
 value should be identical to the value of the C<EvaluationId> in the
 request.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

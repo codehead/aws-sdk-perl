@@ -1,7 +1,7 @@
 
-package Paws::ElasticTranscoder::DeletePreset {
+package Paws::ElasticTranscoder::DeletePreset;
   use Moose;
-  has Id => (is => 'ro', isa => 'Str', traits => ['ParamInURI'], uri_name => 'Id' , required => 1);
+  has Id => (is => 'ro', isa => 'Str', traits => ['ParamInURI'], uri_name => 'Id', required => 1);
 
   use MooseX::ClassAttribute;
 
@@ -9,8 +9,7 @@ package Paws::ElasticTranscoder::DeletePreset {
   class_has _api_uri  => (isa => 'Str', is => 'ro', default => '/2012-09-25/presets/{Id}');
   class_has _api_method  => (isa => 'Str', is => 'ro', default => 'DELETE');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::ElasticTranscoder::DeletePresetResponse');
-  class_has _result_key => (isa => 'Str', is => 'ro', default => 'DeletePresetResult');
-}
+  class_has _result_key => (isa => 'Str', is => 'ro');
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method DeletePreset on
 Amazon Elastic Transcoder service. Use the attributes of this class
 as arguments to method DeletePreset.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DeletePreset.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DeletePreset.
 
 As an example:
 
@@ -35,20 +34,11 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> Id => Str
 
-  
+=head2 B<REQUIRED> Id => Str
 
 The identifier of the preset for which you want to get detailed
 information.
-
-
-
-
-
-
-
-
 
 
 

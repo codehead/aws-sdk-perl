@@ -1,11 +1,10 @@
 
-package Paws::KMS::CreateGrantResponse {
+package Paws::KMS::CreateGrantResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has GrantId => (is => 'ro', isa => 'Str');
   has GrantToken => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -15,35 +14,24 @@ Paws::KMS::CreateGrantResponse
 
 =head1 ATTRIBUTES
 
+
 =head2 GrantId => Str
 
-  
+The unique identifier for the grant.
 
-Unique grant identifier. You can use the I<GrantId> value to revoke a
-grant.
-
-
-
-
-
-
-
+You can use the C<GrantId> in a subsequent RetireGrant or RevokeGrant
+operation.
 
 
 =head2 GrantToken => Str
 
-  
+The grant token.
 
-For more information, see Grant Tokens.
-
-
-
+For more information, see Grant Tokens in the I<AWS Key Management
+Service Developer Guide>.
 
 
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

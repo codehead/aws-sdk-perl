@@ -1,5 +1,5 @@
 
-package Paws::RDS::DescribeDBInstances {
+package Paws::RDS::DescribeDBInstances;
   use Moose;
   has DBInstanceIdentifier => (is => 'ro', isa => 'Str');
   has Filters => (is => 'ro', isa => 'ArrayRef[Paws::RDS::Filter]');
@@ -11,7 +11,6 @@ package Paws::RDS::DescribeDBInstances {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeDBInstances');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::RDS::DBInstanceMessage');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'DescribeDBInstancesResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -26,7 +25,7 @@ This class represents the parameters used for calling the method DescribeDBInsta
 Amazon Relational Database Service service. Use the attributes of this class
 as arguments to method DescribeDBInstances.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeDBInstances.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeDBInstances.
 
 As an example:
 
@@ -36,87 +35,79 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 DBInstanceIdentifier => Str
 
-  
+=head2 DBInstanceIdentifier => Str
 
 The user-supplied instance identifier. If this parameter is specified,
 information from only the specific DB instance is returned. This
-parameter isn't case sensitive.
+parameter isn't case-sensitive.
 
 Constraints:
 
 =over
 
-=item * Must contain from 1 to 63 alphanumeric characters or hyphens
+=item *
 
-=item * First character must be a letter
+Must contain from 1 to 63 alphanumeric characters or hyphens
 
-=item * Cannot end with a hyphen or contain two consecutive hyphens
+=item *
+
+First character must be a letter
+
+=item *
+
+Cannot end with a hyphen or contain two consecutive hyphens
 
 =back
 
 
 
 
+=head2 Filters => ArrayRef[L<Paws::RDS::Filter>]
 
+A filter that specifies one or more DB instances to describe.
 
+Supported filters:
 
+=over
 
+=item *
 
+C<db-cluster-id> - Accepts DB cluster identifiers and DB cluster Amazon
+Resource Names (ARNs). The results list will only include information
+about the DB instances associated with the DB Clusters identified by
+these ARNs.
 
-=head2 Filters => ArrayRef[Paws::RDS::Filter]
+=item *
 
-  
+C<db-instance-id> - Accepts DB instance identifiers and DB instance
+Amazon Resource Names (ARNs). The results list will only include
+information about the DB instances identified by these ARNs.
 
-This parameter is not currently supported.
-
-
-
-
-
-
+=back
 
 
 
 
 =head2 Marker => Str
 
-  
-
-An optional pagination token provided by a previous DescribeDBInstances
-request. If this parameter is specified, the response includes only
-records beyond the marker, up to the value specified by C<MaxRecords> .
-
-
-
-
-
-
-
+An optional pagination token provided by a previous
+C<DescribeDBInstances> request. If this parameter is specified, the
+response includes only records beyond the marker, up to the value
+specified by C<MaxRecords>.
 
 
 
 =head2 MaxRecords => Int
 
-  
-
 The maximum number of records to include in the response. If more
 records exist than the specified C<MaxRecords> value, a pagination
 token called a marker is included in the response so that the remaining
-results may be retrieved.
+results can be retrieved.
 
 Default: 100
 
-Constraints: minimum 20, maximum 100
-
-
-
-
-
-
-
-
+Constraints: Minimum 20, maximum 100.
 
 
 

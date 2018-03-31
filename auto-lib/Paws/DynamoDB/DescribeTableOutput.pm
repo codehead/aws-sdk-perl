@@ -1,10 +1,9 @@
 
-package Paws::DynamoDB::DescribeTableOutput {
+package Paws::DynamoDB::DescribeTableOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
   has Table => (is => 'ro', isa => 'Paws::DynamoDB::TableDescription');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,9 +13,13 @@ Paws::DynamoDB::DescribeTableOutput
 
 =head1 ATTRIBUTES
 
-=head2 Table => Paws::DynamoDB::TableDescription
 
-  
+=head2 Table => L<Paws::DynamoDB::TableDescription>
+
+The properties of the table.
+
+
+=head2 _request_id => Str
 
 
 =cut

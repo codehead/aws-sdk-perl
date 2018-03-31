@@ -1,10 +1,9 @@
 
-package Paws::StorageGateway::DescribeChapCredentialsOutput {
+package Paws::StorageGateway::DescribeChapCredentialsOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
   has ChapCredentials => (is => 'ro', isa => 'ArrayRef[Paws::StorageGateway::ChapInfo]');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,9 +13,8 @@ Paws::StorageGateway::DescribeChapCredentialsOutput
 
 =head1 ATTRIBUTES
 
-=head2 ChapCredentials => ArrayRef[Paws::StorageGateway::ChapInfo]
 
-  
+=head2 ChapCredentials => ArrayRef[L<Paws::StorageGateway::ChapInfo>]
 
 An array of ChapInfo objects that represent CHAP credentials. Each
 object in the array contains CHAP credential information for one
@@ -33,8 +31,8 @@ B<InitiatorName>: The iSCSI initiator that connects to the target.
 =item *
 
 B<SecretToAuthenticateInitiator>: The secret key that the initiator
-(e.g. Windows client) must provide to participate in mutual CHAP with
-the target.
+(for example, the Windows client) must provide to participate in mutual
+CHAP with the target.
 
 =item *
 
@@ -50,12 +48,7 @@ B<TargetARN>: The Amazon Resource Name (ARN) of the storage volume.
 
 
 
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

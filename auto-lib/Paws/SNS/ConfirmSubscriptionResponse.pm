@@ -1,10 +1,9 @@
 
-package Paws::SNS::ConfirmSubscriptionResponse {
+package Paws::SNS::ConfirmSubscriptionResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has SubscriptionArn => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::SNS::ConfirmSubscriptionResponse
 
 =head1 ATTRIBUTES
 
-=head2 SubscriptionArn => Str
 
-  
+=head2 SubscriptionArn => Str
 
 The ARN of the created subscription.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

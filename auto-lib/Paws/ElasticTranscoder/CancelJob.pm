@@ -1,7 +1,7 @@
 
-package Paws::ElasticTranscoder::CancelJob {
+package Paws::ElasticTranscoder::CancelJob;
   use Moose;
-  has Id => (is => 'ro', isa => 'Str', traits => ['ParamInURI'], uri_name => 'Id' , required => 1);
+  has Id => (is => 'ro', isa => 'Str', traits => ['ParamInURI'], uri_name => 'Id', required => 1);
 
   use MooseX::ClassAttribute;
 
@@ -9,8 +9,7 @@ package Paws::ElasticTranscoder::CancelJob {
   class_has _api_uri  => (isa => 'Str', is => 'ro', default => '/2012-09-25/jobs/{Id}');
   class_has _api_method  => (isa => 'Str', is => 'ro', default => 'DELETE');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::ElasticTranscoder::CancelJobResponse');
-  class_has _result_key => (isa => 'Str', is => 'ro', default => 'CancelJobResult');
-}
+  class_has _result_key => (isa => 'Str', is => 'ro');
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method CancelJob on th
 Amazon Elastic Transcoder service. Use the attributes of this class
 as arguments to method CancelJob.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to CancelJob.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to CancelJob.
 
 As an example:
 
@@ -35,22 +34,13 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> Id => Str
 
-  
+=head2 B<REQUIRED> Id => Str
 
 The identifier of the job that you want to cancel.
 
 To get a list of the jobs (including their C<jobId>) that have a status
 of C<Submitted>, use the ListJobsByStatus API action.
-
-
-
-
-
-
-
-
 
 
 

@@ -1,10 +1,9 @@
 
-package Paws::IAM::CreateSAMLProviderResponse {
+package Paws::IAM::CreateSAMLProviderResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has SAMLProviderArn => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,14 @@ Paws::IAM::CreateSAMLProviderResponse
 
 =head1 ATTRIBUTES
 
+
 =head2 SAMLProviderArn => Str
 
-  
-
-The Amazon Resource Name (ARN) of the SAML provider.
-
+The Amazon Resource Name (ARN) of the new SAML provider resource in
+IAM.
 
 
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

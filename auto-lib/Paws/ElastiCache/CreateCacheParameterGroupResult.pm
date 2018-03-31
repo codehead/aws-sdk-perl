@@ -1,10 +1,9 @@
 
-package Paws::ElastiCache::CreateCacheParameterGroupResult {
+package Paws::ElastiCache::CreateCacheParameterGroupResult;
   use Moose;
-  with 'Paws::API::ResultParser';
   has CacheParameterGroup => (is => 'ro', isa => 'Paws::ElastiCache::CacheParameterGroup');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,9 +14,13 @@ Paws::ElastiCache::CreateCacheParameterGroupResult
 
 =head1 ATTRIBUTES
 
-=head2 CacheParameterGroup => Paws::ElastiCache::CacheParameterGroup
 
-  
+=head2 CacheParameterGroup => L<Paws::ElastiCache::CacheParameterGroup>
+
+
+
+
+=head2 _request_id => Str
 
 
 =cut

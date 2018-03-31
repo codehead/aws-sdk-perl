@@ -1,10 +1,9 @@
 
-package Paws::EC2::DescribeExportTasksResult {
+package Paws::EC2::DescribeExportTasksResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has ExportTasks => (is => 'ro', isa => 'ArrayRef[Paws::EC2::ExportTask]', xmlname => 'exportTaskSet', traits => ['Unwrapped',]);
+  has ExportTasks => (is => 'ro', isa => 'ArrayRef[Paws::EC2::ExportTask]', request_name => 'exportTaskSet', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::EC2::DescribeExportTasksResult
 
 =head1 ATTRIBUTES
 
-=head2 ExportTasks => ArrayRef[Paws::EC2::ExportTask]
 
-  
+=head2 ExportTasks => ArrayRef[L<Paws::EC2::ExportTask>]
 
 Information about the export tasks.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

@@ -1,10 +1,9 @@
 
-package Paws::CodeDeploy::BatchGetDeploymentsOutput {
+package Paws::CodeDeploy::BatchGetDeploymentsOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has deploymentsInfo => (is => 'ro', isa => 'ArrayRef[Paws::CodeDeploy::DeploymentInfo]');
+  has DeploymentsInfo => (is => 'ro', isa => 'ArrayRef[Paws::CodeDeploy::DeploymentInfo]', traits => ['NameInRequest'], request_name => 'deploymentsInfo' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::CodeDeploy::BatchGetDeploymentsOutput
 
 =head1 ATTRIBUTES
 
-=head2 deploymentsInfo => ArrayRef[Paws::CodeDeploy::DeploymentInfo]
 
-  
+=head2 DeploymentsInfo => ArrayRef[L<Paws::CodeDeploy::DeploymentInfo>]
 
 Information about the deployments.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

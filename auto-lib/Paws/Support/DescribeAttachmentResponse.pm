@@ -1,10 +1,9 @@
 
-package Paws::Support::DescribeAttachmentResponse {
+package Paws::Support::DescribeAttachmentResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has attachment => (is => 'ro', isa => 'Paws::Support::Attachment');
+  has Attachment => (is => 'ro', isa => 'Paws::Support::Attachment', traits => ['NameInRequest'], request_name => 'attachment' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::Support::DescribeAttachmentResponse
 
 =head1 ATTRIBUTES
 
-=head2 attachment => Paws::Support::Attachment
 
-  
+=head2 Attachment => L<Paws::Support::Attachment>
 
 The attachment content and file name.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

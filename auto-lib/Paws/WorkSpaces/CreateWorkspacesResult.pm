@@ -1,11 +1,10 @@
 
-package Paws::WorkSpaces::CreateWorkspacesResult {
+package Paws::WorkSpaces::CreateWorkspacesResult;
   use Moose;
-  with 'Paws::API::ResultParser';
   has FailedRequests => (is => 'ro', isa => 'ArrayRef[Paws::WorkSpaces::FailedCreateWorkspaceRequest]');
   has PendingRequests => (is => 'ro', isa => 'ArrayRef[Paws::WorkSpaces::Workspace]');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -15,24 +14,14 @@ Paws::WorkSpaces::CreateWorkspacesResult
 
 =head1 ATTRIBUTES
 
-=head2 FailedRequests => ArrayRef[Paws::WorkSpaces::FailedCreateWorkspaceRequest]
 
-  
+=head2 FailedRequests => ArrayRef[L<Paws::WorkSpaces::FailedCreateWorkspaceRequest>]
 
 An array of structures that represent the WorkSpaces that could not be
 created.
 
 
-
-
-
-
-
-
-
-=head2 PendingRequests => ArrayRef[Paws::WorkSpaces::Workspace]
-
-  
+=head2 PendingRequests => ArrayRef[L<Paws::WorkSpaces::Workspace>]
 
 An array of structures that represent the WorkSpaces that were created.
 
@@ -42,13 +31,7 @@ DescribeWorkspaces with this identifier, no information will be
 returned.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

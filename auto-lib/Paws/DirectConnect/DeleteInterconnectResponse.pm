@@ -1,10 +1,9 @@
 
-package Paws::DirectConnect::DeleteInterconnectResponse {
+package Paws::DirectConnect::DeleteInterconnectResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has interconnectState => (is => 'ro', isa => 'Str');
+  has InterconnectState => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'interconnectState' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,9 +13,13 @@ Paws::DirectConnect::DeleteInterconnectResponse
 
 =head1 ATTRIBUTES
 
-=head2 interconnectState => Str
 
-  
+=head2 InterconnectState => Str
+
+
+
+Valid values are: C<"requested">, C<"pending">, C<"available">, C<"down">, C<"deleting">, C<"deleted">
+=head2 _request_id => Str
 
 
 =cut

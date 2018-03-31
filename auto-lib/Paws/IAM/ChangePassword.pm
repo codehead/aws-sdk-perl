@@ -1,5 +1,5 @@
 
-package Paws::IAM::ChangePassword {
+package Paws::IAM::ChangePassword;
   use Moose;
   has NewPassword => (is => 'ro', isa => 'Str', required => 1);
   has OldPassword => (is => 'ro', isa => 'Str', required => 1);
@@ -7,9 +7,8 @@ package Paws::IAM::ChangePassword {
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'ChangePassword');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -24,7 +23,7 @@ This class represents the parameters used for calling the method ChangePassword 
 AWS Identity and Access Management service. Use the attributes of this class
 as arguments to method ChangePassword.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to ChangePassword.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to ChangePassword.
 
 As an example:
 
@@ -34,35 +33,26 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> NewPassword => Str
 
-  
+=head2 B<REQUIRED> NewPassword => Str
 
 The new password. The new password must conform to the AWS account's
 password policy, if one exists.
 
-
-
-
-
-
-
+The regex pattern used to validate this parameter is a string of
+characters consisting of almost any printable ASCII character from the
+space (\u0020) through the end of the ASCII character range (\u00FF).
+You can also include the tab (\u0009), line feed (\u000A), and carriage
+return (\u000D) characters. Although any of these characters are valid
+in a password, note that many tools, such as the AWS Management
+Console, might restrict the ability to enter certain characters because
+they have special meaning within that tool.
 
 
 
 =head2 B<REQUIRED> OldPassword => Str
 
-  
-
 The IAM user's current password.
-
-
-
-
-
-
-
-
 
 
 

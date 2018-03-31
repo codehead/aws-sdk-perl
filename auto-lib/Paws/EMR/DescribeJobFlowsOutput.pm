@@ -1,10 +1,9 @@
 
-package Paws::EMR::DescribeJobFlowsOutput {
+package Paws::EMR::DescribeJobFlowsOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
   has JobFlows => (is => 'ro', isa => 'ArrayRef[Paws::EMR::JobFlowDetail]');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::EMR::DescribeJobFlowsOutput
 
 =head1 ATTRIBUTES
 
-=head2 JobFlows => ArrayRef[Paws::EMR::JobFlowDetail]
 
-  
+=head2 JobFlows => ArrayRef[L<Paws::EMR::JobFlowDetail>]
 
 A list of job flows matching the parameters supplied.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

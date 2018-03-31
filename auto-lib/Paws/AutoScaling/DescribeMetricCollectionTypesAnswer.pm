@@ -1,11 +1,10 @@
 
-package Paws::AutoScaling::DescribeMetricCollectionTypesAnswer {
+package Paws::AutoScaling::DescribeMetricCollectionTypesAnswer;
   use Moose;
-  with 'Paws::API::ResultParser';
   has Granularities => (is => 'ro', isa => 'ArrayRef[Paws::AutoScaling::MetricGranularityType]');
   has Metrics => (is => 'ro', isa => 'ArrayRef[Paws::AutoScaling::MetricCollectionType]');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -16,73 +15,18 @@ Paws::AutoScaling::DescribeMetricCollectionTypesAnswer
 
 =head1 ATTRIBUTES
 
-=head2 Granularities => ArrayRef[Paws::AutoScaling::MetricGranularityType]
 
-  
+=head2 Granularities => ArrayRef[L<Paws::AutoScaling::MetricGranularityType>]
 
-The granularities for the listed metrics.
-
+The granularities for the metrics.
 
 
+=head2 Metrics => ArrayRef[L<Paws::AutoScaling::MetricCollectionType>]
+
+One or more metrics.
 
 
-
-
-
-
-=head2 Metrics => ArrayRef[Paws::AutoScaling::MetricCollectionType]
-
-  
-
-One or more of the following metrics:
-
-=over
-
-=item *
-
-GroupMinSize
-
-=item *
-
-GroupMaxSize
-
-=item *
-
-GroupDesiredCapacity
-
-=item *
-
-GroupInServiceInstances
-
-=item *
-
-GroupPendingInstances
-
-=item *
-
-GroupStandbyInstances
-
-=item *
-
-GroupTerminatingInstances
-
-=item *
-
-GroupTotalInstances
-
-=back
-
-The C<GroupStandbyInstances> metric is not returned by default. You
-must explicitly request it when calling EnableMetricsCollection.
-
-
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

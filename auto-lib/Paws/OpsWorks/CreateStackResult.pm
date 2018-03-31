@@ -1,10 +1,9 @@
 
-package Paws::OpsWorks::CreateStackResult {
+package Paws::OpsWorks::CreateStackResult;
   use Moose;
-  with 'Paws::API::ResultParser';
   has StackId => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,21 +13,14 @@ Paws::OpsWorks::CreateStackResult
 
 =head1 ATTRIBUTES
 
-=head2 StackId => Str
 
-  
+=head2 StackId => Str
 
 The stack ID, which is an opaque string that you use to identify the
 stack when performing actions such as C<DescribeStacks>.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

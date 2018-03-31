@@ -1,9 +1,8 @@
 
-package Paws::ELB::RemoveTagsOutput {
+package Paws::ELB::RemoveTagsOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -14,6 +13,8 @@ Paws::ELB::RemoveTagsOutput
 
 =head1 ATTRIBUTES
 
+
+=head2 _request_id => Str
 
 
 =cut

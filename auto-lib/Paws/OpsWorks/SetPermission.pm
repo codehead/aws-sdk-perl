@@ -1,5 +1,5 @@
 
-package Paws::OpsWorks::SetPermission {
+package Paws::OpsWorks::SetPermission;
   use Moose;
   has AllowSsh => (is => 'ro', isa => 'Bool');
   has AllowSudo => (is => 'ro', isa => 'Bool');
@@ -10,9 +10,8 @@ package Paws::OpsWorks::SetPermission {
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'SetPermission');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -27,7 +26,7 @@ This class represents the parameters used for calling the method SetPermission o
 AWS OpsWorks service. Use the attributes of this class
 as arguments to method SetPermission.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to SetPermission.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to SetPermission.
 
 As an example:
 
@@ -37,97 +36,62 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 AllowSsh => Bool
 
-  
+=head2 AllowSsh => Bool
 
 The user is allowed to use SSH to communicate with the instance.
 
 
 
-
-
-
-
-
-
-
 =head2 AllowSudo => Bool
-
-  
 
 The user is allowed to use B<sudo> to elevate privileges.
 
 
 
-
-
-
-
-
-
-
 =head2 B<REQUIRED> IamUserArn => Str
 
-  
-
-The user's IAM ARN.
-
-
-
-
-
-
-
+The user's IAM ARN. This can also be a federated user's ARN.
 
 
 
 =head2 Level => Str
-
-  
 
 The user's permission level, which must be set to one of the following
 strings. You cannot set your own permissions level.
 
 =over
 
-=item * C<deny>
+=item *
 
-=item * C<show>
+C<deny>
 
-=item * C<deploy>
+=item *
 
-=item * C<manage>
+C<show>
 
-=item * C<iam_only>
+=item *
+
+C<deploy>
+
+=item *
+
+C<manage>
+
+=item *
+
+C<iam_only>
 
 =back
 
 For more information on the permissions associated with these levels,
-see Managing User Permissions
-
-
-
-
-
-
-
+see Managing User Permissions.
 
 
 
 =head2 B<REQUIRED> StackId => Str
 
-  
-
 The stack ID.
-
-
-
-
-
-
-
-
 
 
 

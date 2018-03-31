@@ -1,10 +1,9 @@
 
-package Paws::Lambda::InvokeAsyncResponse {
+package Paws::Lambda::InvokeAsyncResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has Status => (is => 'ro', isa => 'Int');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::Lambda::InvokeAsyncResponse
 
 =head1 ATTRIBUTES
 
-=head2 Status => Int
 
-  
+=head2 Status => Int
 
 It will be 202 upon success.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

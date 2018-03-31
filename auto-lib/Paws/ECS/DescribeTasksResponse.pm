@@ -1,11 +1,10 @@
 
-package Paws::ECS::DescribeTasksResponse {
+package Paws::ECS::DescribeTasksResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has failures => (is => 'ro', isa => 'ArrayRef[Paws::ECS::Failure]');
-  has tasks => (is => 'ro', isa => 'ArrayRef[Paws::ECS::Task]');
+  has Failures => (is => 'ro', isa => 'ArrayRef[Paws::ECS::Failure]', traits => ['NameInRequest'], request_name => 'failures' );
+  has Tasks => (is => 'ro', isa => 'ArrayRef[Paws::ECS::Task]', traits => ['NameInRequest'], request_name => 'tasks' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -15,23 +14,18 @@ Paws::ECS::DescribeTasksResponse
 
 =head1 ATTRIBUTES
 
-=head2 failures => ArrayRef[Paws::ECS::Failure]
 
-  
-=head2 tasks => ArrayRef[Paws::ECS::Task]
+=head2 Failures => ArrayRef[L<Paws::ECS::Failure>]
 
-  
+Any failures associated with the call.
+
+
+=head2 Tasks => ArrayRef[L<Paws::ECS::Task>]
 
 The list of tasks.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

@@ -1,16 +1,15 @@
 
-package Paws::AutoScaling::EnableMetricsCollection {
+package Paws::AutoScaling::EnableMetricsCollection;
   use Moose;
   has AutoScalingGroupName => (is => 'ro', isa => 'Str', required => 1);
   has Granularity => (is => 'ro', isa => 'Str', required => 1);
-  has Metrics => (is => 'ro', isa => 'ArrayRef[Str]');
+  has Metrics => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'EnableMetricsCollection');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method EnableMetricsCo
 Auto Scaling service. Use the attributes of this class
 as arguments to method EnableMetricsCollection.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to EnableMetricsCollection.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to EnableMetricsCollection.
 
 As an example:
 
@@ -35,90 +34,60 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> AutoScalingGroupName => Str
 
-  
+=head2 B<REQUIRED> AutoScalingGroupName => Str
 
 The name or ARN of the Auto Scaling group.
 
 
 
-
-
-
-
-
-
-
 =head2 B<REQUIRED> Granularity => Str
 
-  
-
-The granularity to associate with the metrics to collect. Currently,
-the only valid value is "1Minute".
+The granularity to associate with the metrics to collect. The only
+valid value is C<1Minute>.
 
 
 
+=head2 Metrics => ArrayRef[Str|Undef]
 
-
-
-
-
-
-
-=head2 Metrics => ArrayRef[Str]
-
-  
-
-One or more of the following metrics:
+One or more of the following metrics. If you omit this parameter, all
+metrics are enabled.
 
 =over
 
 =item *
 
-GroupMinSize
+C<GroupMinSize>
 
 =item *
 
-GroupMaxSize
+C<GroupMaxSize>
 
 =item *
 
-GroupDesiredCapacity
+C<GroupDesiredCapacity>
 
 =item *
 
-GroupInServiceInstances
+C<GroupInServiceInstances>
 
 =item *
 
-GroupPendingInstances
+C<GroupPendingInstances>
 
 =item *
 
-GroupStandbyInstances
+C<GroupStandbyInstances>
 
 =item *
 
-GroupTerminatingInstances
+C<GroupTerminatingInstances>
 
 =item *
 
-GroupTotalInstances
+C<GroupTotalInstances>
 
 =back
-
-If you omit this parameter, all metrics are enabled.
-
-The C<GroupStandbyInstances> metric is not returned by default. You
-must explicitly request it when calling EnableMetricsCollection.
-
-
-
-
-
-
-
 
 
 

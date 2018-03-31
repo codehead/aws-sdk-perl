@@ -1,11 +1,10 @@
 
-package Paws::SimpleWorkflow::WorkflowTypeDetail {
+package Paws::SimpleWorkflow::WorkflowTypeDetail;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has configuration => (is => 'ro', isa => 'Paws::SimpleWorkflow::WorkflowTypeConfiguration', required => 1);
-  has typeInfo => (is => 'ro', isa => 'Paws::SimpleWorkflow::WorkflowTypeInfo', required => 1);
+  has Configuration => (is => 'ro', isa => 'Paws::SimpleWorkflow::WorkflowTypeConfiguration', traits => ['NameInRequest'], request_name => 'configuration' , required => 1);
+  has TypeInfo => (is => 'ro', isa => 'Paws::SimpleWorkflow::WorkflowTypeInfo', traits => ['NameInRequest'], request_name => 'typeInfo' , required => 1);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -15,24 +14,14 @@ Paws::SimpleWorkflow::WorkflowTypeDetail
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> configuration => Paws::SimpleWorkflow::WorkflowTypeConfiguration
 
-  
+=head2 B<REQUIRED> Configuration => L<Paws::SimpleWorkflow::WorkflowTypeConfiguration>
 
 Configuration settings of the workflow type registered through
 RegisterWorkflowType
 
 
-
-
-
-
-
-
-
-=head2 B<REQUIRED> typeInfo => Paws::SimpleWorkflow::WorkflowTypeInfo
-
-  
+=head2 B<REQUIRED> TypeInfo => L<Paws::SimpleWorkflow::WorkflowTypeInfo>
 
 General information about the workflow type.
 
@@ -41,10 +30,14 @@ structure) can be one of the following.
 
 =over
 
-=item * B<REGISTERED>: The type is registered and available. Workers
+=item *
+
+C<REGISTERED> E<ndash> The type is registered and available. Workers
 supporting this type should be running.
 
-=item * B<DEPRECATED>: The type was deprecated using
+=item *
+
+C<DEPRECATED> E<ndash> The type was deprecated using
 DeprecateWorkflowType, but is still in use. You should keep workers
 supporting this type running. You cannot create new workflow executions
 of this type.
@@ -53,12 +46,7 @@ of this type.
 
 
 
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

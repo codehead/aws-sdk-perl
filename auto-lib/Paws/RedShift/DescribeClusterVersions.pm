@@ -1,5 +1,5 @@
 
-package Paws::RedShift::DescribeClusterVersions {
+package Paws::RedShift::DescribeClusterVersions;
   use Moose;
   has ClusterParameterGroupFamily => (is => 'ro', isa => 'Str');
   has ClusterVersion => (is => 'ro', isa => 'Str');
@@ -11,7 +11,6 @@ package Paws::RedShift::DescribeClusterVersions {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeClusterVersions');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::RedShift::ClusterVersionsMessage');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'DescribeClusterVersionsResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -26,7 +25,7 @@ This class represents the parameters used for calling the method DescribeCluster
 Amazon Redshift service. Use the attributes of this class
 as arguments to method DescribeClusterVersions.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeClusterVersions.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeClusterVersions.
 
 As an example:
 
@@ -36,9 +35,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 ClusterParameterGroupFamily => Str
 
-  
+=head2 ClusterParameterGroupFamily => Str
 
 The name of a specific cluster parameter group family to return details
 for.
@@ -47,26 +45,24 @@ Constraints:
 
 =over
 
-=item * Must be 1 to 255 alphanumeric characters
+=item *
 
-=item * First character must be a letter
+Must be 1 to 255 alphanumeric characters
 
-=item * Cannot end with a hyphen or contain two consecutive hyphens
+=item *
+
+First character must be a letter
+
+=item *
+
+Cannot end with a hyphen or contain two consecutive hyphens
 
 =back
 
 
 
 
-
-
-
-
-
-
 =head2 ClusterVersion => Str
-
-  
 
 The specific cluster version to return.
 
@@ -74,16 +70,7 @@ Example: C<1.0>
 
 
 
-
-
-
-
-
-
-
 =head2 Marker => Str
-
-  
 
 An optional parameter that specifies the starting point to return a set
 of response records. When the results of a DescribeClusterVersions
@@ -94,16 +81,7 @@ C<Marker> parameter and retrying the request.
 
 
 
-
-
-
-
-
-
-
 =head2 MaxRecords => Int
-
-  
 
 The maximum number of response records to return in each call. If the
 number of remaining response records exceeds the specified
@@ -114,14 +92,6 @@ command with the returned marker value.
 Default: C<100>
 
 Constraints: minimum 20, maximum 100.
-
-
-
-
-
-
-
-
 
 
 

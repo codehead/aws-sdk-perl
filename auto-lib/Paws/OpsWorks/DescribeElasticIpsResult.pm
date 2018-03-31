@@ -1,10 +1,9 @@
 
-package Paws::OpsWorks::DescribeElasticIpsResult {
+package Paws::OpsWorks::DescribeElasticIpsResult;
   use Moose;
-  with 'Paws::API::ResultParser';
   has ElasticIps => (is => 'ro', isa => 'ArrayRef[Paws::OpsWorks::ElasticIp]');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,21 +13,14 @@ Paws::OpsWorks::DescribeElasticIpsResult
 
 =head1 ATTRIBUTES
 
-=head2 ElasticIps => ArrayRef[Paws::OpsWorks::ElasticIp]
 
-  
+=head2 ElasticIps => ArrayRef[L<Paws::OpsWorks::ElasticIp>]
 
 An C<ElasticIps> object that describes the specified Elastic IP
 addresses.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

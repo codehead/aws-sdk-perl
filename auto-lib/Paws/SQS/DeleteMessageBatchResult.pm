@@ -1,11 +1,10 @@
 
-package Paws::SQS::DeleteMessageBatchResult {
+package Paws::SQS::DeleteMessageBatchResult;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has Failed => (is => 'ro', isa => 'ArrayRef[Paws::SQS::BatchResultErrorEntry]', xmlname => 'BatchResultErrorEntry', traits => ['Unwrapped',], required => 1);
-  has Successful => (is => 'ro', isa => 'ArrayRef[Paws::SQS::DeleteMessageBatchResultEntry]', xmlname => 'DeleteMessageBatchResultEntry', traits => ['Unwrapped',], required => 1);
+  has Failed => (is => 'ro', isa => 'ArrayRef[Paws::SQS::BatchResultErrorEntry]', request_name => 'BatchResultErrorEntry', traits => ['NameInRequest',], required => 1);
+  has Successful => (is => 'ro', isa => 'ArrayRef[Paws::SQS::DeleteMessageBatchResultEntry]', request_name => 'DeleteMessageBatchResultEntry', traits => ['NameInRequest',], required => 1);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -16,34 +15,18 @@ Paws::SQS::DeleteMessageBatchResult
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> Failed => ArrayRef[Paws::SQS::BatchResultErrorEntry]
 
-  
+=head2 B<REQUIRED> Failed => ArrayRef[L<Paws::SQS::BatchResultErrorEntry>]
 
-A list of BatchResultErrorEntry items.
-
+A list of C< BatchResultErrorEntry > items.
 
 
+=head2 B<REQUIRED> Successful => ArrayRef[L<Paws::SQS::DeleteMessageBatchResultEntry>]
+
+A list of C< DeleteMessageBatchResultEntry > items.
 
 
-
-
-
-
-=head2 B<REQUIRED> Successful => ArrayRef[Paws::SQS::DeleteMessageBatchResultEntry]
-
-  
-
-A list of DeleteMessageBatchResultEntry items.
-
-
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

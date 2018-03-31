@@ -1,11 +1,10 @@
 
-package Paws::RedShift::ReservedNodeOfferingsMessage {
+package Paws::RedShift::ReservedNodeOfferingsMessage;
   use Moose;
-  with 'Paws::API::ResultParser';
   has Marker => (is => 'ro', isa => 'Str');
-  has ReservedNodeOfferings => (is => 'ro', isa => 'ArrayRef[Paws::RedShift::ReservedNodeOffering]', xmlname => 'ReservedNodeOffering', traits => ['Unwrapped',]);
+  has ReservedNodeOfferings => (is => 'ro', isa => 'ArrayRef[Paws::RedShift::ReservedNodeOffering]', request_name => 'ReservedNodeOffering', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -16,9 +15,8 @@ Paws::RedShift::ReservedNodeOfferingsMessage
 
 =head1 ATTRIBUTES
 
-=head2 Marker => Str
 
-  
+=head2 Marker => Str
 
 A value that indicates the starting point for the next set of response
 records in a subsequent request. If a value is returned in a response,
@@ -28,27 +26,12 @@ the C<Marker> field is empty, all response records have been retrieved
 for the request.
 
 
+=head2 ReservedNodeOfferings => ArrayRef[L<Paws::RedShift::ReservedNodeOffering>]
+
+A list of C<ReservedNodeOffering> objects.
 
 
-
-
-
-
-
-=head2 ReservedNodeOfferings => ArrayRef[Paws::RedShift::ReservedNodeOffering]
-
-  
-
-A list of reserved node offerings.
-
-
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

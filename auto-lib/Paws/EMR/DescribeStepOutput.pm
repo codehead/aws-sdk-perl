@@ -1,10 +1,9 @@
 
-package Paws::EMR::DescribeStepOutput {
+package Paws::EMR::DescribeStepOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
   has Step => (is => 'ro', isa => 'Paws::EMR::Step');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::EMR::DescribeStepOutput
 
 =head1 ATTRIBUTES
 
-=head2 Step => Paws::EMR::Step
 
-  
+=head2 Step => L<Paws::EMR::Step>
 
 The step details for the requested step identifier.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

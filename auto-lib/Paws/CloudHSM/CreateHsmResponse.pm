@@ -1,10 +1,9 @@
 
-package Paws::CloudHSM::CreateHsmResponse {
+package Paws::CloudHSM::CreateHsmResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has HsmArn => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::CloudHSM::CreateHsmResponse
 
 =head1 ATTRIBUTES
 
-=head2 HsmArn => Str
 
-  
+=head2 HsmArn => Str
 
 The ARN of the HSM.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

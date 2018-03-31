@@ -1,10 +1,9 @@
 
-package Paws::CognitoSync::GetCognitoEventsResponse {
+package Paws::CognitoSync::GetCognitoEventsResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has Events => (is => 'ro', isa => 'Paws::CognitoSync::Events');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::CognitoSync::GetCognitoEventsResponse
 
 =head1 ATTRIBUTES
 
-=head2 Events => Paws::CognitoSync::Events
 
-  
+=head2 Events => L<Paws::CognitoSync::Events>
 
 The Cognito Events returned from the GetCognitoEvents request
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

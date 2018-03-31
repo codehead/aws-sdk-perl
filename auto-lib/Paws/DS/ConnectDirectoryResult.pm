@@ -1,10 +1,9 @@
 
-package Paws::DS::ConnectDirectoryResult {
+package Paws::DS::ConnectDirectoryResult;
   use Moose;
-  with 'Paws::API::ResultParser';
   has DirectoryId => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::DS::ConnectDirectoryResult
 
 =head1 ATTRIBUTES
 
-=head2 DirectoryId => Str
 
-  
+=head2 DirectoryId => Str
 
 The identifier of the new directory.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

@@ -1,10 +1,9 @@
 
-package Paws::Config::DeliverConfigSnapshotResponse {
+package Paws::Config::DeliverConfigSnapshotResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has configSnapshotId => (is => 'ro', isa => 'Str');
+  has ConfigSnapshotId => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'configSnapshotId' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::Config::DeliverConfigSnapshotResponse
 
 =head1 ATTRIBUTES
 
-=head2 configSnapshotId => Str
 
-  
+=head2 ConfigSnapshotId => Str
 
 The ID of the snapshot that is being created.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

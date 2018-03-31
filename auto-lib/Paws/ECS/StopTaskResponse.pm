@@ -1,10 +1,9 @@
 
-package Paws::ECS::StopTaskResponse {
+package Paws::ECS::StopTaskResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has task => (is => 'ro', isa => 'Paws::ECS::Task');
+  has Task => (is => 'ro', isa => 'Paws::ECS::Task', traits => ['NameInRequest'], request_name => 'task' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,9 +13,13 @@ Paws::ECS::StopTaskResponse
 
 =head1 ATTRIBUTES
 
-=head2 task => Paws::ECS::Task
 
-  
+=head2 Task => L<Paws::ECS::Task>
+
+The task that was stopped.
+
+
+=head2 _request_id => Str
 
 
 =cut

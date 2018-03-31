@@ -1,10 +1,9 @@
 
-package Paws::Config::DescribeConfigurationRecorderStatusResponse {
+package Paws::Config::DescribeConfigurationRecorderStatusResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has ConfigurationRecordersStatus => (is => 'ro', isa => 'ArrayRef[Paws::Config::ConfigurationRecorderStatus]');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::Config::DescribeConfigurationRecorderStatusResponse
 
 =head1 ATTRIBUTES
 
-=head2 ConfigurationRecordersStatus => ArrayRef[Paws::Config::ConfigurationRecorderStatus]
 
-  
+=head2 ConfigurationRecordersStatus => ArrayRef[L<Paws::Config::ConfigurationRecorderStatus>]
 
 A list that contains status of the specified recorders.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

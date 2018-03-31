@@ -1,5 +1,5 @@
 
-package Paws::CloudFormation::SetStackPolicy {
+package Paws::CloudFormation::SetStackPolicy;
   use Moose;
   has StackName => (is => 'ro', isa => 'Str', required => 1);
   has StackPolicyBody => (is => 'ro', isa => 'Str');
@@ -8,9 +8,8 @@ package Paws::CloudFormation::SetStackPolicy {
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'SetStackPolicy');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method SetStackPolicy 
 AWS CloudFormation service. Use the attributes of this class
 as arguments to method SetStackPolicy.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to SetStackPolicy.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to SetStackPolicy.
 
 As an example:
 
@@ -35,24 +34,14 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> StackName => Str
 
-  
+=head2 B<REQUIRED> StackName => Str
 
 The name or unique stack ID that you want to associate a policy with.
 
 
 
-
-
-
-
-
-
-
 =head2 StackPolicyBody => Str
-
-  
 
 Structure containing the stack policy body. For more information, go to
 Prevent Updates to Stack Resources in the AWS CloudFormation User
@@ -61,29 +50,12 @@ C<StackPolicyURL> parameter, but not both.
 
 
 
-
-
-
-
-
-
-
 =head2 StackPolicyURL => Str
 
-  
-
 Location of a file containing the stack policy. The URL must point to a
-policy (max size: 16KB) located in an S3 bucket in the same region as
-the stack. You can specify either the C<StackPolicyBody> or the
+policy (maximum size: 16 KB) located in an S3 bucket in the same region
+as the stack. You can specify either the C<StackPolicyBody> or the
 C<StackPolicyURL> parameter, but not both.
-
-
-
-
-
-
-
-
 
 
 

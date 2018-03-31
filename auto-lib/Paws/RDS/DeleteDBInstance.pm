@@ -1,5 +1,5 @@
 
-package Paws::RDS::DeleteDBInstance {
+package Paws::RDS::DeleteDBInstance;
   use Moose;
   has DBInstanceIdentifier => (is => 'ro', isa => 'Str', required => 1);
   has FinalDBSnapshotIdentifier => (is => 'ro', isa => 'Str');
@@ -10,7 +10,6 @@ package Paws::RDS::DeleteDBInstance {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DeleteDBInstance');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::RDS::DeleteDBInstanceResult');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'DeleteDBInstanceResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method DeleteDBInstanc
 Amazon Relational Database Service service. Use the attributes of this class
 as arguments to method DeleteDBInstance.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DeleteDBInstance.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DeleteDBInstance.
 
 As an example:
 
@@ -35,37 +34,34 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
+
 =head2 B<REQUIRED> DBInstanceIdentifier => Str
 
-  
-
 The DB instance identifier for the DB instance to be deleted. This
-parameter isn't case sensitive.
+parameter isn't case-sensitive.
 
 Constraints:
 
 =over
 
-=item * Must contain from 1 to 63 alphanumeric characters or hyphens
+=item *
 
-=item * First character must be a letter
+Must contain from 1 to 63 alphanumeric characters or hyphens
 
-=item * Cannot end with a hyphen or contain two consecutive hyphens
+=item *
+
+First character must be a letter
+
+=item *
+
+Cannot end with a hyphen or contain two consecutive hyphens
 
 =back
 
 
 
 
-
-
-
-
-
-
 =head2 FinalDBSnapshotIdentifier => Str
-
-  
 
 The DBSnapshotIdentifier of the new DBSnapshot created when
 SkipFinalSnapshot is set to C<false>.
@@ -77,33 +73,37 @@ Constraints:
 
 =over
 
-=item * Must be 1 to 255 alphanumeric characters
+=item *
 
-=item * First character must be a letter
+Must be 1 to 255 alphanumeric characters
 
-=item * Cannot end with a hyphen or contain two consecutive hyphens
+=item *
 
-=item * Cannot be specified when deleting a Read Replica.
+First character must be a letter
+
+=item *
+
+Cannot end with a hyphen or contain two consecutive hyphens
+
+=item *
+
+Cannot be specified when deleting a Read Replica.
 
 =back
 
 
 
 
-
-
-
-
-
-
 =head2 SkipFinalSnapshot => Bool
-
-  
 
 Determines whether a final DB snapshot is created before the DB
 instance is deleted. If C<true> is specified, no DBSnapshot is created.
 If C<false> is specified, a DB snapshot is created before the DB
 instance is deleted.
+
+Note that when a DB instance is in a failure state and has a status of
+'failed', 'incompatible-restore', or 'incompatible-network', it can
+only be deleted when the SkipFinalSnapshot parameter is set to "true".
 
 Specify C<true> when deleting a Read Replica.
 
@@ -111,14 +111,6 @@ The FinalDBSnapshotIdentifier parameter must be specified if
 SkipFinalSnapshot is C<false>.
 
 Default: C<false>
-
-
-
-
-
-
-
-
 
 
 

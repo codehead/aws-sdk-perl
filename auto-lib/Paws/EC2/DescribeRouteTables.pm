@@ -1,16 +1,15 @@
 
-package Paws::EC2::DescribeRouteTables {
+package Paws::EC2::DescribeRouteTables;
   use Moose;
   has DryRun => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'dryRun' );
   has Filters => (is => 'ro', isa => 'ArrayRef[Paws::EC2::Filter]', traits => ['NameInRequest'], request_name => 'Filter' );
-  has RouteTableIds => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'RouteTableId' );
+  has RouteTableIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'RouteTableId' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeRouteTables');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::EC2::DescribeRouteTablesResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method DescribeRouteTa
 Amazon Elastic Compute Cloud service. Use the attributes of this class
 as arguments to method DescribeRouteTables.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeRouteTables.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeRouteTables.
 
 As an example:
 
@@ -35,9 +34,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 DryRun => Bool
 
-  
+=head2 DryRun => Bool
 
 Checks whether you have the required permissions for the action,
 without actually making the request, and provides an error response. If
@@ -46,16 +44,7 @@ C<DryRunOperation>. Otherwise, it is C<UnauthorizedOperation>.
 
 
 
-
-
-
-
-
-
-
-=head2 Filters => ArrayRef[Paws::EC2::Filter]
-
-  
+=head2 Filters => ArrayRef[L<Paws::EC2::Filter>]
 
 One or more filters.
 
@@ -79,7 +68,8 @@ association.
 =item *
 
 C<association.main> - Indicates whether the route table is the main
-route table for the VPC.
+route table for the VPC (C<true> | C<false>). Route tables that do not
+have an association ID are not returned in the response.
 
 =item *
 
@@ -87,13 +77,23 @@ C<route-table-id> - The ID of the route table.
 
 =item *
 
-C<route.destination-cidr-block> - The CIDR range specified in a route
-in the table.
+C<route.destination-cidr-block> - The IPv4 CIDR range specified in a
+route in the table.
+
+=item *
+
+C<route.destination-ipv6-cidr-block> - The IPv6 CIDR range specified in
+a route in the route table.
 
 =item *
 
 C<route.destination-prefix-list-id> - The ID (prefix) of the AWS
 service specified in a route in the table.
+
+=item *
+
+C<route.egress-only-internet-gateway-id> - The ID of an egress-only
+Internet gateway specified in a route in the route table.
 
 =item *
 
@@ -104,6 +104,10 @@ table.
 
 C<route.instance-id> - The ID of an instance specified in a route in
 the table.
+
+=item *
+
+C<route.nat-gateway-id> - The ID of a NAT gateway.
 
 =item *
 
@@ -129,7 +133,10 @@ specified in a route in the table.
 =item *
 
 C<tag>:I<key>=I<value> - The key/value combination of a tag assigned to
-the resource.
+the resource. Specify the key of the tag in the filter name and the
+value of the tag in the filter value. For example, for the tag
+Purpose=X, specify C<tag:Purpose> for the filter name and C<X> for the
+filter value.
 
 =item *
 
@@ -155,27 +162,11 @@ C<vpc-id> - The ID of the VPC for the route table.
 
 
 
-
-
-
-
-
-
-=head2 RouteTableIds => ArrayRef[Str]
-
-  
+=head2 RouteTableIds => ArrayRef[Str|Undef]
 
 One or more route table IDs.
 
 Default: Describes all your route tables.
-
-
-
-
-
-
-
-
 
 
 

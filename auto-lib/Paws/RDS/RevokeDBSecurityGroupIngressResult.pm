@@ -1,10 +1,9 @@
 
-package Paws::RDS::RevokeDBSecurityGroupIngressResult {
+package Paws::RDS::RevokeDBSecurityGroupIngressResult;
   use Moose;
-  with 'Paws::API::ResultParser';
   has DBSecurityGroup => (is => 'ro', isa => 'Paws::RDS::DBSecurityGroup');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,9 +14,13 @@ Paws::RDS::RevokeDBSecurityGroupIngressResult
 
 =head1 ATTRIBUTES
 
-=head2 DBSecurityGroup => Paws::RDS::DBSecurityGroup
 
-  
+=head2 DBSecurityGroup => L<Paws::RDS::DBSecurityGroup>
+
+
+
+
+=head2 _request_id => Str
 
 
 =cut

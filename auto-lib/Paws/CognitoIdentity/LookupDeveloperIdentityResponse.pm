@@ -1,12 +1,11 @@
 
-package Paws::CognitoIdentity::LookupDeveloperIdentityResponse {
+package Paws::CognitoIdentity::LookupDeveloperIdentityResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has DeveloperUserIdentifierList => (is => 'ro', isa => 'ArrayRef[Str]');
+  has DeveloperUserIdentifierList => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
   has IdentityId => (is => 'ro', isa => 'Str');
   has NextToken => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -16,39 +15,20 @@ Paws::CognitoIdentity::LookupDeveloperIdentityResponse
 
 =head1 ATTRIBUTES
 
-=head2 DeveloperUserIdentifierList => ArrayRef[Str]
 
-  
+=head2 DeveloperUserIdentifierList => ArrayRef[Str|Undef]
 
 This is the list of developer user identifiers associated with an
 identity ID. Cognito supports the association of multiple developer
 user identifiers with an identity ID.
 
 
-
-
-
-
-
-
-
 =head2 IdentityId => Str
-
-  
 
 A unique identifier in the format REGION:GUID.
 
 
-
-
-
-
-
-
-
 =head2 NextToken => Str
-
-  
 
 A pagination token. The first call you make will have C<NextToken> set
 to null. After that the service will return C<NextToken> values as
@@ -59,13 +39,7 @@ used to call the API again and get results starting from the 11th
 match.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

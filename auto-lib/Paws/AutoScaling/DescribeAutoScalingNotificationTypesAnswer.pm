@@ -1,10 +1,9 @@
 
-package Paws::AutoScaling::DescribeAutoScalingNotificationTypesAnswer {
+package Paws::AutoScaling::DescribeAutoScalingNotificationTypesAnswer;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has AutoScalingNotificationTypes => (is => 'ro', isa => 'ArrayRef[Str]');
+  has AutoScalingNotificationTypes => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,44 +14,13 @@ Paws::AutoScaling::DescribeAutoScalingNotificationTypesAnswer
 
 =head1 ATTRIBUTES
 
-=head2 AutoScalingNotificationTypes => ArrayRef[Str]
 
-  
+=head2 AutoScalingNotificationTypes => ArrayRef[Str|Undef]
 
-One or more of the following notification types:
-
-=over
-
-=item *
-
-C<autoscaling:EC2_INSTANCE_LAUNCH>
-
-=item *
-
-C<autoscaling:EC2_INSTANCE_LAUNCH_ERROR>
-
-=item *
-
-C<autoscaling:EC2_INSTANCE_TERMINATE>
-
-=item *
-
-C<autoscaling:EC2_INSTANCE_TERMINATE_ERROR>
-
-=item *
-
-C<autoscaling:TEST_NOTIFICATION>
-
-=back
+The notification types.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

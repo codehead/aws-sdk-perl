@@ -1,7 +1,6 @@
 
-package Paws::ImportExport::GetStatusOutput {
+package Paws::ImportExport::GetStatusOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
   has ArtifactList => (is => 'ro', isa => 'ArrayRef[Paws::ImportExport::Artifact]');
   has Carrier => (is => 'ro', isa => 'Str');
   has CreationDate => (is => 'ro', isa => 'Str');
@@ -19,7 +18,7 @@ package Paws::ImportExport::GetStatusOutput {
   has SignatureFileContents => (is => 'ro', isa => 'Str');
   has TrackingNumber => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -30,54 +29,88 @@ Paws::ImportExport::GetStatusOutput
 
 =head1 ATTRIBUTES
 
-=head2 ArtifactList => ArrayRef[Paws::ImportExport::Artifact]
 
-  
+=head2 ArtifactList => ArrayRef[L<Paws::ImportExport::Artifact>]
+
+
+
+
 =head2 Carrier => Str
 
-  
+
+
+
 =head2 CreationDate => Str
 
-  
+
+
+
 =head2 CurrentManifest => Str
 
-  
+
+
+
 =head2 ErrorCount => Int
 
-  
+
+
+
 =head2 JobId => Str
 
-  
+
+
+
 =head2 JobType => Str
 
-  
+
+
+Valid values are: C<"Import">, C<"Export">
 =head2 LocationCode => Str
 
-  
+
+
+
 =head2 LocationMessage => Str
 
-  
+
+
+
 =head2 LogBucket => Str
 
-  
+
+
+
 =head2 LogKey => Str
 
-  
+
+
+
 =head2 ProgressCode => Str
 
-  
+
+
+
 =head2 ProgressMessage => Str
 
-  
+
+
+
 =head2 Signature => Str
 
-  
+
+
+
 =head2 SignatureFileContents => Str
 
-  
+
+
+
 =head2 TrackingNumber => Str
 
-  
+
+
+
+=head2 _request_id => Str
 
 
 =cut

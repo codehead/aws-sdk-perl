@@ -1,17 +1,17 @@
 
-package Paws::EC2::DescribeReservedInstances {
+package Paws::EC2::DescribeReservedInstances;
   use Moose;
   has DryRun => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'dryRun' );
   has Filters => (is => 'ro', isa => 'ArrayRef[Paws::EC2::Filter]', traits => ['NameInRequest'], request_name => 'Filter' );
+  has OfferingClass => (is => 'ro', isa => 'Str');
   has OfferingType => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'offeringType' );
-  has ReservedInstancesIds => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'ReservedInstancesId' );
+  has ReservedInstancesIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'ReservedInstancesId' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeReservedInstances');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::EC2::DescribeReservedInstancesResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -26,7 +26,7 @@ This class represents the parameters used for calling the method DescribeReserve
 Amazon Elastic Compute Cloud service. Use the attributes of this class
 as arguments to method DescribeReservedInstances.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeReservedInstances.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeReservedInstances.
 
 As an example:
 
@@ -36,9 +36,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 DryRun => Bool
 
-  
+=head2 DryRun => Bool
 
 Checks whether you have the required permissions for the action,
 without actually making the request, and provides an error response. If
@@ -47,16 +46,7 @@ C<DryRunOperation>. Otherwise, it is C<UnauthorizedOperation>.
 
 
 
-
-
-
-
-
-
-
-=head2 Filters => ArrayRef[Paws::EC2::Filter]
-
-  
+=head2 Filters => ArrayRef[L<Paws::EC2::Filter>]
 
 One or more filters.
 
@@ -75,7 +65,7 @@ years), in seconds (C<31536000> | C<94608000>).
 =item *
 
 C<end> - The time when the Reserved Instance expires (for example,
-2014-08-07T11:54:42.000Z).
+2015-08-07T11:54:42.000Z).
 
 =item *
 
@@ -84,14 +74,27 @@ example, 9800.0).
 
 =item *
 
-C<instance-type> - The instance type on which the Reserved Instance can
-be used.
+C<instance-type> - The instance type that is covered by the
+reservation.
 
 =item *
 
-C<product-description> - The product description of the Reserved
-Instance (C<Linux/UNIX> | C<Linux/UNIX (Amazon VPC)> | C<Windows> |
-C<Windows (Amazon VPC)>).
+C<scope> - The scope of the Reserved Instance (C<Region> or
+C<Availability Zone>).
+
+=item *
+
+C<product-description> - The Reserved Instance product platform
+description. Instances that include C<(Amazon VPC)> in the product
+platform description will only be displayed to EC2-Classic account
+holders and are for use with Amazon VPC (C<Linux/UNIX> | C<Linux/UNIX
+(Amazon VPC)> | C<SUSE Linux> | C<SUSE Linux (Amazon VPC)> | C<Red Hat
+Enterprise Linux> | C<Red Hat Enterprise Linux (Amazon VPC)> |
+C<Windows> | C<Windows (Amazon VPC)> | C<Windows with SQL Server
+Standard> | C<Windows with SQL Server Standard (Amazon VPC)> |
+C<Windows with SQL Server Web> | C<Windows with SQL Server Web (Amazon
+VPC)> | C<Windows with SQL Server Enterprise> | C<Windows with SQL
+Server Enterprise (Amazon VPC)>).
 
 =item *
 
@@ -110,7 +113,10 @@ C<active> | C<payment-failed> | C<retired>).
 =item *
 
 C<tag>:I<key>=I<value> - The key/value combination of a tag assigned to
-the resource.
+the resource. Specify the key of the tag in the filter name and the
+value of the tag in the filter value. For example, for the tag
+Purpose=X, specify C<tag:Purpose> for the filter name and C<X> for the
+filter value.
 
 =item *
 
@@ -137,45 +143,26 @@ C<usage-price> - The usage price of the Reserved Instance, per hour
 
 
 
+=head2 OfferingClass => Str
 
+Describes whether the Reserved Instance is Standard or Convertible.
 
-
-
-
+Valid values are: C<"standard">, C<"convertible">
 
 =head2 OfferingType => Str
-
-  
 
 The Reserved Instance offering type. If you are using tools that
 predate the 2011-11-01 API version, you only have access to the
 C<Medium Utilization> Reserved Instance offering type.
 
+Valid values are: C<"Heavy Utilization">, C<"Medium Utilization">, C<"Light Utilization">, C<"No Upfront">, C<"Partial Upfront">, C<"All Upfront">
 
-
-
-
-
-
-
-
-
-=head2 ReservedInstancesIds => ArrayRef[Str]
-
-  
+=head2 ReservedInstancesIds => ArrayRef[Str|Undef]
 
 One or more Reserved Instance IDs.
 
 Default: Describes all your Reserved Instances, or only those otherwise
 specified.
-
-
-
-
-
-
-
-
 
 
 

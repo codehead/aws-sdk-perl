@@ -1,10 +1,9 @@
 
-package Paws::SSM::UpdateAssociationStatusResult {
+package Paws::SSM::UpdateAssociationStatusResult;
   use Moose;
-  with 'Paws::API::ResultParser';
   has AssociationDescription => (is => 'ro', isa => 'Paws::SSM::AssociationDescription');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::SSM::UpdateAssociationStatusResult
 
 =head1 ATTRIBUTES
 
-=head2 AssociationDescription => Paws::SSM::AssociationDescription
 
-  
+=head2 AssociationDescription => L<Paws::SSM::AssociationDescription>
 
 Information about the association.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

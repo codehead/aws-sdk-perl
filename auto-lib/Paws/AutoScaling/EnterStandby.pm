@@ -1,8 +1,8 @@
 
-package Paws::AutoScaling::EnterStandby {
+package Paws::AutoScaling::EnterStandby;
   use Moose;
   has AutoScalingGroupName => (is => 'ro', isa => 'Str', required => 1);
-  has InstanceIds => (is => 'ro', isa => 'ArrayRef[Str]');
+  has InstanceIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
   has ShouldDecrementDesiredCapacity => (is => 'ro', isa => 'Bool', required => 1);
 
   use MooseX::ClassAttribute;
@@ -10,7 +10,6 @@ package Paws::AutoScaling::EnterStandby {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'EnterStandby');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::AutoScaling::EnterStandbyAnswer');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'EnterStandbyResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method EnterStandby on
 Auto Scaling service. Use the attributes of this class
 as arguments to method EnterStandby.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to EnterStandby.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to EnterStandby.
 
 As an example:
 
@@ -35,53 +34,26 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> AutoScalingGroupName => Str
 
-  
+=head2 B<REQUIRED> AutoScalingGroupName => Str
 
 The name of the Auto Scaling group.
 
 
 
-
-
-
-
-
-
-
-=head2 InstanceIds => ArrayRef[Str]
-
-  
+=head2 InstanceIds => ArrayRef[Str|Undef]
 
 One or more instances to move into C<Standby> mode. You must specify at
 least one instance ID.
 
 
 
-
-
-
-
-
-
-
 =head2 B<REQUIRED> ShouldDecrementDesiredCapacity => Bool
-
-  
 
 Specifies whether the instances moved to C<Standby> mode count as part
 of the Auto Scaling group's desired capacity. If set, the desired
 capacity for the Auto Scaling group decrements by the number of
 instances moved to C<Standby> mode.
-
-
-
-
-
-
-
-
 
 
 

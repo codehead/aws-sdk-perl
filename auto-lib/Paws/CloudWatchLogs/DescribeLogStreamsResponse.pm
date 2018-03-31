@@ -1,11 +1,10 @@
 
-package Paws::CloudWatchLogs::DescribeLogStreamsResponse {
+package Paws::CloudWatchLogs::DescribeLogStreamsResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has logStreams => (is => 'ro', isa => 'ArrayRef[Paws::CloudWatchLogs::LogStream]');
-  has nextToken => (is => 'ro', isa => 'Str');
+  has LogStreams => (is => 'ro', isa => 'ArrayRef[Paws::CloudWatchLogs::LogStream]', traits => ['NameInRequest'], request_name => 'logStreams' );
+  has NextToken => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'nextToken' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -15,12 +14,18 @@ Paws::CloudWatchLogs::DescribeLogStreamsResponse
 
 =head1 ATTRIBUTES
 
-=head2 logStreams => ArrayRef[Paws::CloudWatchLogs::LogStream]
 
-  
-=head2 nextToken => Str
+=head2 LogStreams => ArrayRef[L<Paws::CloudWatchLogs::LogStream>]
 
-  
+The log streams.
+
+
+=head2 NextToken => Str
+
+
+
+
+=head2 _request_id => Str
 
 
 =cut

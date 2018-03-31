@@ -1,10 +1,9 @@
 
-package Paws::AutoScaling::DescribeAdjustmentTypesAnswer {
+package Paws::AutoScaling::DescribeAdjustmentTypesAnswer;
   use Moose;
-  with 'Paws::API::ResultParser';
   has AdjustmentTypes => (is => 'ro', isa => 'ArrayRef[Paws::AutoScaling::AdjustmentType]');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::AutoScaling::DescribeAdjustmentTypesAnswer
 
 =head1 ATTRIBUTES
 
-=head2 AdjustmentTypes => ArrayRef[Paws::AutoScaling::AdjustmentType]
 
-  
+=head2 AdjustmentTypes => ArrayRef[L<Paws::AutoScaling::AdjustmentType>]
 
 The policy adjustment types.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

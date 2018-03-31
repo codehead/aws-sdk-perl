@@ -1,14 +1,14 @@
 
-package Paws::CloudTrail::DescribeTrails {
+package Paws::CloudTrail::DescribeTrails;
   use Moose;
-  has trailNameList => (is => 'ro', isa => 'ArrayRef[Str]');
+  has IncludeShadowTrails => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'includeShadowTrails' );
+  has TrailNameList => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'trailNameList' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeTrails');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::CloudTrail::DescribeTrailsResponse');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -23,7 +23,7 @@ This class represents the parameters used for calling the method DescribeTrails 
 AWS CloudTrail service. Use the attributes of this class
 as arguments to method DescribeTrails.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeTrails.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeTrails.
 
 As an example:
 
@@ -33,19 +33,44 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 trailNameList => ArrayRef[Str]
 
-  
+=head2 IncludeShadowTrails => Bool
 
-The trail returned.
-
-
-
+Specifies whether to include shadow trails in the response. A shadow
+trail is the replication in a region of a trail that was created in a
+different region. The default is true.
 
 
 
+=head2 TrailNameList => ArrayRef[Str|Undef]
 
+Specifies a list of trail names, trail ARNs, or both, of the trails to
+describe. The format of a trail ARN is:
 
+C<arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail>
+
+If an empty list is specified, information for the trail in the current
+region is returned.
+
+=over
+
+=item *
+
+If an empty list is specified and C<IncludeShadowTrails> is false, then
+information for all trails in the current region is returned.
+
+=item *
+
+If an empty list is specified and IncludeShadowTrails is null or true,
+then information for all trails in the current region and any
+associated shadow trails in other regions is returned.
+
+=back
+
+If one or more trail names are specified, information is returned only
+if the names match the names of trails belonging only to the current
+region. To return information about a trail in another region, you must
+specify its trail ARN.
 
 
 

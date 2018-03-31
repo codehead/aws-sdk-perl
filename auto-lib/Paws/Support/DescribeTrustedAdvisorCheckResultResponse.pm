@@ -1,10 +1,9 @@
 
-package Paws::Support::DescribeTrustedAdvisorCheckResultResponse {
+package Paws::Support::DescribeTrustedAdvisorCheckResultResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has result => (is => 'ro', isa => 'Paws::Support::TrustedAdvisorCheckResult');
+  has Result => (is => 'ro', isa => 'Paws::Support::TrustedAdvisorCheckResult', traits => ['NameInRequest'], request_name => 'result' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::Support::DescribeTrustedAdvisorCheckResultResponse
 
 =head1 ATTRIBUTES
 
-=head2 result => Paws::Support::TrustedAdvisorCheckResult
 
-  
+=head2 Result => L<Paws::Support::TrustedAdvisorCheckResult>
 
 The detailed results of the Trusted Advisor check.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

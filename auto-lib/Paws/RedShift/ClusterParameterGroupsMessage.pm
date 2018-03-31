@@ -1,11 +1,10 @@
 
-package Paws::RedShift::ClusterParameterGroupsMessage {
+package Paws::RedShift::ClusterParameterGroupsMessage;
   use Moose;
-  with 'Paws::API::ResultParser';
   has Marker => (is => 'ro', isa => 'Str');
-  has ParameterGroups => (is => 'ro', isa => 'ArrayRef[Paws::RedShift::ClusterParameterGroup]', xmlname => 'ClusterParameterGroup', traits => ['Unwrapped',]);
+  has ParameterGroups => (is => 'ro', isa => 'ArrayRef[Paws::RedShift::ClusterParameterGroup]', request_name => 'ClusterParameterGroup', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -16,9 +15,8 @@ Paws::RedShift::ClusterParameterGroupsMessage
 
 =head1 ATTRIBUTES
 
-=head2 Marker => Str
 
-  
+=head2 Marker => Str
 
 A value that indicates the starting point for the next set of response
 records in a subsequent request. If a value is returned in a response,
@@ -28,28 +26,13 @@ the C<Marker> field is empty, all response records have been retrieved
 for the request.
 
 
-
-
-
-
-
-
-
-=head2 ParameterGroups => ArrayRef[Paws::RedShift::ClusterParameterGroup]
-
-  
+=head2 ParameterGroups => ArrayRef[L<Paws::RedShift::ClusterParameterGroup>]
 
 A list of ClusterParameterGroup instances. Each instance describes one
 cluster parameter group.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

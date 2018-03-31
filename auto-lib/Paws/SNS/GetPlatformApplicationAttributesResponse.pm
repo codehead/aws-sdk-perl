@@ -1,10 +1,9 @@
 
-package Paws::SNS::GetPlatformApplicationAttributesResponse {
+package Paws::SNS::GetPlatformApplicationAttributesResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has Attributes => (is => 'ro', isa => 'Paws::SNS::MapStringToString');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,37 +14,39 @@ Paws::SNS::GetPlatformApplicationAttributesResponse
 
 =head1 ATTRIBUTES
 
-=head2 Attributes => Paws::SNS::MapStringToString
 
-  
+=head2 Attributes => L<Paws::SNS::MapStringToString>
 
 Attributes include the following:
 
 =over
 
-=item * C<EventEndpointCreated> -- Topic ARN to which EndpointCreated
-event notifications should be sent.
+=item *
 
-=item * C<EventEndpointDeleted> -- Topic ARN to which EndpointDeleted
-event notifications should be sent.
+C<EventEndpointCreated> -- Topic ARN to which EndpointCreated event
+notifications should be sent.
 
-=item * C<EventEndpointUpdated> -- Topic ARN to which EndpointUpdate
-event notifications should be sent.
+=item *
 
-=item * C<EventDeliveryFailure> -- Topic ARN to which DeliveryFailure
-event notifications should be sent upon Direct Publish delivery failure
+C<EventEndpointDeleted> -- Topic ARN to which EndpointDeleted event
+notifications should be sent.
+
+=item *
+
+C<EventEndpointUpdated> -- Topic ARN to which EndpointUpdate event
+notifications should be sent.
+
+=item *
+
+C<EventDeliveryFailure> -- Topic ARN to which DeliveryFailure event
+notifications should be sent upon Direct Publish delivery failure
 (permanent) to one of the application's endpoints.
 
 =back
 
 
 
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

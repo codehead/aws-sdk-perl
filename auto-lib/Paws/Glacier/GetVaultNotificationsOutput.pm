@@ -1,10 +1,10 @@
 
-package Paws::Glacier::GetVaultNotificationsOutput {
+package Paws::Glacier::GetVaultNotificationsOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has vaultNotificationConfig => (is => 'ro', isa => 'Paws::Glacier::VaultNotificationConfig');
-
-}
+  has VaultNotificationConfig => (is => 'ro', isa => 'Paws::Glacier::VaultNotificationConfig', traits => ['NameInRequest'], request_name => 'vaultNotificationConfig');
+  use MooseX::ClassAttribute;
+  class_has _stream_param => (is => 'ro', default => 'VaultNotificationConfig');
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +15,13 @@ Paws::Glacier::GetVaultNotificationsOutput
 
 =head1 ATTRIBUTES
 
-=head2 vaultNotificationConfig => Paws::Glacier::VaultNotificationConfig
 
-  
+=head2 VaultNotificationConfig => L<Paws::Glacier::VaultNotificationConfig>
 
 Returns the notification configuration set on the vault.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

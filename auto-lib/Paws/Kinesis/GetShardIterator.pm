@@ -1,17 +1,17 @@
 
-package Paws::Kinesis::GetShardIterator {
+package Paws::Kinesis::GetShardIterator;
   use Moose;
   has ShardId => (is => 'ro', isa => 'Str', required => 1);
   has ShardIteratorType => (is => 'ro', isa => 'Str', required => 1);
   has StartingSequenceNumber => (is => 'ro', isa => 'Str');
   has StreamName => (is => 'ro', isa => 'Str', required => 1);
+  has Timestamp => (is => 'ro', isa => 'Str');
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'GetShardIterator');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::Kinesis::GetShardIteratorOutput');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -26,7 +26,7 @@ This class represents the parameters used for calling the method GetShardIterato
 Amazon Kinesis service. Use the attributes of this class
 as arguments to method GetShardIterator.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to GetShardIterator.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to GetShardIterator.
 
 As an example:
 
@@ -36,84 +36,78 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
+
 =head2 B<REQUIRED> ShardId => Str
 
-  
-
-The shard ID of the shard to get the iterator for.
-
-
-
-
-
-
-
+The shard ID of the Amazon Kinesis shard to get the iterator for.
 
 
 
 =head2 B<REQUIRED> ShardIteratorType => Str
 
-  
-
 Determines how the shard iterator is used to start reading data records
 from the shard.
 
-The following are the valid shard iterator types:
+The following are the valid Amazon Kinesis shard iterator types:
 
 =over
 
-=item * AT_SEQUENCE_NUMBER - Start reading exactly from the position
-denoted by a specific sequence number.
+=item *
 
-=item * AFTER_SEQUENCE_NUMBER - Start reading right after the position
-denoted by a specific sequence number.
+AT_SEQUENCE_NUMBER - Start reading from the position denoted by a
+specific sequence number, provided in the value
+C<StartingSequenceNumber>.
 
-=item * TRIM_HORIZON - Start reading at the last untrimmed record in
-the shard in the system, which is the oldest data record in the shard.
+=item *
 
-=item * LATEST - Start reading just after the most recent record in the
-shard, so that you always read the most recent data in the shard.
+AFTER_SEQUENCE_NUMBER - Start reading right after the position denoted
+by a specific sequence number, provided in the value
+C<StartingSequenceNumber>.
+
+=item *
+
+AT_TIMESTAMP - Start reading from the position denoted by a specific
+timestamp, provided in the value C<Timestamp>.
+
+=item *
+
+TRIM_HORIZON - Start reading at the last untrimmed record in the shard
+in the system, which is the oldest data record in the shard.
+
+=item *
+
+LATEST - Start reading just after the most recent record in the shard,
+so that you always read the most recent data in the shard.
 
 =back
 
 
-
-
-
-
-
-
-
+Valid values are: C<"AT_SEQUENCE_NUMBER">, C<"AFTER_SEQUENCE_NUMBER">, C<"TRIM_HORIZON">, C<"LATEST">, C<"AT_TIMESTAMP">
 
 =head2 StartingSequenceNumber => Str
 
-  
-
 The sequence number of the data record in the shard from which to start
-reading from.
-
-
-
-
-
-
-
+reading. Used with shard iterator type AT_SEQUENCE_NUMBER and
+AFTER_SEQUENCE_NUMBER.
 
 
 
 =head2 B<REQUIRED> StreamName => Str
 
-  
-
-The name of the stream.
+The name of the Amazon Kinesis stream.
 
 
 
+=head2 Timestamp => Str
 
-
-
-
-
+The timestamp of the data record from which to start reading. Used with
+shard iterator type AT_TIMESTAMP. A timestamp is the Unix epoch date
+with precision in milliseconds. For example,
+C<2016-04-04T19:58:46.480-00:00> or C<1459799926.480>. If a record with
+this exact timestamp does not exist, the iterator returned is for the
+next (later) record. If the timestamp is older than the current trim
+horizon, the iterator returned is for the oldest untrimmed data record
+(TRIM_HORIZON).
 
 
 

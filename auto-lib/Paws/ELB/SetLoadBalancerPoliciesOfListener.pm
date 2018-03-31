@@ -1,16 +1,15 @@
 
-package Paws::ELB::SetLoadBalancerPoliciesOfListener {
+package Paws::ELB::SetLoadBalancerPoliciesOfListener;
   use Moose;
   has LoadBalancerName => (is => 'ro', isa => 'Str', required => 1);
   has LoadBalancerPort => (is => 'ro', isa => 'Int', required => 1);
-  has PolicyNames => (is => 'ro', isa => 'ArrayRef[Str]', required => 1);
+  has PolicyNames => (is => 'ro', isa => 'ArrayRef[Str|Undef]', required => 1);
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'SetLoadBalancerPoliciesOfListener');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::ELB::SetLoadBalancerPoliciesOfListenerOutput');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'SetLoadBalancerPoliciesOfListenerResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method SetLoadBalancer
 Elastic Load Balancing service. Use the attributes of this class
 as arguments to method SetLoadBalancerPoliciesOfListener.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to SetLoadBalancerPoliciesOfListener.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to SetLoadBalancerPoliciesOfListener.
 
 As an example:
 
@@ -35,50 +34,24 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> LoadBalancerName => Str
 
-  
+=head2 B<REQUIRED> LoadBalancerName => Str
 
 The name of the load balancer.
 
 
 
-
-
-
-
-
-
-
 =head2 B<REQUIRED> LoadBalancerPort => Int
 
-  
-
-The external port of the load balancer for the policy.
+The external port of the load balancer.
 
 
 
+=head2 B<REQUIRED> PolicyNames => ArrayRef[Str|Undef]
 
-
-
-
-
-
-
-=head2 B<REQUIRED> PolicyNames => ArrayRef[Str]
-
-  
-
-The names of the policies. If the list is empty, the current policy is
-removed from the listener.
-
-
-
-
-
-
-
-
+The names of the policies. This list must include all policies to be
+enabled. If you omit a policy that is currently enabled, it is
+disabled. If the list is empty, all current policies are disabled.
 
 
 

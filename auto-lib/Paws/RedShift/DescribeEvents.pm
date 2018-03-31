@@ -1,5 +1,5 @@
 
-package Paws::RedShift::DescribeEvents {
+package Paws::RedShift::DescribeEvents;
   use Moose;
   has Duration => (is => 'ro', isa => 'Int');
   has EndTime => (is => 'ro', isa => 'Str');
@@ -14,7 +14,6 @@ package Paws::RedShift::DescribeEvents {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeEvents');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::RedShift::EventsMessage');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'DescribeEventsResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -29,7 +28,7 @@ This class represents the parameters used for calling the method DescribeEvents 
 Amazon Redshift service. Use the attributes of this class
 as arguments to method DescribeEvents.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeEvents.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeEvents.
 
 As an example:
 
@@ -39,9 +38,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 Duration => Int
 
-  
+=head2 Duration => Int
 
 The number of minutes prior to the time of the request for which to
 retrieve events. For example, if the request is sent at 18:00 and you
@@ -52,16 +50,7 @@ Default: C<60>
 
 
 
-
-
-
-
-
-
-
 =head2 EndTime => Str
-
-  
 
 The end of the time interval for which to retrieve events, specified in
 ISO 8601 format. For more information about ISO 8601, go to the ISO8601
@@ -71,16 +60,7 @@ Example: C<2009-07-08T18:00Z>
 
 
 
-
-
-
-
-
-
-
 =head2 Marker => Str
-
-  
 
 An optional parameter that specifies the starting point to return a set
 of response records. When the results of a DescribeEvents request
@@ -91,16 +71,7 @@ C<Marker> parameter and retrying the request.
 
 
 
-
-
-
-
-
-
-
 =head2 MaxRecords => Int
-
-  
 
 The maximum number of response records to return in each call. If the
 number of remaining response records exceeds the specified
@@ -114,16 +85,7 @@ Constraints: minimum 20, maximum 100.
 
 
 
-
-
-
-
-
-
-
 =head2 SourceIdentifier => Str
-
-  
 
 The identifier of the event source for which events will be returned.
 If this parameter is not specified, then all sources are included in
@@ -136,15 +98,23 @@ provided.
 
 =over
 
-=item * Specify a cluster identifier when I<SourceType> is C<cluster>.
+=item *
 
-=item * Specify a cluster security group name when I<SourceType> is
+Specify a cluster identifier when I<SourceType> is C<cluster>.
+
+=item *
+
+Specify a cluster security group name when I<SourceType> is
 C<cluster-security-group>.
 
-=item * Specify a cluster parameter group name when I<SourceType> is
+=item *
+
+Specify a cluster parameter group name when I<SourceType> is
 C<cluster-parameter-group>.
 
-=item * Specify a cluster snapshot identifier when I<SourceType> is
+=item *
+
+Specify a cluster snapshot identifier when I<SourceType> is
 C<cluster-snapshot>.
 
 =back
@@ -152,15 +122,7 @@ C<cluster-snapshot>.
 
 
 
-
-
-
-
-
-
 =head2 SourceType => Str
-
-  
 
 The event source to retrieve events for. If no value is specified, all
 events are returned.
@@ -172,46 +134,37 @@ provided.
 
 =over
 
-=item * Specify C<cluster> when I<SourceIdentifier> is a cluster
-identifier.
+=item *
 
-=item * Specify C<cluster-security-group> when I<SourceIdentifier> is a
-cluster security group name.
+Specify C<cluster> when I<SourceIdentifier> is a cluster identifier.
 
-=item * Specify C<cluster-parameter-group> when I<SourceIdentifier> is
-a cluster parameter group name.
+=item *
 
-=item * Specify C<cluster-snapshot> when I<SourceIdentifier> is a
-cluster snapshot identifier.
+Specify C<cluster-security-group> when I<SourceIdentifier> is a cluster
+security group name.
+
+=item *
+
+Specify C<cluster-parameter-group> when I<SourceIdentifier> is a
+cluster parameter group name.
+
+=item *
+
+Specify C<cluster-snapshot> when I<SourceIdentifier> is a cluster
+snapshot identifier.
 
 =back
 
 
-
-
-
-
-
-
-
+Valid values are: C<"cluster">, C<"cluster-parameter-group">, C<"cluster-security-group">, C<"cluster-snapshot">
 
 =head2 StartTime => Str
-
-  
 
 The beginning of the time interval to retrieve events for, specified in
 ISO 8601 format. For more information about ISO 8601, go to the ISO8601
 Wikipedia page.
 
 Example: C<2009-07-08T18:00Z>
-
-
-
-
-
-
-
-
 
 
 

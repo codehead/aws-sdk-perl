@@ -1,12 +1,11 @@
 
-package Paws::EFS::DescribeTagsResponse {
+package Paws::EFS::DescribeTagsResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has Marker => (is => 'ro', isa => 'Str');
   has NextMarker => (is => 'ro', isa => 'Str');
   has Tags => (is => 'ro', isa => 'ArrayRef[Paws::EFS::Tag]', required => 1);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -17,24 +16,14 @@ Paws::EFS::DescribeTagsResponse
 
 =head1 ATTRIBUTES
 
-=head2 Marker => Str
 
-  
+=head2 Marker => Str
 
 If the request included a C<Marker>, the response returns that value in
 this field.
 
 
-
-
-
-
-
-
-
 =head2 NextMarker => Str
-
-  
 
 If a value is present, there are more tags to return. In a subsequent
 request, you can provide the value of C<NextMarker> as the value of the
@@ -42,28 +31,13 @@ C<Marker> parameter in your next request to retrieve the next set of
 tags.
 
 
-
-
-
-
-
-
-
-=head2 B<REQUIRED> Tags => ArrayRef[Paws::EFS::Tag]
-
-  
+=head2 B<REQUIRED> Tags => ArrayRef[L<Paws::EFS::Tag>]
 
 Returns tags associated with the file system as an array of C<Tag>
 objects.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

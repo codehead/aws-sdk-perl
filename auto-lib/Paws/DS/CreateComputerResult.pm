@@ -1,10 +1,9 @@
 
-package Paws::DS::CreateComputerResult {
+package Paws::DS::CreateComputerResult;
   use Moose;
-  with 'Paws::API::ResultParser';
   has Computer => (is => 'ro', isa => 'Paws::DS::Computer');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::DS::CreateComputerResult
 
 =head1 ATTRIBUTES
 
-=head2 Computer => Paws::DS::Computer
 
-  
+=head2 Computer => L<Paws::DS::Computer>
 
-A Computer object the represents the computer account.
-
+A Computer object that represents the computer account.
 
 
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

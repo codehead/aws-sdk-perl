@@ -1,11 +1,10 @@
 
-package Paws::RedShift::SnapshotMessage {
+package Paws::RedShift::SnapshotMessage;
   use Moose;
-  with 'Paws::API::ResultParser';
   has Marker => (is => 'ro', isa => 'Str');
-  has Snapshots => (is => 'ro', isa => 'ArrayRef[Paws::RedShift::Snapshot]', xmlname => 'Snapshot', traits => ['Unwrapped',]);
+  has Snapshots => (is => 'ro', isa => 'ArrayRef[Paws::RedShift::Snapshot]', request_name => 'Snapshot', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -16,9 +15,8 @@ Paws::RedShift::SnapshotMessage
 
 =head1 ATTRIBUTES
 
-=head2 Marker => Str
 
-  
+=head2 Marker => Str
 
 A value that indicates the starting point for the next set of response
 records in a subsequent request. If a value is returned in a response,
@@ -28,27 +26,12 @@ the C<Marker> field is empty, all response records have been retrieved
 for the request.
 
 
-
-
-
-
-
-
-
-=head2 Snapshots => ArrayRef[Paws::RedShift::Snapshot]
-
-  
+=head2 Snapshots => ArrayRef[L<Paws::RedShift::Snapshot>]
 
 A list of Snapshot instances.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

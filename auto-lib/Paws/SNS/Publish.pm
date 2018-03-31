@@ -1,9 +1,10 @@
 
-package Paws::SNS::Publish {
+package Paws::SNS::Publish;
   use Moose;
   has Message => (is => 'ro', isa => 'Str', required => 1);
   has MessageAttributes => (is => 'ro', isa => 'Paws::SNS::MessageAttributeMap');
   has MessageStructure => (is => 'ro', isa => 'Str');
+  has PhoneNumber => (is => 'ro', isa => 'Str');
   has Subject => (is => 'ro', isa => 'Str');
   has TargetArn => (is => 'ro', isa => 'Str');
   has TopicArn => (is => 'ro', isa => 'Str');
@@ -13,7 +14,6 @@ package Paws::SNS::Publish {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'Publish');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::SNS::PublishResponse');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'PublishResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -28,7 +28,7 @@ This class represents the parameters used for calling the method Publish on the
 Amazon Simple Notification Service service. Use the attributes of this class
 as arguments to method Publish.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to Publish.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to Publish.
 
 As an example:
 
@@ -38,9 +38,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> Message => Str
 
-  
+=head2 B<REQUIRED> Message => Str
 
 The message you want to send to the topic.
 
@@ -49,8 +48,7 @@ include the text of the message as a String value.
 
 If you want to send different messages for each transport protocol, set
 the value of the C<MessageStructure> parameter to C<json> and use a
-JSON object for the C<Message> parameter. See the Examples section for
-the format of the JSON object.
+JSON object for the C<Message> parameter.
 
 Constraints: Messages must be UTF-8 encoded strings at most 256 KB in
 size (262144 bytes, not 262144 characters).
@@ -59,61 +57,60 @@ JSON-specific constraints:
 
 =over
 
-=item * Keys in the JSON object that correspond to supported transport
+=item *
+
+Keys in the JSON object that correspond to supported transport
 protocols must have simple JSON string values.
 
-=item * The values will be parsed (unescaped) before they are used in
-outgoing messages.
+=item *
 
-=item * Outbound notifications are JSON encoded (meaning that the
-characters will be reescaped for sending).
+The values will be parsed (unescaped) before they are used in outgoing
+messages.
 
-=item * Values have a minimum length of 0 (the empty string, "", is
-allowed).
+=item *
 
-=item * Values have a maximum length bounded by the overall message
-size (so, including multiple protocols may limit message sizes).
+Outbound notifications are JSON encoded (meaning that the characters
+will be reescaped for sending).
 
-=item * Non-string values will cause the key to be ignored.
+=item *
 
-=item * Keys that do not correspond to supported transport protocols
-are ignored.
+Values have a minimum length of 0 (the empty string, "", is allowed).
 
-=item * Duplicate keys are not allowed.
+=item *
 
-=item * Failure to parse or validate any key or value in the message
-will cause the C<Publish> call to return an error (no partial
-delivery).
+Values have a maximum length bounded by the overall message size (so,
+including multiple protocols may limit message sizes).
+
+=item *
+
+Non-string values will cause the key to be ignored.
+
+=item *
+
+Keys that do not correspond to supported transport protocols are
+ignored.
+
+=item *
+
+Duplicate keys are not allowed.
+
+=item *
+
+Failure to parse or validate any key or value in the message will cause
+the C<Publish> call to return an error (no partial delivery).
 
 =back
 
 
 
 
-
-
-
-
-
-
-=head2 MessageAttributes => Paws::SNS::MessageAttributeMap
-
-  
+=head2 MessageAttributes => L<Paws::SNS::MessageAttributeMap>
 
 Message attributes for Publish action.
 
 
 
-
-
-
-
-
-
-
 =head2 MessageStructure => Str
-
-  
 
 Set C<MessageStructure> to C<json> if you want to send a different
 message for each protocol. For example, using one publish action, you
@@ -123,10 +120,14 @@ the value of the C<Message> parameter must:
 
 =over
 
-=item * be a syntactically valid JSON object; and
+=item *
 
-=item * contain at least a top-level JSON key of "default" with a value
-that is a string.
+be a syntactically valid JSON object; and
+
+=item *
+
+contain at least a top-level JSON key of "default" with a value that is
+a string.
 
 =back
 
@@ -142,16 +143,17 @@ Valid value: C<json>
 
 
 
+=head2 PhoneNumber => Str
 
+The phone number to which you want to deliver an SMS message. Use E.164
+format.
 
-
-
+If you don't specify a value for the C<PhoneNumber> parameter, you must
+specify a value for the C<TargetArn> or C<TopicArn> parameters.
 
 
 
 =head2 Subject => Str
-
-  
 
 Optional parameter to be used as the "Subject" line when the message is
 delivered to email endpoints. This field will also be included, if
@@ -163,41 +165,21 @@ characters; and must be less than 100 characters long.
 
 
 
-
-
-
-
-
-
-
 =head2 TargetArn => Str
-
-  
 
 Either TopicArn or EndpointArn, but not both.
 
-
-
-
-
-
-
+If you don't specify a value for the C<TargetArn> parameter, you must
+specify a value for the C<PhoneNumber> or C<TopicArn> parameters.
 
 
 
 =head2 TopicArn => Str
 
-  
-
 The topic you want to publish to.
 
-
-
-
-
-
-
-
+If you don't specify a value for the C<TopicArn> parameter, you must
+specify a value for the C<PhoneNumber> or C<TargetArn> parameters.
 
 
 

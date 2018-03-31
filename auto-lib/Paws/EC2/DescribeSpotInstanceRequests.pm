@@ -1,16 +1,15 @@
 
-package Paws::EC2::DescribeSpotInstanceRequests {
+package Paws::EC2::DescribeSpotInstanceRequests;
   use Moose;
   has DryRun => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'dryRun' );
   has Filters => (is => 'ro', isa => 'ArrayRef[Paws::EC2::Filter]', traits => ['NameInRequest'], request_name => 'Filter' );
-  has SpotInstanceRequestIds => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'SpotInstanceRequestId' );
+  has SpotInstanceRequestIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'SpotInstanceRequestId' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeSpotInstanceRequests');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::EC2::DescribeSpotInstanceRequestsResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method DescribeSpotIns
 Amazon Elastic Compute Cloud service. Use the attributes of this class
 as arguments to method DescribeSpotInstanceRequests.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeSpotInstanceRequests.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeSpotInstanceRequests.
 
 As an example:
 
@@ -35,9 +34,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 DryRun => Bool
 
-  
+=head2 DryRun => Bool
 
 Checks whether you have the required permissions for the action,
 without actually making the request, and provides an error response. If
@@ -46,16 +44,7 @@ C<DryRunOperation>. Otherwise, it is C<UnauthorizedOperation>.
 
 
 
-
-
-
-
-
-
-
-=head2 Filters => ArrayRef[Paws::EC2::Filter]
-
-  
+=head2 Filters => ArrayRef[L<Paws::EC2::Filter>]
 
 One or more filters.
 
@@ -67,7 +56,7 @@ C<availability-zone-group> - The Availability Zone group.
 
 =item *
 
-C<create-time> - The time stamp when the Spot Instance request was
+C<create-time> - The time stamp when the Spot instance request was
 created.
 
 =item *
@@ -84,7 +73,7 @@ C<instance-id> - The ID of the instance that fulfilled the request.
 
 =item *
 
-C<launch-group> - The Spot Instance launch group.
+C<launch-group> - The Spot instance launch group.
 
 =item *
 
@@ -109,7 +98,9 @@ volume, in GiB.
 =item *
 
 C<launch.block-device-mapping.volume-type> - The type of the Amazon EBS
-volume (C<gp2> | C<standard> | C<io1>).
+volume: C<gp2> for General Purpose SSD, C<io1> for Provisioned IOPS
+SSD, C<st1> for Throughput Optimized HDD, C<sc1>for Cold HDD, or
+C<standard> for Magnetic.
 
 =item *
 
@@ -122,7 +113,7 @@ C<launch.image-id> - The ID of the AMI.
 =item *
 
 C<launch.instance-type> - The type of instance (for example,
-C<m1.small>).
+C<m3.medium>).
 
 =item *
 
@@ -135,8 +126,8 @@ with.
 
 =item *
 
-C<launch.monitoring-enabled> - Whether monitoring is enabled for the
-Spot Instance.
+C<launch.monitoring-enabled> - Whether detailed monitoring is enabled
+for the Spot instance.
 
 =item *
 
@@ -144,7 +135,22 @@ C<launch.ramdisk-id> - The RAM disk ID.
 
 =item *
 
-C<network-interface.network-interface-id> - The ID of the network
+C<launched-availability-zone> - The Availability Zone in which the bid
+is launched.
+
+=item *
+
+C<network-interface.addresses.primary> - Indicates whether the IP
+address is the primary private IP address.
+
+=item *
+
+C<network-interface.delete-on-termination> - Indicates whether the
+network interface is deleted when the instance is terminated.
+
+=item *
+
+C<network-interface.description> - A description of the network
 interface.
 
 =item *
@@ -154,11 +160,12 @@ network interface attachment on the instance.
 
 =item *
 
-C<network-interface.subnet-id> - The ID of the subnet for the instance.
+C<network-interface.group-id> - The ID of the security group associated
+with the network interface.
 
 =item *
 
-C<network-interface.description> - A description of the network
+C<network-interface.network-interface-id> - The ID of the network
 interface.
 
 =item *
@@ -168,23 +175,7 @@ address of the network interface.
 
 =item *
 
-C<network-interface.delete-on-termination> - Indicates whether the
-network interface is deleted when the instance is terminated.
-
-=item *
-
-C<network-interface.group-id> - The ID of the security group associated
-with the network interface.
-
-=item *
-
-C<network-interface.group-name> - The name of the security group
-associated with the network interface.
-
-=item *
-
-C<network-interface.addresses.primary> - Indicates whether the IP
-address is the primary private IP address.
+C<network-interface.subnet-id> - The ID of the subnet for the instance.
 
 =item *
 
@@ -193,35 +184,38 @@ instance (C<Linux/UNIX> | C<Windows>).
 
 =item *
 
-C<spot-instance-request-id> - The Spot Instance request ID.
+C<spot-instance-request-id> - The Spot instance request ID.
 
 =item *
 
-C<spot-price> - The maximum hourly price for any Spot Instance launched
+C<spot-price> - The maximum hourly price for any Spot instance launched
 to fulfill the request.
 
 =item *
 
-C<state> - The state of the Spot Instance request (C<open> | C<active>
+C<state> - The state of the Spot instance request (C<open> | C<active>
 | C<closed> | C<cancelled> | C<failed>). Spot bid status information
-can help you track your Amazon EC2 Spot Instance requests. For more
+can help you track your Amazon EC2 Spot instance requests. For more
 information, see Spot Bid Status in the Amazon Elastic Compute Cloud
 User Guide.
 
 =item *
 
 C<status-code> - The short code describing the most recent evaluation
-of your Spot Instance request.
+of your Spot instance request.
 
 =item *
 
 C<status-message> - The message explaining the status of the Spot
-Instance request.
+instance request.
 
 =item *
 
 C<tag>:I<key>=I<value> - The key/value combination of a tag assigned to
-the resource.
+the resource. Specify the key of the tag in the filter name and the
+value of the tag in the filter value. For example, for the tag
+Purpose=X, specify C<tag:Purpose> for the filter name and C<X> for the
+filter value.
 
 =item *
 
@@ -240,13 +234,8 @@ is independent of the C<tag-key> filter.
 
 =item *
 
-C<type> - The type of Spot Instance request (C<one-time> |
+C<type> - The type of Spot instance request (C<one-time> |
 C<persistent>).
-
-=item *
-
-C<launched-availability-zone> - The Availability Zone in which the bid
-is launched.
 
 =item *
 
@@ -261,25 +250,9 @@ C<valid-until> - The end date of the request.
 
 
 
+=head2 SpotInstanceRequestIds => ArrayRef[Str|Undef]
 
-
-
-
-
-
-=head2 SpotInstanceRequestIds => ArrayRef[Str]
-
-  
-
-One or more Spot Instance request IDs.
-
-
-
-
-
-
-
-
+One or more Spot instance request IDs.
 
 
 

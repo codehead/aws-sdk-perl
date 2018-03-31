@@ -1,18 +1,17 @@
 
-package Paws::CodeDeploy::ListDeployments {
+package Paws::CodeDeploy::ListDeployments;
   use Moose;
-  has applicationName => (is => 'ro', isa => 'Str');
-  has createTimeRange => (is => 'ro', isa => 'Paws::CodeDeploy::TimeRange');
-  has deploymentGroupName => (is => 'ro', isa => 'Str');
-  has includeOnlyStatuses => (is => 'ro', isa => 'ArrayRef[Str]');
-  has nextToken => (is => 'ro', isa => 'Str');
+  has ApplicationName => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'applicationName' );
+  has CreateTimeRange => (is => 'ro', isa => 'Paws::CodeDeploy::TimeRange', traits => ['NameInRequest'], request_name => 'createTimeRange' );
+  has DeploymentGroupName => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'deploymentGroupName' );
+  has IncludeOnlyStatuses => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'includeOnlyStatuses' );
+  has NextToken => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'nextToken' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'ListDeployments');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::CodeDeploy::ListDeploymentsOutput');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -27,7 +26,7 @@ This class represents the parameters used for calling the method ListDeployments
 AWS CodeDeploy service. Use the attributes of this class
 as arguments to method ListDeployments.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to ListDeployments.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to ListDeployments.
 
 As an example:
 
@@ -37,100 +36,66 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 applicationName => Str
 
-  
+=head2 ApplicationName => Str
 
-The name of an existing AWS CodeDeploy application associated with the
+The name of an AWS CodeDeploy application associated with the
 applicable IAM user or AWS account.
 
 
 
+=head2 CreateTimeRange => L<Paws::CodeDeploy::TimeRange>
+
+A time range (start and end) for returning a subset of the list of
+deployments.
 
 
 
-
-
-
-
-=head2 createTimeRange => Paws::CodeDeploy::TimeRange
-
-  
-
-A deployment creation start- and end-time range for returning a subset
-of the list of deployments.
-
-
-
-
-
-
-
-
-
-
-=head2 deploymentGroupName => Str
-
-  
+=head2 DeploymentGroupName => Str
 
 The name of an existing deployment group for the specified application.
 
 
 
+=head2 IncludeOnlyStatuses => ArrayRef[Str|Undef]
 
-
-
-
-
-
-
-=head2 includeOnlyStatuses => ArrayRef[Str]
-
-  
-
-A subset of deployments to list, by status:
+A subset of deployments to list by status:
 
 =over
 
-=item * Created: Include in the resulting list created deployments.
+=item *
 
-=item * Queued: Include in the resulting list queued deployments.
+Created: Include created deployments in the resulting list.
 
-=item * In Progress: Include in the resulting list in-progress
-deployments.
+=item *
 
-=item * Succeeded: Include in the resulting list succeeded deployments.
+Queued: Include queued deployments in the resulting list.
 
-=item * Failed: Include in the resulting list failed deployments.
+=item *
 
-=item * Aborted: Include in the resulting list aborted deployments.
+In Progress: Include in-progress deployments in the resulting list.
+
+=item *
+
+Succeeded: Include successful deployments in the resulting list.
+
+=item *
+
+Failed: Include failed deployments in the resulting list.
+
+=item *
+
+Stopped: Include stopped deployments in the resulting list.
 
 =back
 
 
 
 
+=head2 NextToken => Str
 
-
-
-
-
-
-=head2 nextToken => Str
-
-  
-
-An identifier that was returned from the previous list deployments
-call, which can be used to return the next set of deployments in the
-list.
-
-
-
-
-
-
-
-
+An identifier returned from the previous list deployments call. It can
+be used to return the next set of deployments in the list.
 
 
 

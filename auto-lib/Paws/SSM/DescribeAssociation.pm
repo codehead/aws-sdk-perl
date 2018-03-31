@@ -1,15 +1,16 @@
 
-package Paws::SSM::DescribeAssociation {
+package Paws::SSM::DescribeAssociation;
   use Moose;
-  has InstanceId => (is => 'ro', isa => 'Str', required => 1);
-  has Name => (is => 'ro', isa => 'Str', required => 1);
+  has AssociationId => (is => 'ro', isa => 'Str');
+  has AssociationVersion => (is => 'ro', isa => 'Str');
+  has InstanceId => (is => 'ro', isa => 'Str');
+  has Name => (is => 'ro', isa => 'Str');
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeAssociation');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::SSM::DescribeAssociationResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -21,10 +22,10 @@ Paws::SSM::DescribeAssociation - Arguments for method DescribeAssociation on Paw
 =head1 DESCRIPTION
 
 This class represents the parameters used for calling the method DescribeAssociation on the 
-Amazon Simple Systems Management Service service. Use the attributes of this class
+Amazon Simple Systems Manager (SSM) service. Use the attributes of this class
 as arguments to method DescribeAssociation.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeAssociation.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeAssociation.
 
 As an example:
 
@@ -34,34 +35,32 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> InstanceId => Str
 
-  
+=head2 AssociationId => Str
 
-The ID of the instance.
-
+The association ID for which you want information.
 
 
 
+=head2 AssociationVersion => Str
+
+Specify the association version to retrieve. To view the latest
+version, either specify C<$LATEST> for this parameter, or omit this
+parameter. To view a list of all associations for an instance, use
+ListInstanceAssociations. To get a list of versions for a specific
+association, use ListAssociationVersions.
 
 
 
+=head2 InstanceId => Str
+
+The instance ID.
 
 
 
-=head2 B<REQUIRED> Name => Str
+=head2 Name => Str
 
-  
-
-The name of the configuration document.
-
-
-
-
-
-
-
-
+The name of the Systems Manager document.
 
 
 

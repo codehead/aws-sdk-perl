@@ -1,10 +1,9 @@
 
-package Paws::EC2::DescribeNetworkInterfacesResult {
+package Paws::EC2::DescribeNetworkInterfacesResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has NetworkInterfaces => (is => 'ro', isa => 'ArrayRef[Paws::EC2::NetworkInterface]', xmlname => 'networkInterfaceSet', traits => ['Unwrapped',]);
+  has NetworkInterfaces => (is => 'ro', isa => 'ArrayRef[Paws::EC2::NetworkInterface]', request_name => 'networkInterfaceSet', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::EC2::DescribeNetworkInterfacesResult
 
 =head1 ATTRIBUTES
 
-=head2 NetworkInterfaces => ArrayRef[Paws::EC2::NetworkInterface]
 
-  
+=head2 NetworkInterfaces => ArrayRef[L<Paws::EC2::NetworkInterface>]
 
 Information about one or more network interfaces.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

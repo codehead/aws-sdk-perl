@@ -1,10 +1,9 @@
 
-package Paws::EFS::DescribeMountTargetSecurityGroupsResponse {
+package Paws::EFS::DescribeMountTargetSecurityGroupsResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has SecurityGroups => (is => 'ro', isa => 'ArrayRef[Str]', required => 1);
+  has SecurityGroups => (is => 'ro', isa => 'ArrayRef[Str|Undef]', required => 1);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::EFS::DescribeMountTargetSecurityGroupsResponse
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> SecurityGroups => ArrayRef[Str]
 
-  
+=head2 B<REQUIRED> SecurityGroups => ArrayRef[Str|Undef]
 
-An array of security groups.
-
+Array of security groups.
 
 
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

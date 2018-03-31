@@ -1,16 +1,15 @@
 
-package Paws::EC2::DescribeNetworkInterfaces {
+package Paws::EC2::DescribeNetworkInterfaces;
   use Moose;
   has DryRun => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'dryRun' );
   has Filters => (is => 'ro', isa => 'ArrayRef[Paws::EC2::Filter]', traits => ['NameInRequest'], request_name => 'filter' );
-  has NetworkInterfaceIds => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'NetworkInterfaceId' );
+  has NetworkInterfaceIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'NetworkInterfaceId' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeNetworkInterfaces');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::EC2::DescribeNetworkInterfacesResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method DescribeNetwork
 Amazon Elastic Compute Cloud service. Use the attributes of this class
 as arguments to method DescribeNetworkInterfaces.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeNetworkInterfaces.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeNetworkInterfaces.
 
 As an example:
 
@@ -35,9 +34,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 DryRun => Bool
 
-  
+=head2 DryRun => Bool
 
 Checks whether you have the required permissions for the action,
 without actually making the request, and provides an error response. If
@@ -46,16 +44,7 @@ C<DryRunOperation>. Otherwise, it is C<UnauthorizedOperation>.
 
 
 
-
-
-
-
-
-
-
-=head2 Filters => ArrayRef[Paws::EC2::Filter]
-
-  
+=head2 Filters => ArrayRef[L<Paws::EC2::Filter>]
 
 One or more filters.
 
@@ -63,18 +52,19 @@ One or more filters.
 
 =item *
 
-C<addresses.private-ip-address> - The private IP addresses associated
+C<addresses.private-ip-address> - The private IPv4 addresses associated
 with the network interface.
 
 =item *
 
-C<addresses.primary> - Whether the private IP address is the primary IP
-address associated with the network interface.
+C<addresses.primary> - Whether the private IPv4 address is the primary
+IP address associated with the network interface.
 
 =item *
 
 C<addresses.association.public-ip> - The association ID returned when
-the network interface was associated with the Elastic IP address.
+the network interface was associated with the Elastic IP address
+(IPv4).
 
 =item *
 
@@ -84,31 +74,46 @@ associated with the network interface.
 =item *
 
 C<association.association-id> - The association ID returned when the
-network interface was associated with an IP address.
+network interface was associated with an IPv4 address.
 
 =item *
 
 C<association.allocation-id> - The allocation ID returned when you
-allocated the Elastic IP address for your network interface.
+allocated the Elastic IP address (IPv4) for your network interface.
 
 =item *
 
-C<association.ip-owner-id> - The owner of the Elastic IP address
+C<association.ip-owner-id> - The owner of the Elastic IP address (IPv4)
 associated with the network interface.
 
 =item *
 
-C<association.public-ip> - The address of the Elastic IP address bound
-to the network interface.
+C<association.public-ip> - The address of the Elastic IP address (IPv4)
+bound to the network interface.
 
 =item *
 
 C<association.public-dns-name> - The public DNS name for the network
-interface.
+interface (IPv4).
 
 =item *
 
 C<attachment.attachment-id> - The ID of the interface attachment.
+
+=item *
+
+C<attachment.attach.time> - The time that the network interface was
+attached to an instance.
+
+=item *
+
+C<attachment.delete-on-termination> - Indicates whether the attachment
+is deleted when an instance is terminated.
+
+=item *
+
+C<attachment.device-index> - The device index to which the network
+interface is attached.
 
 =item *
 
@@ -122,23 +127,13 @@ the network interface is attached.
 
 =item *
 
-C<attachment.device-index> - The device index to which the network
-interface is attached.
+C<attachment.nat-gateway-id> - The ID of the NAT gateway to which the
+network interface is attached.
 
 =item *
 
 C<attachment.status> - The status of the attachment (C<attaching> |
 C<attached> | C<detaching> | C<detached>).
-
-=item *
-
-C<attachment.attach.time> - The time that the network interface was
-attached to an instance.
-
-=item *
-
-C<attachment.delete-on-termination> - Indicates whether the attachment
-is deleted when an instance is terminated.
 
 =item *
 
@@ -160,6 +155,11 @@ network interface.
 
 =item *
 
+C<ipv6-addresses.ipv6-address> - An IPv6 address associated with the
+network interface.
+
+=item *
+
 C<mac-address> - The MAC address of the network interface.
 
 =item *
@@ -172,12 +172,13 @@ C<owner-id> - The AWS account ID of the network interface owner.
 
 =item *
 
-C<private-ip-address> - The private IP address or addresses of the
+C<private-ip-address> - The private IPv4 address or addresses of the
 network interface.
 
 =item *
 
-C<private-dns-name> - The private DNS name of the network interface.
+C<private-dns-name> - The private DNS name of the network interface
+(IPv4).
 
 =item *
 
@@ -196,8 +197,8 @@ Scaling, and so on).
 C<source-desk-check> - Indicates whether the network interface performs
 source/destination checking. A value of C<true> means checking is
 enabled, and C<false> means checking is disabled. The value must be
-C<false> for the network interface to perform Network Address
-Translation (NAT) in your VPC.
+C<false> for the network interface to perform network address
+translation (NAT) in your VPC.
 
 =item *
 
@@ -213,7 +214,10 @@ C<subnet-id> - The ID of the subnet for the network interface.
 =item *
 
 C<tag>:I<key>=I<value> - The key/value combination of a tag assigned to
-the resource.
+the resource. Specify the key of the tag in the filter name and the
+value of the tag in the filter value. For example, for the tag
+Purpose=X, specify C<tag:Purpose> for the filter name and C<X> for the
+filter value.
 
 =item *
 
@@ -239,27 +243,11 @@ C<vpc-id> - The ID of the VPC for the network interface.
 
 
 
-
-
-
-
-
-
-=head2 NetworkInterfaceIds => ArrayRef[Str]
-
-  
+=head2 NetworkInterfaceIds => ArrayRef[Str|Undef]
 
 One or more network interface IDs.
 
 Default: Describes all your network interfaces.
-
-
-
-
-
-
-
-
 
 
 

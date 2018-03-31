@@ -1,15 +1,15 @@
 
-package Paws::CognitoIdentity::SetIdentityPoolRoles {
+package Paws::CognitoIdentity::SetIdentityPoolRoles;
   use Moose;
   has IdentityPoolId => (is => 'ro', isa => 'Str', required => 1);
+  has RoleMappings => (is => 'ro', isa => 'Paws::CognitoIdentity::RoleMappingMap');
   has Roles => (is => 'ro', isa => 'Paws::CognitoIdentity::RolesMap', required => 1);
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'SetIdentityPoolRoles');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -24,7 +24,7 @@ This class represents the parameters used for calling the method SetIdentityPool
 Amazon Cognito Identity service. Use the attributes of this class
 as arguments to method SetIdentityPoolRoles.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to SetIdentityPoolRoles.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to SetIdentityPoolRoles.
 
 As an example:
 
@@ -34,35 +34,29 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> IdentityPoolId => Str
 
-  
+=head2 B<REQUIRED> IdentityPoolId => Str
 
 An identity pool ID in the format REGION:GUID.
 
 
 
+=head2 RoleMappings => L<Paws::CognitoIdentity::RoleMappingMap>
+
+How users for a specific identity provider are to mapped to roles. This
+is a string to RoleMapping object map. The string identifies the
+identity provider, for example, "graph.facebook.com" or
+"cognito-idp-east-1.amazonaws.com/us-east-1_abcdefghi:app_client_id".
+
+Up to 25 rules can be specified per identity provider.
 
 
 
+=head2 B<REQUIRED> Roles => L<Paws::CognitoIdentity::RolesMap>
 
-
-
-
-=head2 B<REQUIRED> Roles => Paws::CognitoIdentity::RolesMap
-
-  
-
-The map of roles associated with this pool. Currently only
-authenticated and unauthenticated roles are supported.
-
-
-
-
-
-
-
-
+The map of roles associated with this pool. For a given role, the key
+will be either "authenticated" or "unauthenticated" and the value will
+be the Role ARN.
 
 
 

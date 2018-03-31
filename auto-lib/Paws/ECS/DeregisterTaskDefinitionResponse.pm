@@ -1,10 +1,9 @@
 
-package Paws::ECS::DeregisterTaskDefinitionResponse {
+package Paws::ECS::DeregisterTaskDefinitionResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has taskDefinition => (is => 'ro', isa => 'Paws::ECS::TaskDefinition');
+  has TaskDefinition => (is => 'ro', isa => 'Paws::ECS::TaskDefinition', traits => ['NameInRequest'], request_name => 'taskDefinition' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::ECS::DeregisterTaskDefinitionResponse
 
 =head1 ATTRIBUTES
 
-=head2 taskDefinition => Paws::ECS::TaskDefinition
 
-  
+=head2 TaskDefinition => L<Paws::ECS::TaskDefinition>
 
 The full description of the deregistered task.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

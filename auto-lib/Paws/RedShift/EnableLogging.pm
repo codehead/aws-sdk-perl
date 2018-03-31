@@ -1,5 +1,5 @@
 
-package Paws::RedShift::EnableLogging {
+package Paws::RedShift::EnableLogging;
   use Moose;
   has BucketName => (is => 'ro', isa => 'Str', required => 1);
   has ClusterIdentifier => (is => 'ro', isa => 'Str', required => 1);
@@ -10,7 +10,6 @@ package Paws::RedShift::EnableLogging {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'EnableLogging');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::RedShift::LoggingStatus');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'EnableLoggingResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method EnableLogging o
 Amazon Redshift service. Use the attributes of this class
 as arguments to method EnableLogging.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to EnableLogging.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to EnableLogging.
 
 As an example:
 
@@ -35,9 +34,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> BucketName => Str
 
-  
+=head2 B<REQUIRED> BucketName => Str
 
 The name of an existing S3 bucket where the log files are to be stored.
 
@@ -45,24 +43,20 @@ Constraints:
 
 =over
 
-=item * Must be in the same region as the cluster
+=item *
 
-=item * The cluster must have read bucket and put object permissions
+Must be in the same region as the cluster
+
+=item *
+
+The cluster must have read bucket and put object permissions
 
 =back
 
 
 
 
-
-
-
-
-
-
 =head2 B<REQUIRED> ClusterIdentifier => Str
-
-  
 
 The identifier of the cluster on which logging is to be started.
 
@@ -70,16 +64,7 @@ Example: C<examplecluster>
 
 
 
-
-
-
-
-
-
-
 =head2 S3KeyPrefix => Str
-
-  
 
 The prefix applied to the log file names.
 
@@ -87,34 +72,41 @@ Constraints:
 
 =over
 
-=item * Cannot exceed 512 characters
+=item *
 
-=item * Cannot contain spaces( ), double quotes ("), single quotes ('),
-a backslash (\), or control characters. The hexadecimal codes for
-invalid characters are:
+Cannot exceed 512 characters
+
+=item *
+
+Cannot contain spaces( ), double quotes ("), single quotes ('), a
+backslash (\), or control characters. The hexadecimal codes for invalid
+characters are:
 
 =over
 
-=item * x00 to x20
+=item *
 
-=item * x22
+x00 to x20
 
-=item * x27
+=item *
 
-=item * x5c
+x22
 
-=item * x7f or larger
+=item *
+
+x27
+
+=item *
+
+x5c
+
+=item *
+
+x7f or larger
 
 =back
 
 =back
-
-
-
-
-
-
-
 
 
 

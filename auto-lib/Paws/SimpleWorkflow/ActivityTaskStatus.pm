@@ -1,10 +1,9 @@
 
-package Paws::SimpleWorkflow::ActivityTaskStatus {
+package Paws::SimpleWorkflow::ActivityTaskStatus;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has cancelRequested => (is => 'ro', isa => 'Bool', required => 1);
+  has CancelRequested => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'cancelRequested' , required => 1);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::SimpleWorkflow::ActivityTaskStatus
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> cancelRequested => Bool
 
-  
+=head2 B<REQUIRED> CancelRequested => Bool
 
 Set to C<true> if cancellation of the task is requested.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

@@ -1,9 +1,9 @@
 
-package Paws::CloudSearchDomain::Suggest {
+package Paws::CloudSearchDomain::Suggest;
   use Moose;
-  has query => (is => 'ro', isa => 'Str', traits => ['ParamInQuery'], query_name => 'q' , required => 1);
-  has size => (is => 'ro', isa => 'Num', traits => ['ParamInQuery'], query_name => 'size' );
-  has suggester => (is => 'ro', isa => 'Str', traits => ['ParamInQuery'], query_name => 'suggester' , required => 1);
+  has Query => (is => 'ro', isa => 'Str', traits => ['ParamInQuery'], query_name => 'query', required => 1);
+  has Size => (is => 'ro', isa => 'Int', traits => ['ParamInQuery'], query_name => 'size');
+  has Suggester => (is => 'ro', isa => 'Str', traits => ['ParamInQuery'], query_name => 'suggester', required => 1);
 
   use MooseX::ClassAttribute;
 
@@ -11,8 +11,7 @@ package Paws::CloudSearchDomain::Suggest {
   class_has _api_uri  => (isa => 'Str', is => 'ro', default => '/2013-01-01/suggest?format=sdk&pretty=true');
   class_has _api_method  => (isa => 'Str', is => 'ro', default => 'GET');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::CloudSearchDomain::SuggestResponse');
-  class_has _result_key => (isa => 'Str', is => 'ro', default => 'SuggestResult');
-}
+  class_has _result_key => (isa => 'Str', is => 'ro');
 1;
 
 ### main pod documentation begin ###
@@ -27,7 +26,7 @@ This class represents the parameters used for calling the method Suggest on the
 Amazon CloudSearch Domain service. Use the attributes of this class
 as arguments to method Suggest.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to Suggest.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to Suggest.
 
 As an example:
 
@@ -37,49 +36,22 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> query => Str
 
-  
+=head2 B<REQUIRED> Query => Str
 
 Specifies the string for which you want to get suggestions.
 
 
 
-
-
-
-
-
-
-
-=head2 size => Num
-
-  
+=head2 Size => Int
 
 Specifies the maximum number of suggestions to return.
 
 
 
-
-
-
-
-
-
-
-=head2 B<REQUIRED> suggester => Str
-
-  
+=head2 B<REQUIRED> Suggester => Str
 
 Specifies the name of the suggester to use to find suggested matches.
-
-
-
-
-
-
-
-
 
 
 

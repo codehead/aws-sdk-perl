@@ -1,10 +1,9 @@
 
-package Paws::AutoScaling::DescribeTerminationPolicyTypesAnswer {
+package Paws::AutoScaling::DescribeTerminationPolicyTypesAnswer;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has TerminationPolicyTypes => (is => 'ro', isa => 'ArrayRef[Str]');
+  has TerminationPolicyTypes => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,22 +14,15 @@ Paws::AutoScaling::DescribeTerminationPolicyTypesAnswer
 
 =head1 ATTRIBUTES
 
-=head2 TerminationPolicyTypes => ArrayRef[Str]
 
-  
+=head2 TerminationPolicyTypes => ArrayRef[Str|Undef]
 
-The Termination policies supported by Auto Scaling. They are:
-C<OldestInstance>, C<OldestLaunchConfiguration>, C<NewestInstance>,
-C<ClosestToNextInstanceHour>, and C<Default>.
-
+The termination policies supported by Auto Scaling (C<OldestInstance>,
+C<OldestLaunchConfiguration>, C<NewestInstance>,
+C<ClosestToNextInstanceHour>, and C<Default>).
 
 
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

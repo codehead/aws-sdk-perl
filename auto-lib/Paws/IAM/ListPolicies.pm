@@ -1,5 +1,5 @@
 
-package Paws::IAM::ListPolicies {
+package Paws::IAM::ListPolicies;
   use Moose;
   has Marker => (is => 'ro', isa => 'Str');
   has MaxItems => (is => 'ro', isa => 'Int');
@@ -12,7 +12,6 @@ package Paws::IAM::ListPolicies {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'ListPolicies');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::IAM::ListPoliciesResponse');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'ListPoliciesResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -27,7 +26,7 @@ This class represents the parameters used for calling the method ListPolicies on
 AWS Identity and Access Management service. Use the attributes of this class
 as arguments to method ListPolicies.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to ListPolicies.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to ListPolicies.
 
 As an example:
 
@@ -37,83 +36,56 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
+
 =head2 Marker => Str
 
-  
-
-Use this parameter only when paginating results, and only in a
-subsequent request after you've received a response where the results
-are truncated. Set it to the value of the C<Marker> element in the
-response you just received.
-
-
-
-
-
-
-
+Use this parameter only when paginating results and only after you
+receive a response indicating that the results are truncated. Set it to
+the value of the C<Marker> element in the response that you received to
+indicate where the next call should start.
 
 
 
 =head2 MaxItems => Int
 
-  
+(Optional) Use this only when paginating results to indicate the
+maximum number of items you want in the response. If additional items
+exist beyond the maximum you specify, the C<IsTruncated> response
+element is C<true>.
 
-Use this parameter only when paginating results to indicate the maximum
-number of policies you want in the response. If there are additional
-policies beyond the maximum you specify, the C<IsTruncated> response
-element is C<true>. This parameter is optional. If you do not include
-it, it defaults to 100.
-
-
-
-
-
-
-
+If you do not include this parameter, it defaults to 100. Note that IAM
+might return fewer results, even when there are more results available.
+In that case, the C<IsTruncated> response element returns C<true> and
+C<Marker> contains a value to include in the subsequent call that tells
+the service where to continue from.
 
 
 
 =head2 OnlyAttached => Bool
 
-  
-
 A flag to filter the results to only the attached policies.
 
 When C<OnlyAttached> is C<true>, the returned list contains only the
-policies that are attached to a user, group, or role. When
+policies that are attached to an IAM user, group, or role. When
 C<OnlyAttached> is C<false>, or when the parameter is not included, all
 policies are returned.
 
 
 
-
-
-
-
-
-
-
 =head2 PathPrefix => Str
-
-  
 
 The path prefix for filtering the results. This parameter is optional.
 If it is not included, it defaults to a slash (/), listing all
-policies.
-
-
-
-
-
-
-
+policies. This paramater allows (per its regex pattern) a string of
+characters consisting of either a forward slash (/) by itself or a
+string that must begin and end with forward slashes, containing any
+ASCII character from the ! (\u0021) thru the DEL character (\u007F),
+including most punctuation characters, digits, and upper and lowercased
+letters.
 
 
 
 =head2 Scope => Str
-
-  
 
 The scope to use for filtering the results.
 
@@ -124,15 +96,7 @@ C<Local>.
 This parameter is optional. If it is not included, or if it is set to
 C<All>, all policies are returned.
 
-
-
-
-
-
-
-
-
-
+Valid values are: C<"All">, C<"AWS">, C<"Local">
 
 
 =head1 SEE ALSO

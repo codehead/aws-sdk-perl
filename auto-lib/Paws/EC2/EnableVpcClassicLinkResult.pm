@@ -1,10 +1,9 @@
 
-package Paws::EC2::EnableVpcClassicLinkResult {
+package Paws::EC2::EnableVpcClassicLinkResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has Return => (is => 'ro', isa => 'Bool', xmlname => 'return', traits => ['Unwrapped',]);
+  has Return => (is => 'ro', isa => 'Bool', request_name => 'return', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,21 +14,14 @@ Paws::EC2::EnableVpcClassicLinkResult
 
 =head1 ATTRIBUTES
 
-=head2 Return => Bool
 
-  
+=head2 Return => Bool
 
 Returns C<true> if the request succeeds; otherwise, it returns an
 error.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

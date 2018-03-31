@@ -1,10 +1,10 @@
 
-package Paws::Glacier::GetVaultAccessPolicyOutput {
+package Paws::Glacier::GetVaultAccessPolicyOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has policy => (is => 'ro', isa => 'Paws::Glacier::VaultAccessPolicy');
-
-}
+  has Policy => (is => 'ro', isa => 'Paws::Glacier::VaultAccessPolicy', traits => ['NameInRequest'], request_name => 'policy');
+  use MooseX::ClassAttribute;
+  class_has _stream_param => (is => 'ro', default => 'Policy');
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +15,13 @@ Paws::Glacier::GetVaultAccessPolicyOutput
 
 =head1 ATTRIBUTES
 
-=head2 policy => Paws::Glacier::VaultAccessPolicy
 
-  
+=head2 Policy => L<Paws::Glacier::VaultAccessPolicy>
 
 Contains the returned vault access policy as a JSON string.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

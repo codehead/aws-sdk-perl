@@ -1,5 +1,5 @@
 
-package Paws::SNS::Subscribe {
+package Paws::SNS::Subscribe;
   use Moose;
   has Endpoint => (is => 'ro', isa => 'Str');
   has Protocol => (is => 'ro', isa => 'Str', required => 1);
@@ -10,7 +10,6 @@ package Paws::SNS::Subscribe {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'Subscribe');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::SNS::SubscribeResponse');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'SubscribeResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method Subscribe on th
 Amazon Simple Notification Service service. Use the attributes of this class
 as arguments to method Subscribe.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to Subscribe.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to Subscribe.
 
 As an example:
 
@@ -35,94 +34,104 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 Endpoint => Str
 
-  
+=head2 Endpoint => Str
 
 The endpoint that you want to receive notifications. Endpoints vary by
 protocol:
 
 =over
 
-=item * For the C<http> protocol, the endpoint is an URL beginning with
+=item *
+
+For the C<http> protocol, the endpoint is an URL beginning with
 "http://"
 
-=item * For the C<https> protocol, the endpoint is a URL beginning with
+=item *
+
+For the C<https> protocol, the endpoint is a URL beginning with
 "https://"
 
-=item * For the C<email> protocol, the endpoint is an email address
+=item *
 
-=item * For the C<email-json> protocol, the endpoint is an email
-address
+For the C<email> protocol, the endpoint is an email address
 
-=item * For the C<sms> protocol, the endpoint is a phone number of an
+=item *
+
+For the C<email-json> protocol, the endpoint is an email address
+
+=item *
+
+For the C<sms> protocol, the endpoint is a phone number of an
 SMS-enabled device
 
-=item * For the C<sqs> protocol, the endpoint is the ARN of an Amazon
-SQS queue
+=item *
 
-=item * For the C<application> protocol, the endpoint is the
-EndpointArn of a mobile app and device.
+For the C<sqs> protocol, the endpoint is the ARN of an Amazon SQS queue
+
+=item *
+
+For the C<application> protocol, the endpoint is the EndpointArn of a
+mobile app and device.
+
+=item *
+
+For the C<lambda> protocol, the endpoint is the ARN of an AWS Lambda
+function.
 
 =back
-
-
-
-
-
-
 
 
 
 
 =head2 B<REQUIRED> Protocol => Str
 
-  
-
 The protocol you want to use. Supported protocols include:
 
 =over
 
-=item * C<http> -- delivery of JSON-encoded message via HTTP POST
+=item *
 
-=item * C<https> -- delivery of JSON-encoded message via HTTPS POST
+C<http> -- delivery of JSON-encoded message via HTTP POST
 
-=item * C<email> -- delivery of message via SMTP
+=item *
 
-=item * C<email-json> -- delivery of JSON-encoded message via SMTP
+C<https> -- delivery of JSON-encoded message via HTTPS POST
 
-=item * C<sms> -- delivery of message via SMS
+=item *
 
-=item * C<sqs> -- delivery of JSON-encoded message to an Amazon SQS
-queue
+C<email> -- delivery of message via SMTP
 
-=item * C<application> -- delivery of JSON-encoded message to an
-EndpointArn for a mobile app and device.
+=item *
+
+C<email-json> -- delivery of JSON-encoded message via SMTP
+
+=item *
+
+C<sms> -- delivery of message via SMS
+
+=item *
+
+C<sqs> -- delivery of JSON-encoded message to an Amazon SQS queue
+
+=item *
+
+C<application> -- delivery of JSON-encoded message to an EndpointArn
+for a mobile app and device.
+
+=item *
+
+C<lambda> -- delivery of JSON-encoded message to an AWS Lambda
+function.
 
 =back
 
 
 
 
-
-
-
-
-
-
 =head2 B<REQUIRED> TopicArn => Str
 
-  
-
 The ARN of the topic you want to subscribe to.
-
-
-
-
-
-
-
-
 
 
 

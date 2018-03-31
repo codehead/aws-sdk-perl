@@ -1,11 +1,10 @@
 
-package Paws::ECS::DescribeContainerInstancesResponse {
+package Paws::ECS::DescribeContainerInstancesResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has containerInstances => (is => 'ro', isa => 'ArrayRef[Paws::ECS::ContainerInstance]');
-  has failures => (is => 'ro', isa => 'ArrayRef[Paws::ECS::Failure]');
+  has ContainerInstances => (is => 'ro', isa => 'ArrayRef[Paws::ECS::ContainerInstance]', traits => ['NameInRequest'], request_name => 'containerInstances' );
+  has Failures => (is => 'ro', isa => 'ArrayRef[Paws::ECS::Failure]', traits => ['NameInRequest'], request_name => 'failures' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -15,23 +14,18 @@ Paws::ECS::DescribeContainerInstancesResponse
 
 =head1 ATTRIBUTES
 
-=head2 containerInstances => ArrayRef[Paws::ECS::ContainerInstance]
 
-  
+=head2 ContainerInstances => ArrayRef[L<Paws::ECS::ContainerInstance>]
 
 The list of container instances.
 
 
+=head2 Failures => ArrayRef[L<Paws::ECS::Failure>]
+
+Any failures associated with the call.
 
 
-
-
-
-
-
-=head2 failures => ArrayRef[Paws::ECS::Failure]
-
-  
+=head2 _request_id => Str
 
 
 =cut

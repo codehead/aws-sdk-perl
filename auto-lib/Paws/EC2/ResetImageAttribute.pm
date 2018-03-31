@@ -1,5 +1,5 @@
 
-package Paws::EC2::ResetImageAttribute {
+package Paws::EC2::ResetImageAttribute;
   use Moose;
   has Attribute => (is => 'ro', isa => 'Str', required => 1);
   has DryRun => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'dryRun' );
@@ -8,9 +8,8 @@ package Paws::EC2::ResetImageAttribute {
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'ResetImageAttribute');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method ResetImageAttri
 Amazon Elastic Compute Cloud service. Use the attributes of this class
 as arguments to method ResetImageAttribute.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to ResetImageAttribute.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to ResetImageAttribute.
 
 As an example:
 
@@ -35,25 +34,15 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> Attribute => Str
 
-  
+=head2 B<REQUIRED> Attribute => Str
 
 The attribute to reset (currently you can only reset the launch
 permission attribute).
 
-
-
-
-
-
-
-
-
+Valid values are: C<"launchPermission">
 
 =head2 DryRun => Bool
-
-  
 
 Checks whether you have the required permissions for the action,
 without actually making the request, and provides an error response. If
@@ -62,26 +51,9 @@ C<DryRunOperation>. Otherwise, it is C<UnauthorizedOperation>.
 
 
 
-
-
-
-
-
-
-
 =head2 B<REQUIRED> ImageId => Str
 
-  
-
 The ID of the AMI.
-
-
-
-
-
-
-
-
 
 
 

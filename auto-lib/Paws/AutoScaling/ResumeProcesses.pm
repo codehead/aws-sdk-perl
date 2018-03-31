@@ -1,15 +1,14 @@
 
-package Paws::AutoScaling::ResumeProcesses {
+package Paws::AutoScaling::ResumeProcesses;
   use Moose;
   has AutoScalingGroupName => (is => 'ro', isa => 'Str', required => 1);
-  has ScalingProcesses => (is => 'ro', isa => 'ArrayRef[Str]');
+  has ScalingProcesses => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'ResumeProcesses');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -24,7 +23,7 @@ This class represents the parameters used for calling the method ResumeProcesses
 Auto Scaling service. Use the attributes of this class
 as arguments to method ResumeProcesses.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to ResumeProcesses.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to ResumeProcesses.
 
 As an example:
 
@@ -34,53 +33,53 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> AutoScalingGroupName => Str
 
-  
+=head2 B<REQUIRED> AutoScalingGroupName => Str
 
 The name or Amazon Resource Name (ARN) of the Auto Scaling group.
 
 
 
+=head2 ScalingProcesses => ArrayRef[Str|Undef]
 
-
-
-
-
-
-
-=head2 ScalingProcesses => ArrayRef[Str]
-
-  
-
-One or more of the following processes:
+One or more of the following processes. If you omit this parameter, all
+processes are specified.
 
 =over
 
-=item * Launch
+=item *
 
-=item * Terminate
+C<Launch>
 
-=item * HealthCheck
+=item *
 
-=item * ReplaceUnhealthy
+C<Terminate>
 
-=item * AZRebalance
+=item *
 
-=item * AlarmNotification
+C<HealthCheck>
 
-=item * ScheduledActions
+=item *
 
-=item * AddToLoadBalancer
+C<ReplaceUnhealthy>
+
+=item *
+
+C<AZRebalance>
+
+=item *
+
+C<AlarmNotification>
+
+=item *
+
+C<ScheduledActions>
+
+=item *
+
+C<AddToLoadBalancer>
 
 =back
-
-
-
-
-
-
-
 
 
 

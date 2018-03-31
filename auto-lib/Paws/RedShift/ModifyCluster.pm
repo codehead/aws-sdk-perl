@@ -1,13 +1,15 @@
 
-package Paws::RedShift::ModifyCluster {
+package Paws::RedShift::ModifyCluster;
   use Moose;
   has AllowVersionUpgrade => (is => 'ro', isa => 'Bool');
   has AutomatedSnapshotRetentionPeriod => (is => 'ro', isa => 'Int');
   has ClusterIdentifier => (is => 'ro', isa => 'Str', required => 1);
   has ClusterParameterGroupName => (is => 'ro', isa => 'Str');
-  has ClusterSecurityGroups => (is => 'ro', isa => 'ArrayRef[Str]');
+  has ClusterSecurityGroups => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
   has ClusterType => (is => 'ro', isa => 'Str');
   has ClusterVersion => (is => 'ro', isa => 'Str');
+  has ElasticIp => (is => 'ro', isa => 'Str');
+  has EnhancedVpcRouting => (is => 'ro', isa => 'Bool');
   has HsmClientCertificateIdentifier => (is => 'ro', isa => 'Str');
   has HsmConfigurationIdentifier => (is => 'ro', isa => 'Str');
   has MasterUserPassword => (is => 'ro', isa => 'Str');
@@ -15,14 +17,14 @@ package Paws::RedShift::ModifyCluster {
   has NodeType => (is => 'ro', isa => 'Str');
   has NumberOfNodes => (is => 'ro', isa => 'Int');
   has PreferredMaintenanceWindow => (is => 'ro', isa => 'Str');
-  has VpcSecurityGroupIds => (is => 'ro', isa => 'ArrayRef[Str]');
+  has PubliclyAccessible => (is => 'ro', isa => 'Bool');
+  has VpcSecurityGroupIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'ModifyCluster');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::RedShift::ModifyClusterResult');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'ModifyClusterResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -37,7 +39,7 @@ This class represents the parameters used for calling the method ModifyCluster o
 Amazon Redshift service. Use the attributes of this class
 as arguments to method ModifyCluster.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to ModifyCluster.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to ModifyCluster.
 
 As an example:
 
@@ -47,9 +49,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 AllowVersionUpgrade => Bool
 
-  
+=head2 AllowVersionUpgrade => Bool
 
 If C<true>, major version upgrades will be applied automatically to the
 cluster during the maintenance window.
@@ -58,16 +59,7 @@ Default: C<false>
 
 
 
-
-
-
-
-
-
-
 =head2 AutomatedSnapshotRetentionPeriod => Int
-
-  
 
 The number of days that automated snapshots are retained. If the value
 is 0, automated snapshots are disabled. Even if automated snapshots are
@@ -84,16 +76,7 @@ Constraints: Must be a value from 0 to 35.
 
 
 
-
-
-
-
-
-
-
 =head2 B<REQUIRED> ClusterIdentifier => Str
-
-  
 
 The unique identifier of the cluster to be modified.
 
@@ -101,16 +84,7 @@ Example: C<examplecluster>
 
 
 
-
-
-
-
-
-
-
 =head2 ClusterParameterGroupName => Str
-
-  
 
 The name of the cluster parameter group to apply to this cluster. This
 change is applied only after the cluster is rebooted. To reboot a
@@ -123,16 +97,7 @@ group family that matches the cluster version.
 
 
 
-
-
-
-
-
-
-
-=head2 ClusterSecurityGroups => ArrayRef[Str]
-
-  
+=head2 ClusterSecurityGroups => ArrayRef[Str|Undef]
 
 A list of cluster security groups to be authorized on this cluster.
 This change is asynchronously applied as soon as possible.
@@ -144,26 +109,24 @@ Constraints:
 
 =over
 
-=item * Must be 1 to 255 alphanumeric characters or hyphens
+=item *
 
-=item * First character must be a letter
+Must be 1 to 255 alphanumeric characters or hyphens
 
-=item * Cannot end with a hyphen or contain two consecutive hyphens
+=item *
+
+First character must be a letter
+
+=item *
+
+Cannot end with a hyphen or contain two consecutive hyphens
 
 =back
 
 
 
 
-
-
-
-
-
-
 =head2 ClusterType => Str
-
-  
 
 The new cluster type.
 
@@ -178,16 +141,7 @@ Valid Values: C< multi-node | single-node>
 
 
 
-
-
-
-
-
-
-
 =head2 ClusterVersion => Str
-
-  
 
 The new version number of the Amazon Redshift engine to upgrade to.
 
@@ -195,40 +149,46 @@ For major version upgrades, if a non-default cluster parameter group is
 currently in use, a new cluster parameter group in the cluster
 parameter group family for the new version must be specified. The new
 cluster parameter group can be the default for that cluster parameter
-group family. For more information about managing parameter groups, go
-to Amazon Redshift Parameter Groups in the I<Amazon Redshift Cluster
-Management Guide>.
+group family. For more information about parameters and parameter
+groups, go to Amazon Redshift Parameter Groups in the I<Amazon Redshift
+Cluster Management Guide>.
 
 Example: C<1.0>
 
 
 
+=head2 ElasticIp => Str
+
+The Elastic IP (EIP) address for the cluster.
+
+Constraints: The cluster must be provisioned in EC2-VPC and
+publicly-accessible through an Internet gateway. For more information
+about provisioning clusters in EC2-VPC, go to Supported Platforms to
+Launch Your Cluster in the Amazon Redshift Cluster Management Guide.
 
 
 
+=head2 EnhancedVpcRouting => Bool
 
+An option that specifies whether to create the cluster with enhanced
+VPC routing enabled. To create a cluster that uses enhanced VPC
+routing, the cluster must be in a VPC. For more information, see
+Enhanced VPC Routing in the Amazon Redshift Cluster Management Guide.
+
+If this option is C<true>, enhanced VPC routing is enabled.
+
+Default: false
 
 
 
 =head2 HsmClientCertificateIdentifier => Str
-
-  
 
 Specifies the name of the HSM client certificate the Amazon Redshift
 cluster uses to retrieve the data encryption keys stored in an HSM.
 
 
 
-
-
-
-
-
-
-
 =head2 HsmConfigurationIdentifier => Str
-
-  
 
 Specifies the name of the HSM configuration that contains the
 information the Amazon Redshift cluster can use to retrieve and store
@@ -236,24 +196,17 @@ keys in an HSM.
 
 
 
-
-
-
-
-
-
-
 =head2 MasterUserPassword => Str
-
-  
 
 The new password for the cluster master user. This change is
 asynchronously applied as soon as possible. Between the time of the
 request and the completion of the request, the C<MasterUserPassword>
 element exists in the C<PendingModifiedValues> element of the operation
-response. Operations never return the password, so this operation
-provides a way to regain access to the master user account for a
-cluster if the password is lost.
+response.
+
+Operations never return the password, so this operation provides a way
+to regain access to the master user account for a cluster if the
+password is lost.
 
 Default: Uses existing setting.
 
@@ -261,31 +214,33 @@ Constraints:
 
 =over
 
-=item * Must be between 8 and 64 characters in length.
+=item *
 
-=item * Must contain at least one uppercase letter.
+Must be between 8 and 64 characters in length.
 
-=item * Must contain at least one lowercase letter.
+=item *
 
-=item * Must contain one number.
+Must contain at least one uppercase letter.
 
-=item * Can be any printable ASCII character (ASCII code 33 to 126)
-except ' (single quote), " (double quote), \, /, @, or space.
+=item *
+
+Must contain at least one lowercase letter.
+
+=item *
+
+Must contain one number.
+
+=item *
+
+Can be any printable ASCII character (ASCII code 33 to 126) except '
+(single quote), " (double quote), \, /, @, or space.
 
 =back
 
 
 
 
-
-
-
-
-
-
 =head2 NewClusterIdentifier => Str
-
-  
 
 The new identifier for the cluster.
 
@@ -293,15 +248,25 @@ Constraints:
 
 =over
 
-=item * Must contain from 1 to 63 alphanumeric characters or hyphens.
+=item *
 
-=item * Alphabetic characters must be lowercase.
+Must contain from 1 to 63 alphanumeric characters or hyphens.
 
-=item * First character must be a letter.
+=item *
 
-=item * Cannot end with a hyphen or contain two consecutive hyphens.
+Alphabetic characters must be lowercase.
 
-=item * Must be unique for all clusters within an AWS account.
+=item *
+
+First character must be a letter.
+
+=item *
+
+Cannot end with a hyphen or contain two consecutive hyphens.
+
+=item *
+
+Must be unique for all clusters within an AWS account.
 
 =back
 
@@ -309,16 +274,7 @@ Example: C<examplecluster>
 
 
 
-
-
-
-
-
-
-
 =head2 NodeType => Str
-
-  
 
 The new node type of the cluster. If you specify a new node type, you
 must also specify the number of nodes parameter.
@@ -331,21 +287,12 @@ connection is switched to the new cluster. When the new connection is
 complete, the original access permissions for the cluster are restored.
 You can use DescribeResize to track the progress of the resize request.
 
-Valid Values: C< dw1.xlarge> | C<dw1.8xlarge> | C<dw2.large> |
-C<dw2.8xlarge>.
-
-
-
-
-
-
-
+Valid Values: C< ds1.xlarge> | C<ds1.8xlarge> | C< ds2.xlarge> |
+C<ds2.8xlarge> | C<dc1.large> | C<dc1.8xlarge>.
 
 
 
 =head2 NumberOfNodes => Int
-
-  
 
 The new number of nodes of the cluster. If you specify a new number of
 nodes, you must also specify the node type parameter.
@@ -362,16 +309,7 @@ Valid Values: Integer greater than C<0>.
 
 
 
-
-
-
-
-
-
-
 =head2 PreferredMaintenanceWindow => Str
-
-  
 
 The weekly time range (in UTC) during which system maintenance can
 occur, if necessary. If system maintenance is necessary during the
@@ -392,27 +330,17 @@ Constraints: Must be at least 30 minutes.
 
 
 
+=head2 PubliclyAccessible => Bool
+
+If C<true>, the cluster can be accessed from a public network. Only
+clusters in VPCs can be set to be publicly available.
 
 
 
-
-
-
-
-=head2 VpcSecurityGroupIds => ArrayRef[Str]
-
-  
+=head2 VpcSecurityGroupIds => ArrayRef[Str|Undef]
 
 A list of virtual private cloud (VPC) security groups to be associated
 with the cluster.
-
-
-
-
-
-
-
-
 
 
 

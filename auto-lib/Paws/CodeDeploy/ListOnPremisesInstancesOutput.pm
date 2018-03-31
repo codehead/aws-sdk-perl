@@ -1,11 +1,10 @@
 
-package Paws::CodeDeploy::ListOnPremisesInstancesOutput {
+package Paws::CodeDeploy::ListOnPremisesInstancesOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has instanceNames => (is => 'ro', isa => 'ArrayRef[Str]');
-  has nextToken => (is => 'ro', isa => 'Str');
+  has InstanceNames => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'instanceNames' );
+  has NextToken => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'nextToken' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -15,37 +14,20 @@ Paws::CodeDeploy::ListOnPremisesInstancesOutput
 
 =head1 ATTRIBUTES
 
-=head2 instanceNames => ArrayRef[Str]
 
-  
+=head2 InstanceNames => ArrayRef[Str|Undef]
 
 The list of matching on-premises instance names.
 
 
+=head2 NextToken => Str
+
+If a large amount of information is returned, an identifier is also
+returned. It can be used in a subsequent list on-premises instances
+call to return the next set of on-premises instances in the list.
 
 
-
-
-
-
-
-=head2 nextToken => Str
-
-  
-
-If the amount of information that is returned is significantly large,
-an identifier will also be returned, which can be used in a subsequent
-list on-premises instances call to return the next set of on-premises
-instances in the list.
-
-
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

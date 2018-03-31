@@ -1,5 +1,5 @@
 
-package Paws::RedShift::ModifyClusterParameterGroup {
+package Paws::RedShift::ModifyClusterParameterGroup;
   use Moose;
   has ParameterGroupName => (is => 'ro', isa => 'Str', required => 1);
   has Parameters => (is => 'ro', isa => 'ArrayRef[Paws::RedShift::Parameter]', required => 1);
@@ -9,7 +9,6 @@ package Paws::RedShift::ModifyClusterParameterGroup {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'ModifyClusterParameterGroup');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::RedShift::ClusterParameterGroupNameMessage');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'ModifyClusterParameterGroupResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -24,7 +23,7 @@ This class represents the parameters used for calling the method ModifyClusterPa
 Amazon Redshift service. Use the attributes of this class
 as arguments to method ModifyClusterParameterGroup.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to ModifyClusterParameterGroup.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to ModifyClusterParameterGroup.
 
 As an example:
 
@@ -34,24 +33,14 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> ParameterGroupName => Str
 
-  
+=head2 B<REQUIRED> ParameterGroupName => Str
 
 The name of the parameter group to be modified.
 
 
 
-
-
-
-
-
-
-
-=head2 B<REQUIRED> Parameters => ArrayRef[Paws::RedShift::Parameter]
-
-  
+=head2 B<REQUIRED> Parameters => ArrayRef[L<Paws::RedShift::Parameter>]
 
 An array of parameters to be modified. A maximum of 20 parameters can
 be modified in a single request.
@@ -62,14 +51,6 @@ parameter are optional.
 
 For the workload management (WLM) configuration, you must supply all
 the name-value pairs in the wlm_json_configuration parameter.
-
-
-
-
-
-
-
-
 
 
 

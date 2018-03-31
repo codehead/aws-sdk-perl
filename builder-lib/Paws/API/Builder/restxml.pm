@@ -1,32 +1,58 @@
 package Paws::API::Builder::restxml {
 
-  use Data::Printer;
-  use Data::Dumper;
-
-  use autodie;
-
   use Moose;
   extends 'Paws::API::Builder';
 
-  has service => (is => 'ro', lazy => 1, default => sub { $_[0]->api_struct->{metadata}->{ endpointPrefix } });
-  has version => (is => 'ro', lazy => 1, default => sub { $_[0]->api_struct->{metadata}->{ apiVersion } });
-  has endpoint_role => (is => 'ro', lazy => 1, default => sub { defined $_[0]->api_struct->{metadata}->{ globalEndpoint } ? 
-                                                                   'Paws::API::SingleEndpointCaller':
-                                                                   'Paws::API::RegionalEndpointCaller' 
-                                                              } );
   has wrapped_responses => (is => 'ro', lazy => 1, default => sub { $_[0]->api_struct->{ result_wrapped } });
   has response_role  => (is => 'ro', lazy => 1, default => sub { 'Paws::Net::RestXMLResponse' });
   has parameter_role => (is => 'ro', lazy => 1, default => sub { return "Paws::Net::RestXmlCaller" });
 
+  has '+class_documentation_template' => (default => q#
+\#\#\# main pod documentation begin \#\#\#
+
+=head1 NAME
+
+[% c.api %]::[% op_name %]
+
+=head1 ATTRIBUTES
+
+[% FOREACH param_name IN shape.members.keys.sort -%]
+  [%- member = c.shape(shape.members.$param_name.shape) %]
+=head2 [%- IF (c.required_in_shape(shape,param_name)) %]B<REQUIRED> [% END %][% param_name %] => [% c.perl_type_to_pod(member.perl_type) %]
+
+[% c.doc_for_param_name_in_shape(shape, param_name) %]
+
+[% IF member.enum %]Valid values are: [% FOR value=member.enum %]C<"[% value %]">[% IF NOT loop.last %], [% END %][% END %][% END -%]
+
+[% END %]
+
+=cut
+#);
+
   has callargs_class_template => (is => 'ro', isa => 'Str', default => q#
 [%- operation = c.operation(op_name) %]
 [%- shape = c.input_for_operation(op_name) %]
-package [% c.api %]::[% operation.name %] {
+package [% c.api %]::[% op_name %];
   use Moose;
 [% FOREACH param_name IN shape.members.keys.sort -%]
   [%- member = c.shape(shape.members.$param_name.shape) -%]
+  [%- traits = [] -%]
   has [% param_name %] => (is => 'ro', isa => '[% member.perl_type %]'
-  [%- IF (shape.members.$param_name.location == 'header') %], traits => ['ParamInHeader'], header_name => '[% shape.members.$param_name.locationName %]' [% END %]
+  [%- IF (shape.members.$param_name.location == 'header') %], header_name => '[% shape.members.$param_name.locationName %]'
+    [%- IF (param_name == 'ContentMD5'); traits.push('AutoInHeader') %], auto => 'MD5'
+    [%- ELSE; traits.push('ParamInHeader') %]
+  [%- END %]
+  [%- ELSIF (shape.members.$param_name.location == 'headers');     traits.push('ParamInHeaders') %], header_prefix => '[% shape.members.$param_name.locationName %]'
+  [%- ELSIF (shape.members.$param_name.location == 'querystring'); traits.push('ParamInQuery') %], query_name => '[% shape.members.$param_name.locationName %]'
+  [%- ELSIF (shape.members.$param_name.location == 'uri');         traits.push('ParamInURI') %], uri_name => '[% shape.members.$param_name.locationName %]'
+  [%- ELSIF (shape.members.$param_name.streaming == 1);            traits.push('ParamInBody'); %][% stream_param = param_name -%]
+  [%- ELSE %][% IF (shape.members.$param_name.locationName != '') -%]
+               [%- IF (shape.members.$param_name.locationName == 'x-amz-meta-') %]
+               [%- ELSIF (shape.members.$param_name.locationName != param_name); traits.push('NameInRequest'); %], request_name => '[% shape.members.$param_name.locationName -%]'
+               [%- END -%]
+             [%- END -%]
+  [%- END -%]
+  [%- IF (traits.size) %], traits => [[% FOREACH trait=traits %]'[% trait %]'[% ',' IF (NOT loop.last) %][% END %]][% END -%]
   [%- IF (c.required_in_shape(shape,param_name)) %], required => 1[% END %]);
 [% END %]
   use MooseX::ClassAttribute;
@@ -34,31 +60,46 @@ package [% c.api %]::[% operation.name %] {
   class_has _api_call => (isa => 'Str', is => 'ro', default => '[% op_name %]');
   class_has _api_uri  => (isa => 'Str', is => 'ro', default => '[% operation.http.requestUri %]');
   class_has _api_method  => (isa => 'Str', is => 'ro', default => '[% operation.http.method %]');
-  class_has _returns => (isa => 'Str', is => 'ro'[% IF (operation.output.keys.size) %], default => '[% c.api %]::[% c.shapename_for_operation_output(op_name) %]'[% END %]);
+  class_has _returns => (isa => 'Str', is => 'ro', default => '
+    [%- IF (operation.output.keys.size) -%]
+      [%- c.api %]::[% c.shapename_for_operation_output(op_name) -%]
+    [%- ELSE -%]Paws::API::Response[% END -%]');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
+  [% IF (stream_param) %]class_has _stream_param => (is => 'ro', default => '[% c.to_payload_shape_name(stream_param) %]');[% END %]
 1;
-[% c.class_documentation_template | eval %]
+[% c.callclass_documentation_template | eval %]
 #);
 
   has callresult_class_template => (is => 'ro', isa => 'Str', default => q#
 [%- operation = c.result_for_operation(op_name) %]
 [%- shape = c.result_for_operation(op_name) %]
+[%- op_name = c.shapename_for_operation_output(op_name) %]
 [%- IF (shape) %]
-package [% c.api %]::[% c.shapename_for_operation_output(op_name) %] {
+package [% c.api %]::[% op_name %];
   use Moose;
-  with 'Paws::API::ResultParser';
 [% FOREACH param_name IN shape.members.keys.sort -%]
   [%- member = c.shape(shape.members.$param_name.shape) -%]
   has [% param_name %] => (is => 'ro', isa => '[% member.perl_type %]'
-  [%- IF (member.member.locationName) %], traits => ['Unwrapped'], xmlname => '[% member.member.locationName %]'[% END %]
-  [%- IF (member.locationName) %], traits => ['Unwrapped'], xmlname => '[% member.locationName %]'[% END %]
+  [%- IF (shape.members.$param_name.locationName) %]
+    [%- IF (shape.members.$param_name.location == 'header') %], traits => ['ParamInHeader'], header_name => '[% shape.members.$param_name.locationName %]'
+    [%- ELSIF (shape.members.$param_name.location == 'headers') %], traits => ['ParamInHeaders'], header_prefix => '[% shape.members.$param_name.locationName %]'
+    [%- ELSIF (shape.members.$param_name.location == 'querystring') %], traits => ['ParamInQuery'], query_name => '[% shape.members.$param_name.locationName -%]' 
+    [%- ELSIF (shape.members.$param_name.location == 'uri') %], traits => ['ParamInURI'], uri_name => '[% shape.members.$param_name.locationName -%]' 
+    [%- ELSE %], traits => ['NameInRequest'], request_name => '[% shape.members.$param_name.locationName %]'[%- END -%][%- END -%]
+  [%- IF (shape.members.$param_name.streaming == 1) %], traits => ['ParamInBody'][% stream_param = param_name %][% END %]
   [%- IF (c.required_in_shape(shape,param_name)) %], required => 1[% END %]);
 [% END %]
-}
+  [%- IF (stream_param or shape.payload == param_name) %]
+  use MooseX::ClassAttribute;
+  [%- IF (stream_param) %]
+  class_has _stream_param => (is => 'ro', default => '[% c.to_payload_shape_name(stream_param) %]');[% END %]
+  [%- IF (shape.payload == param_name) %]
+  class_has _payload => (is => 'ro', default => '[% param_name %]');[% END %]
+  [%- END %]
+  has _request_id => (is => 'ro', isa => 'Str');
 [%- END %]
 1;
-[% c.callclass_documentation_template | eval %]
+[% c.class_documentation_template | eval %]
 #);
 
   has service_class_template => (is => 'ro', isa => 'Str', default => q#
@@ -68,144 +109,47 @@ use Moose::Util::TypeConstraints;
 enum '[% enum_name %]', [[% FOR val IN c.enums.$enum_name %]'[% val %]',[% END %]];
 [%- END %]
 [%- END -%]
-package [% c.api %] {
+package [% c.api %];
   warn "[% c.api %] is not stable / supported / entirely developed";
   use Moose;
   sub service { '[% c.service %]' }
   sub version { '[% c.version %]' }
   sub flattened_arrays { [% c.flattened_arrays %] }
+  has max_attempts => (is => 'ro', isa => 'Int', default => [% c.service_max_attempts %]);
+  has retry => (is => 'ro', isa => 'HashRef', default => sub {
+    { base => '[% c.service_retry.base %]', type => '[% c.service_retry.type %]', growth_factor => [% c.service_retry.growth_factor %] }
+  });
+  has retriables => (is => 'ro', isa => 'ArrayRef', default => sub { [
+  [%- FOREACH key IN c.retry.policies.keys.sort %]
+     [%- policy = c.retry.policies.$key.applies_when.response %]
+     [%- IF (policy.service_error_code) %]
+       sub { defined $_[0]->http_status and $_[0]->http_status == [% policy.http_status_code %] and $_[0]->code eq '[% policy.service_error_code %]' },
+     [%- ELSIF (policy.crc32body) %]
+       sub { $_[0]->code eq 'Crc32Error' },
+     [%- ELSE %]
+       [% THROW 'Unknown retry type' %]
+     [%- END %]
+  [%- END %]
+  ] });
 
   with 'Paws::API::Caller', '[% c.endpoint_role %]', '[% c.signature_role %]', '[% c.parameter_role %]', '[% c.response_role %]';
 
+  [%- c.service_endpoint_rules %]
   [% FOR op IN c.api_struct.operations.keys.sort %]
-  [%- op_name = c.api_struct.operations.$op.name %]
+  [%- op_name = op %]
   sub [% op_name %] {
     my $self = shift;
     my $call_object = $self->new_with_coercions('[% c.api %]::[% op_name %]', @_);
     return $self->caller->do_call($self, $call_object);
   }
   [%- END %]
-  [%- FOR op IN [] \#c.paginators_struct.keys.sort %]
-  sub [% c.get_paginator_name(op) %] {
-    [%- paginator = c.paginators_struct.$op %]
-    my $self = shift;
+  [% c.paginator_template | eval %]
 
-    my $result = $self->[% op %](@_);
-    my $array = [];
-    push @$array, @{ $result->[% paginator.result_key %] };
+  sub operations { qw/[% FOR op IN c.api_struct.operations.keys.sort; op _ ' '; END %]/ }
 
-    while ($result->[% paginator.output_token %]) {
-      $result = $self->[% op %](@_, [% paginator.input_token %] => $result->[% paginator.output_token %]);
-      push @$array, @{ $result->[% paginator.result_key %] };
-    }
-
-    return '[% c.api %]::[% op %]'->_returns->new([% paginator.result_key %] => $array);
-  }
-  [%- END %]
-}
 1;
 [% c.service_documentation_template | eval %]
 #);
 
-  sub make_inner_class {
-    my $self = shift;
-    my $iclass = shift;
-    my $inner_class = shift;
-
-    return if (not defined $inner_class);
-
-      my $output = '';
-      if ($iclass->{type} eq 'map'){
-        my $keys_shape = $self->shape($iclass->{key}->{shape});
-        if ($keys_shape->{enum}){
-          $output .= "package $inner_class {\n";
-          $output .= "  use Moose;\n";
-          $output .= "  with 'Paws::API::MapParser';\n";
-
-          my $type = $self->get_caller_class_type($iclass->{value}->{shape});
-
-          my $xml_keys = $iclass->{key}->{locationName} || 'key';
-          my $xml_values = $iclass->{value}->{locationName} || 'value';
-          $output .= "\n";
-          $output .= "  use MooseX::ClassAttribute;\n";
-          $output .= "  class_has xml_keys =>(is => 'ro', default => '$xml_keys');\n";
-          $output .= "  class_has xml_values =>(is => 'ro', default => '$xml_values');\n";
-          $output .= "\n";
-
-          my $members = $keys_shape->{enum};
-          foreach my $param_name (sort @$members){
-            $output .= "  has $param_name => (is => 'ro', isa => '$type'";
-            $output .= ");\n";
-          }
-          $output .= "}\n1\n";
-          $self->save_class($inner_class, $output) if ($inner_class !~ m/ArrayRef/);
-        } elsif ($keys_shape->{type} eq 'string') {
-          $output .= "package $inner_class {\n"; 
-          $output .= "  use Moose;\n";
-          $output .= "  with 'Paws::API::StrToStrMapParser';\n";
-
-          my $xml_keys = $iclass->{key}->{locationName} || 'key';
-          my $xml_values = $iclass->{value}->{locationName} || 'value';
-          $output .= "\n";
-          $output .= "  use MooseX::ClassAttribute;\n";
-          $output .= "  class_has xml_keys =>(is => 'ro', default => '$xml_keys');\n";
-          $output .= "  class_has xml_values =>(is => 'ro', default => '$xml_values');\n";
-          $output .= "\n";
-
-          $output .= "  has Map => (is => 'ro', isa => 'HashRef[Str]');\n";
-          $output .= "}\n1\n";
-          $self->save_class($inner_class, $output) if ($inner_class !~ m/ArrayRef/);
-        } elsif ($keys_shape->{type} eq 'structure') {
-          my $type = $self->get_caller_class_type($iclass->{members});
-          $output .= "package $inner_class {\n";
-          $output .= "  use Moose;\n";
-          $output .= "  with 'Paws::API::StrToObjMapParser';\n";
-
-          my $xml_keys = $iclass->{key}->{locationName} || 'key';
-          my $xml_values = $iclass->{value}->{locationName} || 'value';
-          $output .= "\n";
-          $output .= "  use MooseX::ClassAttribute;\n";
-          $output .= "  class_has xml_keys =>(is => 'ro', default => '$xml_keys');\n";
-          $output .= "  class_has xml_values =>(is => 'ro', default => '$xml_values');\n";
-          $output .= "\n";
-
-          $output .= "  has Map => (is => 'ro', isa => 'HashRef[$type]');\n";
-          $output .= "}\n1\n";
-          $self->save_class($inner_class, $output) if ($inner_class !~ m/ArrayRef/);
-        } else {
-          die "Unrecognized Map type in query API " . Dumper($iclass) . 'keys_shape' . Dumper($keys_shape);
-        }
-      } elsif ($iclass->{type} eq 'structure'){
-        $output .= "package $inner_class {\n";
-        $output .= "  use Moose;\n";
-        my $members = $iclass->{members};
-        foreach my $param_name (sort keys %$members){
-          my $param_props = $self->shape($members->{ $param_name }->{ shape });
-
-          my $callit = $self->get_caller_class_type($members->{ $param_name }->{ shape });
-          $self->make_inner_class($param_props,$callit);
-
-          my $type;
-          if ($param_props->{enum}) {
-            # Enums passed to Str because documentation tends to have inconsistencies 
-            #$type = $self->api . "::" . $param_props->{shape_name};
-            #$self->register_enum($type, $param_props->{enum});
-            $type = 'Str';
-          } else {
-            $type = eval { $self->get_caller_class_type($members->{ $param_name }->{ shape }) };
-            if ($@) { die "In Inner Class: $inner_class: $@"; }
-          }
-          $output .= "  has $param_name => (is => 'ro', isa => '$type'";
-          if (defined $param_props->{xmlname}) {
-            $output .= ", traits => ['Unwrapped'], xmlname => '$param_props->{xmlname}'";
-          }
-          $output .= ", required => 1" if ($self->required_in_shape($iclass,$param_name));
-          $output .= ");\n";
-        }
-        $output .= "}\n1;\n";
-        $self->save_class($inner_class, $output) if ($inner_class !~ m/ArrayRef/);
-      }
-  }
 }
-
 1;

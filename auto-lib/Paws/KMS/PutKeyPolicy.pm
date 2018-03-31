@@ -1,6 +1,7 @@
 
-package Paws::KMS::PutKeyPolicy {
+package Paws::KMS::PutKeyPolicy;
   use Moose;
+  has BypassPolicyLockoutSafetyCheck => (is => 'ro', isa => 'Bool');
   has KeyId => (is => 'ro', isa => 'Str', required => 1);
   has Policy => (is => 'ro', isa => 'Str', required => 1);
   has PolicyName => (is => 'ro', isa => 'Str', required => 1);
@@ -8,9 +9,8 @@ package Paws::KMS::PutKeyPolicy {
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'PutKeyPolicy');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +25,7 @@ This class represents the parameters used for calling the method PutKeyPolicy on
 AWS Key Management Service service. Use the attributes of this class
 as arguments to method PutKeyPolicy.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to PutKeyPolicy.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to PutKeyPolicy.
 
 As an example:
 
@@ -35,61 +35,87 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
+
+=head2 BypassPolicyLockoutSafetyCheck => Bool
+
+A flag to indicate whether to bypass the key policy lockout safety
+check.
+
+Setting this value to true increases the likelihood that the CMK
+becomes unmanageable. Do not set this value to true indiscriminately.
+
+For more information, refer to the scenario in the Default Key Policy
+section in the I<AWS Key Management Service Developer Guide>.
+
+Use this parameter only when you intend to prevent the principal that
+is making the request from making a subsequent C<PutKeyPolicy> request
+on the CMK.
+
+The default value is false.
+
+
+
 =head2 B<REQUIRED> KeyId => Str
 
-  
+A unique identifier for the CMK.
 
-A unique identifier for the customer master key. This value can be a
-globally unique identifier or the fully specified ARN to a key.
+Use the CMK's unique identifier or its Amazon Resource Name (ARN). For
+example:
 
 =over
 
-=item * Key ARN Example -
-arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
+=item *
 
-=item * Globally Unique Key ID Example -
-12345678-1234-1234-1234-123456789012
+Unique ID: 1234abcd-12ab-34cd-56ef-1234567890ab
+
+=item *
+
+ARN:
+arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
 
 =back
 
 
 
 
-
-
-
-
-
-
 =head2 B<REQUIRED> Policy => Str
 
-  
+The key policy to attach to the CMK.
 
-The policy, in JSON format, to be attached to the key.
+If you do not set C<BypassPolicyLockoutSafetyCheck> to true, the policy
+must meet the following criteria:
 
+=over
 
+=item *
 
+It must allow the principal that is making the C<PutKeyPolicy> request
+to make a subsequent C<PutKeyPolicy> request on the CMK. This reduces
+the likelihood that the CMK becomes unmanageable. For more information,
+refer to the scenario in the Default Key Policy section in the I<AWS
+Key Management Service Developer Guide>.
 
+=item *
 
+The principals that are specified in the key policy must exist and be
+visible to AWS KMS. When you create a new AWS principal (for example,
+an IAM user or role), you might need to enforce a delay before
+specifying the new principal in a key policy because the new principal
+might not immediately be visible to AWS KMS. For more information, see
+Changes that I make are not always immediately visible in the I<IAM
+User Guide>.
 
+=back
 
+The policy size limit is 32 KiB (32768 bytes).
 
 
 
 =head2 B<REQUIRED> PolicyName => Str
 
-  
+The name of the key policy.
 
-Name of the policy to be attached. Currently, the only supported name
-is "default".
-
-
-
-
-
-
-
-
+This value must be C<default>.
 
 
 

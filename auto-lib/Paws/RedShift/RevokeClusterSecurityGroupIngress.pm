@@ -1,5 +1,5 @@
 
-package Paws::RedShift::RevokeClusterSecurityGroupIngress {
+package Paws::RedShift::RevokeClusterSecurityGroupIngress;
   use Moose;
   has CIDRIP => (is => 'ro', isa => 'Str');
   has ClusterSecurityGroupName => (is => 'ro', isa => 'Str', required => 1);
@@ -11,7 +11,6 @@ package Paws::RedShift::RevokeClusterSecurityGroupIngress {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'RevokeClusterSecurityGroupIngress');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::RedShift::RevokeClusterSecurityGroupIngressResult');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'RevokeClusterSecurityGroupIngressResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -26,7 +25,7 @@ This class represents the parameters used for calling the method RevokeClusterSe
 Amazon Redshift service. Use the attributes of this class
 as arguments to method RevokeClusterSecurityGroupIngress.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to RevokeClusterSecurityGroupIngress.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to RevokeClusterSecurityGroupIngress.
 
 As an example:
 
@@ -36,9 +35,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 CIDRIP => Str
 
-  
+=head2 CIDRIP => Str
 
 The IP range for which to revoke access. This range must be a valid
 Classless Inter-Domain Routing (CIDR) block of IP addresses. If
@@ -47,31 +45,13 @@ C<EC2SecurityGroupOwnerId> cannot be provided.
 
 
 
-
-
-
-
-
-
-
 =head2 B<REQUIRED> ClusterSecurityGroupName => Str
-
-  
 
 The name of the security Group from which to revoke the ingress rule.
 
 
 
-
-
-
-
-
-
-
 =head2 EC2SecurityGroupName => Str
-
-  
 
 The name of the EC2 Security Group whose access is to be revoked. If
 C<EC2SecurityGroupName> is specified, C<EC2SecurityGroupOwnerId> must
@@ -79,16 +59,7 @@ also be provided and C<CIDRIP> cannot be provided.
 
 
 
-
-
-
-
-
-
-
 =head2 EC2SecurityGroupOwnerId => Str
-
-  
 
 The AWS account number of the owner of the security group specified in
 the C<EC2SecurityGroupName> parameter. The AWS access key ID is not an
@@ -97,14 +68,6 @@ C<EC2SecurityGroupName> must also be provided. and C<CIDRIP> cannot be
 provided.
 
 Example: C<111122223333>
-
-
-
-
-
-
-
-
 
 
 

@@ -1,16 +1,15 @@
 
-package Paws::EC2::DescribeVpcs {
+package Paws::EC2::DescribeVpcs;
   use Moose;
   has DryRun => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'dryRun' );
   has Filters => (is => 'ro', isa => 'ArrayRef[Paws::EC2::Filter]', traits => ['NameInRequest'], request_name => 'Filter' );
-  has VpcIds => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'VpcId' );
+  has VpcIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'VpcId' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeVpcs');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::EC2::DescribeVpcsResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method DescribeVpcs on
 Amazon Elastic Compute Cloud service. Use the attributes of this class
 as arguments to method DescribeVpcs.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeVpcs.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeVpcs.
 
 As an example:
 
@@ -35,9 +34,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 DryRun => Bool
 
-  
+=head2 DryRun => Bool
 
 Checks whether you have the required permissions for the action,
 without actually making the request, and provides an error response. If
@@ -46,16 +44,7 @@ C<DryRunOperation>. Otherwise, it is C<UnauthorizedOperation>.
 
 
 
-
-
-
-
-
-
-
-=head2 Filters => ArrayRef[Paws::EC2::Filter]
-
-  
+=head2 Filters => ArrayRef[L<Paws::EC2::Filter>]
 
 One or more filters.
 
@@ -63,14 +52,44 @@ One or more filters.
 
 =item *
 
-C<cidr> - The CIDR block of the VPC. The CIDR block you specify must
-exactly match the VPC's CIDR block for information to be returned for
-the VPC. Must contain the slash followed by one or two digits (for
-example, C</28>).
+C<cidr> - The primary IPv4 CIDR block of the VPC. The CIDR block you
+specify must exactly match the VPC's CIDR block for information to be
+returned for the VPC. Must contain the slash followed by one or two
+digits (for example, C</28>).
+
+=item *
+
+C<cidr-block-association.cidr-block> - An IPv4 CIDR block associated
+with the VPC.
+
+=item *
+
+C<cidr-block-association.association-id> - The association ID for an
+IPv4 CIDR block associated with the VPC.
+
+=item *
+
+C<cidr-block-association.state> - The state of an IPv4 CIDR block
+associated with the VPC.
 
 =item *
 
 C<dhcp-options-id> - The ID of a set of DHCP options.
+
+=item *
+
+C<ipv6-cidr-block-association.ipv6-cidr-block> - An IPv6 CIDR block
+associated with the VPC.
+
+=item *
+
+C<ipv6-cidr-block-association.association-id> - The association ID for
+an IPv6 CIDR block associated with the VPC.
+
+=item *
+
+C<ipv6-cidr-block-association.state> - The state of an IPv6 CIDR block
+associated with the VPC.
 
 =item *
 
@@ -83,7 +102,10 @@ C<state> - The state of the VPC (C<pending> | C<available>).
 =item *
 
 C<tag>:I<key>=I<value> - The key/value combination of a tag assigned to
-the resource.
+the resource. Specify the key of the tag in the filter name and the
+value of the tag in the filter value. For example, for the tag
+Purpose=X, specify C<tag:Purpose> for the filter name and C<X> for the
+filter value.
 
 =item *
 
@@ -109,27 +131,11 @@ C<vpc-id> - The ID of the VPC.
 
 
 
-
-
-
-
-
-
-=head2 VpcIds => ArrayRef[Str]
-
-  
+=head2 VpcIds => ArrayRef[Str|Undef]
 
 One or more VPC IDs.
 
 Default: Describes all your VPCs.
-
-
-
-
-
-
-
-
 
 
 

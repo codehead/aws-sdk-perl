@@ -1,10 +1,9 @@
 
-package Paws::CloudTrail::DescribeTrailsResponse {
+package Paws::CloudTrail::DescribeTrailsResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has trailList => (is => 'ro', isa => 'ArrayRef[Paws::CloudTrail::Trail]');
+  has TrailList => (is => 'ro', isa => 'ArrayRef[Paws::CloudTrail::Trail]', traits => ['NameInRequest'], request_name => 'trailList' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::CloudTrail::DescribeTrailsResponse
 
 =head1 ATTRIBUTES
 
-=head2 trailList => ArrayRef[Paws::CloudTrail::Trail]
 
-  
+=head2 TrailList => ArrayRef[L<Paws::CloudTrail::Trail>]
 
-The list of trails.
-
+The list of trail objects.
 
 
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

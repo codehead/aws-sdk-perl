@@ -1,12 +1,11 @@
 
-package Paws::CloudWatchLogs::FilterLogEventsResponse {
+package Paws::CloudWatchLogs::FilterLogEventsResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has events => (is => 'ro', isa => 'ArrayRef[Paws::CloudWatchLogs::FilteredLogEvent]');
-  has nextToken => (is => 'ro', isa => 'Str');
-  has searchedLogStreams => (is => 'ro', isa => 'ArrayRef[Paws::CloudWatchLogs::SearchedLogStream]');
+  has Events => (is => 'ro', isa => 'ArrayRef[Paws::CloudWatchLogs::FilteredLogEvent]', traits => ['NameInRequest'], request_name => 'events' );
+  has NextToken => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'nextToken' );
+  has SearchedLogStreams => (is => 'ro', isa => 'ArrayRef[Paws::CloudWatchLogs::SearchedLogStream]', traits => ['NameInRequest'], request_name => 'searchedLogStreams' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -16,52 +15,25 @@ Paws::CloudWatchLogs::FilterLogEventsResponse
 
 =head1 ATTRIBUTES
 
-=head2 events => ArrayRef[Paws::CloudWatchLogs::FilteredLogEvent]
 
-  
+=head2 Events => ArrayRef[L<Paws::CloudWatchLogs::FilteredLogEvent>]
 
-A list of C<FilteredLogEvent> objects representing the matched events
-from the request.
+The matched events.
 
 
+=head2 NextToken => Str
+
+The token to use when requesting the next set of items. The token
+expires after 24 hours.
 
 
+=head2 SearchedLogStreams => ArrayRef[L<Paws::CloudWatchLogs::SearchedLogStream>]
+
+Indicates which log streams have been searched and whether each has
+been searched completely.
 
 
-
-
-
-=head2 nextToken => Str
-
-  
-
-A pagination token obtained from a C<FilterLogEvents> response to
-continue paginating the FilterLogEvents results.
-
-
-
-
-
-
-
-
-
-=head2 searchedLogStreams => ArrayRef[Paws::CloudWatchLogs::SearchedLogStream]
-
-  
-
-A list of C<SearchedLogStream> objects indicating which log streams
-have been searched in this request and whether each has been searched
-completely or still has more to be paginated.
-
-
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

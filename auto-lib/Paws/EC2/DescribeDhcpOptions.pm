@@ -1,7 +1,7 @@
 
-package Paws::EC2::DescribeDhcpOptions {
+package Paws::EC2::DescribeDhcpOptions;
   use Moose;
-  has DhcpOptionsIds => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'DhcpOptionsId' );
+  has DhcpOptionsIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'DhcpOptionsId' );
   has DryRun => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'dryRun' );
   has Filters => (is => 'ro', isa => 'ArrayRef[Paws::EC2::Filter]', traits => ['NameInRequest'], request_name => 'Filter' );
 
@@ -10,7 +10,6 @@ package Paws::EC2::DescribeDhcpOptions {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeDhcpOptions');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::EC2::DescribeDhcpOptionsResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method DescribeDhcpOpt
 Amazon Elastic Compute Cloud service. Use the attributes of this class
 as arguments to method DescribeDhcpOptions.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeDhcpOptions.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeDhcpOptions.
 
 As an example:
 
@@ -35,9 +34,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 DhcpOptionsIds => ArrayRef[Str]
 
-  
+=head2 DhcpOptionsIds => ArrayRef[Str|Undef]
 
 The IDs of one or more DHCP options sets.
 
@@ -45,16 +43,7 @@ Default: Describes all your DHCP options sets.
 
 
 
-
-
-
-
-
-
-
 =head2 DryRun => Bool
-
-  
 
 Checks whether you have the required permissions for the action,
 without actually making the request, and provides an error response. If
@@ -63,16 +52,7 @@ C<DryRunOperation>. Otherwise, it is C<UnauthorizedOperation>.
 
 
 
-
-
-
-
-
-
-
-=head2 Filters => ArrayRef[Paws::EC2::Filter]
-
-  
+=head2 Filters => ArrayRef[L<Paws::EC2::Filter>]
 
 One or more filters.
 
@@ -93,7 +73,10 @@ C<value> - The value for one of the options.
 =item *
 
 C<tag>:I<key>=I<value> - The key/value combination of a tag assigned to
-the resource.
+the resource. Specify the key of the tag in the filter name and the
+value of the tag in the filter value. For example, for the tag
+Purpose=X, specify C<tag:Purpose> for the filter name and C<X> for the
+filter value.
 
 =item *
 
@@ -111,13 +94,6 @@ C<tag-value> - The value of a tag assigned to the resource. This filter
 is independent of the C<tag-key> filter.
 
 =back
-
-
-
-
-
-
-
 
 
 

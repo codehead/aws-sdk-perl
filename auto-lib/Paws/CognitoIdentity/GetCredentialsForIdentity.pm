@@ -1,6 +1,7 @@
 
-package Paws::CognitoIdentity::GetCredentialsForIdentity {
+package Paws::CognitoIdentity::GetCredentialsForIdentity;
   use Moose;
+  has CustomRoleArn => (is => 'ro', isa => 'Str');
   has IdentityId => (is => 'ro', isa => 'Str', required => 1);
   has Logins => (is => 'ro', isa => 'Paws::CognitoIdentity::LoginsMap');
 
@@ -9,7 +10,6 @@ package Paws::CognitoIdentity::GetCredentialsForIdentity {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'GetCredentialsForIdentity');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::CognitoIdentity::GetCredentialsForIdentityResponse');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -24,7 +24,7 @@ This class represents the parameters used for calling the method GetCredentialsF
 Amazon Cognito Identity service. Use the attributes of this class
 as arguments to method GetCredentialsForIdentity.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to GetCredentialsForIdentity.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to GetCredentialsForIdentity.
 
 As an example:
 
@@ -34,35 +34,26 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> IdentityId => Str
 
-  
+=head2 CustomRoleArn => Str
+
+The Amazon Resource Name (ARN) of the role to be assumed when multiple
+roles were received in the token from the identity provider. For
+example, a SAML-based identity provider. This parameter is optional for
+identity providers that do not support role customization.
+
+
+
+=head2 B<REQUIRED> IdentityId => Str
 
 A unique identifier in the format REGION:GUID.
 
 
 
-
-
-
-
-
-
-
-=head2 Logins => Paws::CognitoIdentity::LoginsMap
-
-  
+=head2 Logins => L<Paws::CognitoIdentity::LoginsMap>
 
 A set of optional name-value pairs that map provider names to provider
 tokens.
-
-
-
-
-
-
-
-
 
 
 

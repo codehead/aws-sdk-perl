@@ -1,13 +1,17 @@
 
-package Paws::RDS::RestoreDBInstanceFromDBSnapshot {
+package Paws::RDS::RestoreDBInstanceFromDBSnapshot;
   use Moose;
   has AutoMinorVersionUpgrade => (is => 'ro', isa => 'Bool');
   has AvailabilityZone => (is => 'ro', isa => 'Str');
+  has CopyTagsToSnapshot => (is => 'ro', isa => 'Bool');
   has DBInstanceClass => (is => 'ro', isa => 'Str');
   has DBInstanceIdentifier => (is => 'ro', isa => 'Str', required => 1);
   has DBName => (is => 'ro', isa => 'Str');
   has DBSnapshotIdentifier => (is => 'ro', isa => 'Str', required => 1);
   has DBSubnetGroupName => (is => 'ro', isa => 'Str');
+  has Domain => (is => 'ro', isa => 'Str');
+  has DomainIAMRoleName => (is => 'ro', isa => 'Str');
+  has EnableIAMDatabaseAuthentication => (is => 'ro', isa => 'Bool');
   has Engine => (is => 'ro', isa => 'Str');
   has Iops => (is => 'ro', isa => 'Int');
   has LicenseModel => (is => 'ro', isa => 'Str');
@@ -25,7 +29,6 @@ package Paws::RDS::RestoreDBInstanceFromDBSnapshot {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'RestoreDBInstanceFromDBSnapshot');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::RDS::RestoreDBInstanceFromDBSnapshotResult');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'RestoreDBInstanceFromDBSnapshotResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -40,7 +43,7 @@ This class represents the parameters used for calling the method RestoreDBInstan
 Amazon Relational Database Service service. Use the attributes of this class
 as arguments to method RestoreDBInstanceFromDBSnapshot.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to RestoreDBInstanceFromDBSnapshot.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to RestoreDBInstanceFromDBSnapshot.
 
 As an example:
 
@@ -50,25 +53,15 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 AutoMinorVersionUpgrade => Bool
 
-  
+=head2 AutoMinorVersionUpgrade => Bool
 
 Indicates that minor version upgrades will be applied automatically to
 the DB instance during the maintenance window.
 
 
 
-
-
-
-
-
-
-
 =head2 AvailabilityZone => Str
-
-  
 
 The EC2 Availability Zone that the database instance will be created
 in.
@@ -82,50 +75,46 @@ Example: C<us-east-1a>
 
 
 
+=head2 CopyTagsToSnapshot => Bool
 
-
-
-
+True to copy all tags from the restored DB instance to snapshots of the
+DB instance; otherwise false. The default is false.
 
 
 
 =head2 DBInstanceClass => Str
 
-  
-
 The compute and memory capacity of the Amazon RDS DB instance.
 
 Valid Values: C<db.t1.micro | db.m1.small | db.m1.medium | db.m1.large
 | db.m1.xlarge | db.m2.2xlarge | db.m2.4xlarge | db.m3.medium |
-db.m3.large | db.m3.xlarge | db.m3.2xlarge | db.r3.large | db.r3.xlarge
-| db.r3.2xlarge | db.r3.4xlarge | db.r3.8xlarge | db.t2.micro |
-db.t2.small | db.t2.medium>
-
-
-
-
-
-
-
+db.m3.large | db.m3.xlarge | db.m3.2xlarge | db.m4.large | db.m4.xlarge
+| db.m4.2xlarge | db.m4.4xlarge | db.m4.10xlarge | db.r3.large |
+db.r3.xlarge | db.r3.2xlarge | db.r3.4xlarge | db.r3.8xlarge |
+db.t2.micro | db.t2.small | db.t2.medium | db.t2.large>
 
 
 
 =head2 B<REQUIRED> DBInstanceIdentifier => Str
 
-  
-
 Name of the DB instance to create from the DB snapshot. This parameter
-isn't case sensitive.
+isn't case-sensitive.
 
 Constraints:
 
 =over
 
-=item * Must contain from 1 to 255 alphanumeric characters or hyphens
+=item *
 
-=item * First character must be a letter
+Must contain from 1 to 63 alphanumeric characters or hyphens
 
-=item * Cannot end with a hyphen or contain two consecutive hyphens
+=item *
+
+First character must be a letter
+
+=item *
+
+Cannot end with a hyphen or contain two consecutive hyphens
 
 =back
 
@@ -133,33 +122,16 @@ Example: C<my-snapshot-id>
 
 
 
-
-
-
-
-
-
-
 =head2 DBName => Str
-
-  
 
 The database name for the restored DB instance.
 
-This parameter doesn't apply to the MySQL engine.
-
-
-
-
-
-
-
+This parameter doesn't apply to the MySQL, PostgreSQL, or MariaDB
+engines.
 
 
 
 =head2 B<REQUIRED> DBSnapshotIdentifier => Str
-
-  
 
 The identifier for the DB snapshot to restore from.
 
@@ -167,64 +139,93 @@ Constraints:
 
 =over
 
-=item * Must contain from 1 to 63 alphanumeric characters or hyphens
+=item *
 
-=item * First character must be a letter
+Must contain from 1 to 255 alphanumeric characters or hyphens
 
-=item * Cannot end with a hyphen or contain two consecutive hyphens
+=item *
+
+First character must be a letter
+
+=item *
+
+Cannot end with a hyphen or contain two consecutive hyphens
 
 =back
 
-
-
-
-
-
-
+If you are restoring from a shared manual DB snapshot, the
+C<DBSnapshotIdentifier> must be the ARN of the shared DB snapshot.
 
 
 
 =head2 DBSubnetGroupName => Str
 
-  
-
 The DB subnet group name to use for the new instance.
 
+Constraints: Must contain no more than 255 alphanumeric characters,
+periods, underscores, spaces, or hyphens. Must not be default.
+
+Example: C<mySubnetgroup>
 
 
 
+=head2 Domain => Str
+
+Specify the Active Directory Domain to restore the instance in.
 
 
 
+=head2 DomainIAMRoleName => Str
+
+Specify the name of the IAM role to be used when making API calls to
+the Directory Service.
+
+
+
+=head2 EnableIAMDatabaseAuthentication => Bool
+
+True to enable mapping of AWS Identity and Access Management (IAM)
+accounts to database accounts; otherwise false.
+
+You can enable IAM database authentication for the following database
+engines
+
+=over
+
+=item *
+
+For MySQL 5.6, minor version 5.6.34 or higher
+
+=item *
+
+For MySQL 5.7, minor version 5.7.16 or higher
+
+=item *
+
+Aurora 5.6 or higher.
+
+=back
+
+Default: C<false>
 
 
 
 =head2 Engine => Str
 
-  
-
 The database engine to use for the new instance.
 
 Default: The same as source
 
-Constraint: Must be compatible with the engine of the source
+Constraint: Must be compatible with the engine of the source. You can
+restore a MariaDB 10.1 DB instance from a MySQL 5.6 snapshot.
 
-Valid Values: C<MySQL> | C<oracle-se1> | C<oracle-se> | C<oracle-ee> |
-C<sqlserver-ee> | C<sqlserver-se> | C<sqlserver-ex> | C<sqlserver-web>
-| C<postgres>
-
-
-
-
-
-
-
+Valid Values: C<MySQL> | C<mariadb> | C<oracle-se1> | C<oracle-se> |
+C<oracle-ee> | C<sqlserver-ee> | C<sqlserver-se> | C<sqlserver-ex> |
+C<sqlserver-web> | C<postgres> | C<aurora>
 
 
 
 =head2 Iops => Int
-
-  
 
 Specifies the amount of provisioned IOPS for the DB instance, expressed
 in I/O operations per second. If this parameter is not specified, the
@@ -242,16 +243,7 @@ supported.
 
 
 
-
-
-
-
-
-
-
 =head2 LicenseModel => Str
-
-  
 
 License model information for the restored DB instance.
 
@@ -262,16 +254,7 @@ C<general-public-license>
 
 
 
-
-
-
-
-
-
-
 =head2 MultiAZ => Bool
-
-  
 
 Specifies if the DB instance is a Multi-AZ deployment.
 
@@ -280,16 +263,7 @@ MultiAZ parameter is set to C<true>.
 
 
 
-
-
-
-
-
-
-
 =head2 OptionGroupName => Str
-
-  
 
 The name of the option group to be used for the restored DB instance.
 
@@ -300,16 +274,7 @@ instance
 
 
 
-
-
-
-
-
-
-
 =head2 Port => Int
-
-  
 
 The port number on which the database accepts connections.
 
@@ -319,16 +284,7 @@ Constraints: Value must be C<1150-65535>
 
 
 
-
-
-
-
-
-
-
 =head2 PubliclyAccessible => Bool
-
-  
 
 Specifies the accessibility options for the DB instance. A value of
 true specifies an Internet-facing instance with a publicly resolvable
@@ -342,9 +298,13 @@ each case.
 
 =over
 
-=item * B<Default VPC:> true
+=item *
 
-=item * B<VPC:> false
+B<Default VPC:> true
+
+=item *
+
+B<VPC:> false
 
 =back
 
@@ -356,16 +316,7 @@ set, the DB instance will be private.
 
 
 
-
-
-
-
-
-
-
 =head2 StorageType => Str
-
-  
 
 Specifies the storage type to be associated with the DB instance.
 
@@ -379,47 +330,23 @@ C<standard>
 
 
 
+=head2 Tags => ArrayRef[L<Paws::RDS::Tag>]
 
 
 
 
-
-
-
-=head2 Tags => ArrayRef[Paws::RDS::Tag]
-
-  
 
 =head2 TdeCredentialArn => Str
-
-  
 
 The ARN from the Key Store with which to associate the instance for TDE
 encryption.
 
 
 
-
-
-
-
-
-
-
 =head2 TdeCredentialPassword => Str
-
-  
 
 The password for the given ARN from the Key Store in order to access
 the device.
-
-
-
-
-
-
-
-
 
 
 

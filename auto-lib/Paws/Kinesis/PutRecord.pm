@@ -1,5 +1,5 @@
 
-package Paws::Kinesis::PutRecord {
+package Paws::Kinesis::PutRecord;
   use Moose;
   has Data => (is => 'ro', isa => 'Str', required => 1);
   has ExplicitHashKey => (is => 'ro', isa => 'Str');
@@ -12,7 +12,6 @@ package Paws::Kinesis::PutRecord {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'PutRecord');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::Kinesis::PutRecordOutput');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -27,7 +26,7 @@ This class represents the parameters used for calling the method PutRecord on th
 Amazon Kinesis service. Use the attributes of this class
 as arguments to method PutRecord.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to PutRecord.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to PutRecord.
 
 As an example:
 
@@ -37,42 +36,24 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
+
 =head2 B<REQUIRED> Data => Str
 
-  
-
 The data blob to put into the record, which is base64-encoded when the
-blob is serialized. The maximum size of the data blob (the payload
-before base64-encoding) is 50 kilobytes (KB)
-
-
-
-
-
-
-
+blob is serialized. When the data blob (the payload before
+base64-encoding) is added to the partition key size, the total size
+must not exceed the maximum record size (1 MB).
 
 
 
 =head2 ExplicitHashKey => Str
-
-  
 
 The hash value used to explicitly determine the shard the data record
 is assigned to by overriding the partition key hash.
 
 
 
-
-
-
-
-
-
-
 =head2 B<REQUIRED> PartitionKey => Str
-
-  
 
 Determines which shard in the stream the data record is assigned to.
 Partition keys are Unicode strings with a maximum length limit of 256
@@ -81,21 +62,12 @@ to a hash function that maps the partition key and associated data to a
 specific shard. Specifically, an MD5 hash function is used to map
 partition keys to 128-bit integer values and to map associated data
 records to shards. As a result of this hashing mechanism, all data
-records with the same partition key will map to the same shard within
-the stream.
-
-
-
-
-
-
-
+records with the same partition key map to the same shard within the
+stream.
 
 
 
 =head2 SequenceNumberForOrdering => Str
-
-  
 
 Guarantees strictly increasing sequence numbers, for puts from the same
 client and to the same partition key. Usage: set the
@@ -106,26 +78,9 @@ arrival time.
 
 
 
-
-
-
-
-
-
-
 =head2 B<REQUIRED> StreamName => Str
 
-  
-
 The name of the stream to put the data record into.
-
-
-
-
-
-
-
-
 
 
 

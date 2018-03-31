@@ -1,11 +1,13 @@
 
-package Paws::ElasticBeanstalk::DescribeEnvironments {
+package Paws::ElasticBeanstalk::DescribeEnvironments;
   use Moose;
   has ApplicationName => (is => 'ro', isa => 'Str');
-  has EnvironmentIds => (is => 'ro', isa => 'ArrayRef[Str]');
-  has EnvironmentNames => (is => 'ro', isa => 'ArrayRef[Str]');
+  has EnvironmentIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
+  has EnvironmentNames => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
   has IncludedDeletedBackTo => (is => 'ro', isa => 'Str');
   has IncludeDeleted => (is => 'ro', isa => 'Bool');
+  has MaxRecords => (is => 'ro', isa => 'Int');
+  has NextToken => (is => 'ro', isa => 'Str');
   has VersionLabel => (is => 'ro', isa => 'Str');
 
   use MooseX::ClassAttribute;
@@ -13,7 +15,6 @@ package Paws::ElasticBeanstalk::DescribeEnvironments {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeEnvironments');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::ElasticBeanstalk::EnvironmentDescriptionsMessage');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'DescribeEnvironmentsResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -28,7 +29,7 @@ This class represents the parameters used for calling the method DescribeEnviron
 AWS Elastic Beanstalk service. Use the attributes of this class
 as arguments to method DescribeEnvironments.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeEnvironments.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeEnvironments.
 
 As an example:
 
@@ -38,73 +39,36 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 ApplicationName => Str
 
-  
+=head2 ApplicationName => Str
 
 If specified, AWS Elastic Beanstalk restricts the returned descriptions
 to include only those that are associated with this application.
 
 
 
-
-
-
-
-
-
-
-=head2 EnvironmentIds => ArrayRef[Str]
-
-  
+=head2 EnvironmentIds => ArrayRef[Str|Undef]
 
 If specified, AWS Elastic Beanstalk restricts the returned descriptions
 to include only those that have the specified IDs.
 
 
 
-
-
-
-
-
-
-
-=head2 EnvironmentNames => ArrayRef[Str]
-
-  
+=head2 EnvironmentNames => ArrayRef[Str|Undef]
 
 If specified, AWS Elastic Beanstalk restricts the returned descriptions
 to include only those that have the specified names.
 
 
 
-
-
-
-
-
-
-
 =head2 IncludedDeletedBackTo => Str
-
-  
 
 If specified when C<IncludeDeleted> is set to C<true>, then
 environments deleted after this date are displayed.
 
 
 
-
-
-
-
-
-
-
 =head2 IncludeDeleted => Bool
-
-  
 
 Indicates whether to include deleted environments:
 
@@ -115,28 +79,31 @@ C<false>: Do not include deleted environments.
 
 
 
+=head2 MaxRecords => Int
+
+For a paginated request. Specify a maximum number of environments to
+include in each response.
+
+If no C<MaxRecords> is specified, all available environments are
+retrieved in a single response.
 
 
 
+=head2 NextToken => Str
 
+For a paginated request. Specify a token from a previous response page
+to retrieve the next response page. All other parameter values must be
+identical to the ones specified in the initial request.
+
+If no C<NextToken> is specified, the first page is retrieved.
 
 
 
 =head2 VersionLabel => Str
 
-  
-
 If specified, AWS Elastic Beanstalk restricts the returned descriptions
 to include only those that are associated with this application
 version.
-
-
-
-
-
-
-
-
 
 
 

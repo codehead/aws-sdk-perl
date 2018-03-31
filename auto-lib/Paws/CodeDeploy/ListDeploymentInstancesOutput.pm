@@ -1,11 +1,10 @@
 
-package Paws::CodeDeploy::ListDeploymentInstancesOutput {
+package Paws::CodeDeploy::ListDeploymentInstancesOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has instancesList => (is => 'ro', isa => 'ArrayRef[Str]');
-  has nextToken => (is => 'ro', isa => 'Str');
+  has InstancesList => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'instancesList' );
+  has NextToken => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'nextToken' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -15,37 +14,20 @@ Paws::CodeDeploy::ListDeploymentInstancesOutput
 
 =head1 ATTRIBUTES
 
-=head2 instancesList => ArrayRef[Str]
 
-  
+=head2 InstancesList => ArrayRef[Str|Undef]
 
-A list of instances IDs.
-
+A list of instance IDs.
 
 
+=head2 NextToken => Str
+
+If a large amount of information is returned, an identifier is also
+returned. It can be used in a subsequent list deployment instances call
+to return the next set of deployment instances in the list.
 
 
-
-
-
-
-=head2 nextToken => Str
-
-  
-
-If the amount of information that is returned is significantly large,
-an identifier will also be returned, which can be used in a subsequent
-list deployment instances call to return the next set of deployment
-instances in the list.
-
-
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

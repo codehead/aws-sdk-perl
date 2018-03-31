@@ -1,5 +1,5 @@
 
-package Paws::RedShift::DescribeReservedNodes {
+package Paws::RedShift::DescribeReservedNodes;
   use Moose;
   has Marker => (is => 'ro', isa => 'Str');
   has MaxRecords => (is => 'ro', isa => 'Int');
@@ -10,7 +10,6 @@ package Paws::RedShift::DescribeReservedNodes {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeReservedNodes');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::RedShift::ReservedNodesMessage');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'DescribeReservedNodesResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method DescribeReserve
 Amazon Redshift service. Use the attributes of this class
 as arguments to method DescribeReservedNodes.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeReservedNodes.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeReservedNodes.
 
 As an example:
 
@@ -35,9 +34,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 Marker => Str
 
-  
+=head2 Marker => Str
 
 An optional parameter that specifies the starting point to return a set
 of response records. When the results of a DescribeReservedNodes
@@ -48,16 +46,7 @@ C<Marker> parameter and retrying the request.
 
 
 
-
-
-
-
-
-
-
 =head2 MaxRecords => Int
-
-  
 
 The maximum number of response records to return in each call. If the
 number of remaining response records exceeds the specified
@@ -71,26 +60,9 @@ Constraints: minimum 20, maximum 100.
 
 
 
-
-
-
-
-
-
-
 =head2 ReservedNodeId => Str
 
-  
-
 Identifier for the node reservation.
-
-
-
-
-
-
-
-
 
 
 

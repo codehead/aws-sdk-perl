@@ -1,10 +1,9 @@
 
-package Paws::EC2::CopySnapshotResult {
+package Paws::EC2::CopySnapshotResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has SnapshotId => (is => 'ro', isa => 'Str', xmlname => 'snapshotId', traits => ['Unwrapped',]);
+  has SnapshotId => (is => 'ro', isa => 'Str', request_name => 'snapshotId', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::EC2::CopySnapshotResult
 
 =head1 ATTRIBUTES
 
-=head2 SnapshotId => Str
 
-  
+=head2 SnapshotId => Str
 
 The ID of the new snapshot.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

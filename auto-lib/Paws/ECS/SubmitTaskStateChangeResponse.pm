@@ -1,10 +1,9 @@
 
-package Paws::ECS::SubmitTaskStateChangeResponse {
+package Paws::ECS::SubmitTaskStateChangeResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has acknowledgment => (is => 'ro', isa => 'Str');
+  has Acknowledgment => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'acknowledgment' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::ECS::SubmitTaskStateChangeResponse
 
 =head1 ATTRIBUTES
 
-=head2 acknowledgment => Str
 
-  
+=head2 Acknowledgment => Str
 
 Acknowledgement of the state change.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

@@ -1,11 +1,11 @@
 
-package Paws::OpsWorks::CreateApp {
+package Paws::OpsWorks::CreateApp;
   use Moose;
   has AppSource => (is => 'ro', isa => 'Paws::OpsWorks::Source');
   has Attributes => (is => 'ro', isa => 'Paws::OpsWorks::AppAttributes');
   has DataSources => (is => 'ro', isa => 'ArrayRef[Paws::OpsWorks::DataSource]');
   has Description => (is => 'ro', isa => 'Str');
-  has Domains => (is => 'ro', isa => 'ArrayRef[Str]');
+  has Domains => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
   has EnableSsl => (is => 'ro', isa => 'Bool');
   has Environment => (is => 'ro', isa => 'ArrayRef[Paws::OpsWorks::EnvironmentVariable]');
   has Name => (is => 'ro', isa => 'Str', required => 1);
@@ -19,7 +19,6 @@ package Paws::OpsWorks::CreateApp {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'CreateApp');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::OpsWorks::CreateAppResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -34,7 +33,7 @@ This class represents the parameters used for calling the method CreateApp on th
 AWS OpsWorks service. Use the attributes of this class
 as arguments to method CreateApp.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to CreateApp.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to CreateApp.
 
 As an example:
 
@@ -44,101 +43,46 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 AppSource => Paws::OpsWorks::Source
 
-  
+=head2 AppSource => L<Paws::OpsWorks::Source>
 
 A C<Source> object that specifies the app repository.
 
 
 
-
-
-
-
-
-
-
-=head2 Attributes => Paws::OpsWorks::AppAttributes
-
-  
+=head2 Attributes => L<Paws::OpsWorks::AppAttributes>
 
 One or more user-defined key/value pairs to be added to the stack
 attributes.
 
 
 
-
-
-
-
-
-
-
-=head2 DataSources => ArrayRef[Paws::OpsWorks::DataSource]
-
-  
+=head2 DataSources => ArrayRef[L<Paws::OpsWorks::DataSource>]
 
 The app's data source.
 
 
 
-
-
-
-
-
-
-
 =head2 Description => Str
-
-  
 
 A description of the app.
 
 
 
-
-
-
-
-
-
-
-=head2 Domains => ArrayRef[Str]
-
-  
+=head2 Domains => ArrayRef[Str|Undef]
 
 The app virtual host settings, with multiple domains separated by
 commas. For example: C<'www.example.com, example.com'>
 
 
 
-
-
-
-
-
-
-
 =head2 EnableSsl => Bool
-
-  
 
 Whether to enable SSL for the app.
 
 
 
-
-
-
-
-
-
-
-=head2 Environment => ArrayRef[Paws::OpsWorks::EnvironmentVariable]
-
-  
+=head2 Environment => ArrayRef[L<Paws::OpsWorks::EnvironmentVariable>]
 
 An array of C<EnvironmentVariable> objects that specify environment
 variables to be associated with the app. After you deploy the app,
@@ -158,93 +102,40 @@ stack's Chef version.
 
 
 
-
-
-
-
-
-
-
 =head2 B<REQUIRED> Name => Str
-
-  
 
 The app name.
 
 
 
-
-
-
-
-
-
-
 =head2 Shortname => Str
-
-  
 
 The app's short name.
 
 
 
-
-
-
-
-
-
-
-=head2 SslConfiguration => Paws::OpsWorks::SslConfiguration
-
-  
+=head2 SslConfiguration => L<Paws::OpsWorks::SslConfiguration>
 
 An C<SslConfiguration> object with the SSL configuration.
 
 
 
-
-
-
-
-
-
-
 =head2 B<REQUIRED> StackId => Str
-
-  
 
 The stack ID.
 
 
 
-
-
-
-
-
-
-
 =head2 B<REQUIRED> Type => Str
-
-  
 
 The app type. Each supported type is associated with a particular
 layer. For example, PHP applications are associated with a PHP layer.
-AWS OpsWorks deploys an application to those instances that are members
-of the corresponding layer. If your app isn't one of the standard
-types, or you prefer to implement your own Deploy recipes, specify
-C<other>.
+AWS OpsWorks Stacks deploys an application to those instances that are
+members of the corresponding layer. If your app isn't one of the
+standard types, or you prefer to implement your own Deploy recipes,
+specify C<other>.
 
-
-
-
-
-
-
-
-
-
+Valid values are: C<"aws-flow-ruby">, C<"java">, C<"rails">, C<"php">, C<"nodejs">, C<"static">, C<"other">
 
 
 =head1 SEE ALSO

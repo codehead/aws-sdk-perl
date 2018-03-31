@@ -1,20 +1,19 @@
 
-package Paws::CodeDeploy::ListApplicationRevisions {
+package Paws::CodeDeploy::ListApplicationRevisions;
   use Moose;
-  has applicationName => (is => 'ro', isa => 'Str', required => 1);
-  has deployed => (is => 'ro', isa => 'Str');
-  has nextToken => (is => 'ro', isa => 'Str');
-  has s3Bucket => (is => 'ro', isa => 'Str');
-  has s3KeyPrefix => (is => 'ro', isa => 'Str');
-  has sortBy => (is => 'ro', isa => 'Str');
-  has sortOrder => (is => 'ro', isa => 'Str');
+  has ApplicationName => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'applicationName' , required => 1);
+  has Deployed => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'deployed' );
+  has NextToken => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'nextToken' );
+  has S3Bucket => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 's3Bucket' );
+  has S3KeyPrefix => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 's3KeyPrefix' );
+  has SortBy => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'sortBy' );
+  has SortOrder => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'sortOrder' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'ListApplicationRevisions');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::CodeDeploy::ListApplicationRevisionsOutput');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -29,7 +28,7 @@ This class represents the parameters used for calling the method ListApplication
 AWS CodeDeploy service. Use the attributes of this class
 as arguments to method ListApplicationRevisions.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to ListApplicationRevisions.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to ListApplicationRevisions.
 
 As an example:
 
@@ -39,143 +38,104 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> applicationName => Str
 
-  
+=head2 B<REQUIRED> ApplicationName => Str
 
-The name of an existing AWS CodeDeploy application associated with the
+The name of an AWS CodeDeploy application associated with the
 applicable IAM user or AWS account.
 
 
 
-
-
-
-
-
-
-
-=head2 deployed => Str
-
-  
+=head2 Deployed => Str
 
 Whether to list revisions based on whether the revision is the target
 revision of an deployment group:
 
 =over
 
-=item * include: List revisions that are target revisions of a
+=item *
+
+include: List revisions that are target revisions of a deployment
+group.
+
+=item *
+
+exclude: Do not list revisions that are target revisions of a
 deployment group.
 
-=item * exclude: Do not list revisions that are target revisions of a
-deployment group.
+=item *
 
-=item * ignore: List all revisions, regardless of whether they are
-target revisions of a deployment group.
+ignore: List all revisions.
 
 =back
 
 
+Valid values are: C<"include">, C<"exclude">, C<"ignore">
+
+=head2 NextToken => Str
+
+An identifier returned from the previous list application revisions
+call. It can be used to return the next set of applications in the
+list.
 
 
 
+=head2 S3Bucket => Str
+
+An Amazon S3 bucket name to limit the search for revisions.
+
+If set to null, all of the user's buckets will be searched.
 
 
 
+=head2 S3KeyPrefix => Str
 
-
-=head2 nextToken => Str
-
-  
-
-An identifier that was returned from the previous list application
-revisions call, which can be used to return the next set of
-applications in the list.
+A key prefix for the set of Amazon S3 objects to limit the search for
+revisions.
 
 
 
+=head2 SortBy => Str
 
-
-
-
-
-
-
-=head2 s3Bucket => Str
-
-  
-
-A specific Amazon S3 bucket name to limit the search for revisions.
-
-If set to null, then all of the user's buckets will be searched.
-
-
-
-
-
-
-
-
-
-
-=head2 s3KeyPrefix => Str
-
-  
-
-A specific key prefix for the set of Amazon S3 objects to limit the
-search for revisions.
-
-
-
-
-
-
-
-
-
-
-=head2 sortBy => Str
-
-  
-
-The column name to sort the list results by:
+The column name to use to sort the list results:
 
 =over
 
-=item * registerTime: Sort the list results by when the revisions were
-registered with AWS CodeDeploy.
+=item *
 
-=item * firstUsedTime: Sort the list results by when the revisions were
-first used by in a deployment.
+registerTime: Sort by the time the revisions were registered with AWS
+CodeDeploy.
 
-=item * lastUsedTime: Sort the list results by when the revisions were
-last used in a deployment.
+=item *
+
+firstUsedTime: Sort by the time the revisions were first used in a
+deployment.
+
+=item *
+
+lastUsedTime: Sort by the time the revisions were last used in a
+deployment.
 
 =back
 
 If not specified or set to null, the results will be returned in an
 arbitrary order.
 
+Valid values are: C<"registerTime">, C<"firstUsedTime">, C<"lastUsedTime">
 
+=head2 SortOrder => Str
 
-
-
-
-
-
-
-
-=head2 sortOrder => Str
-
-  
-
-The order to sort the list results by:
+The order in which to sort the list results:
 
 =over
 
-=item * ascending: Sort the list of results in ascending order.
+=item *
 
-=item * descending: Sort the list of results in descending order.
+ascending: ascending order.
+
+=item *
+
+descending: descending order.
 
 =back
 
@@ -183,15 +143,7 @@ If not specified, the results will be sorted in ascending order.
 
 If set to null, the results will be sorted in an arbitrary order.
 
-
-
-
-
-
-
-
-
-
+Valid values are: C<"ascending">, C<"descending">
 
 
 =head1 SEE ALSO

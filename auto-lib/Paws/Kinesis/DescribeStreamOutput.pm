@@ -1,10 +1,9 @@
 
-package Paws::Kinesis::DescribeStreamOutput {
+package Paws::Kinesis::DescribeStreamOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
   has StreamDescription => (is => 'ro', isa => 'Paws::Kinesis::StreamDescription', required => 1);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,22 +13,15 @@ Paws::Kinesis::DescribeStreamOutput
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> StreamDescription => Paws::Kinesis::StreamDescription
 
-  
+=head2 B<REQUIRED> StreamDescription => L<Paws::Kinesis::StreamDescription>
 
 The current status of the stream, the stream ARN, an array of shard
-objects that comprise the stream, and states whether there are more
-shards available.
+objects that comprise the stream, and whether there are more shards
+available.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

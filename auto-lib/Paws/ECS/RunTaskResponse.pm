@@ -1,11 +1,10 @@
 
-package Paws::ECS::RunTaskResponse {
+package Paws::ECS::RunTaskResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has failures => (is => 'ro', isa => 'ArrayRef[Paws::ECS::Failure]');
-  has tasks => (is => 'ro', isa => 'ArrayRef[Paws::ECS::Task]');
+  has Failures => (is => 'ro', isa => 'ArrayRef[Paws::ECS::Failure]', traits => ['NameInRequest'], request_name => 'failures' );
+  has Tasks => (is => 'ro', isa => 'ArrayRef[Paws::ECS::Task]', traits => ['NameInRequest'], request_name => 'tasks' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -15,35 +14,19 @@ Paws::ECS::RunTaskResponse
 
 =head1 ATTRIBUTES
 
-=head2 failures => ArrayRef[Paws::ECS::Failure]
 
-  
+=head2 Failures => ArrayRef[L<Paws::ECS::Failure>]
 
-Any failed tasks from your C<RunTask> action are listed here.
-
+Any failures associated with the call.
 
 
-
-
-
-
-
-
-=head2 tasks => ArrayRef[Paws::ECS::Task]
-
-  
+=head2 Tasks => ArrayRef[L<Paws::ECS::Task>]
 
 A full description of the tasks that were run. Each task that was
-successfully placed on your cluster will be described here.
+successfully placed on your cluster are described here.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

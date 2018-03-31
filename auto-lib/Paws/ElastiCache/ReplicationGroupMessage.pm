@@ -1,11 +1,10 @@
 
-package Paws::ElastiCache::ReplicationGroupMessage {
+package Paws::ElastiCache::ReplicationGroupMessage;
   use Moose;
-  with 'Paws::API::ResultParser';
   has Marker => (is => 'ro', isa => 'Str');
-  has ReplicationGroups => (is => 'ro', isa => 'ArrayRef[Paws::ElastiCache::ReplicationGroup]', xmlname => 'ReplicationGroup', traits => ['Unwrapped',]);
+  has ReplicationGroups => (is => 'ro', isa => 'ArrayRef[Paws::ElastiCache::ReplicationGroup]', request_name => 'ReplicationGroup', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -16,35 +15,19 @@ Paws::ElastiCache::ReplicationGroupMessage
 
 =head1 ATTRIBUTES
 
-=head2 Marker => Str
 
-  
+=head2 Marker => Str
 
 Provides an identifier to allow retrieval of paginated results.
 
 
-
-
-
-
-
-
-
-=head2 ReplicationGroups => ArrayRef[Paws::ElastiCache::ReplicationGroup]
-
-  
+=head2 ReplicationGroups => ArrayRef[L<Paws::ElastiCache::ReplicationGroup>]
 
 A list of replication groups. Each item in the list contains detailed
 information about one replication group.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

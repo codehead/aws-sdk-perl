@@ -1,7 +1,7 @@
 
-package Paws::AutoScaling::DescribeNotificationConfigurations {
+package Paws::AutoScaling::DescribeNotificationConfigurations;
   use Moose;
-  has AutoScalingGroupNames => (is => 'ro', isa => 'ArrayRef[Str]');
+  has AutoScalingGroupNames => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
   has MaxRecords => (is => 'ro', isa => 'Int');
   has NextToken => (is => 'ro', isa => 'Str');
 
@@ -10,7 +10,6 @@ package Paws::AutoScaling::DescribeNotificationConfigurations {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeNotificationConfigurations');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::AutoScaling::DescribeNotificationConfigurationsAnswer');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'DescribeNotificationConfigurationsResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method DescribeNotific
 Auto Scaling service. Use the attributes of this class
 as arguments to method DescribeNotificationConfigurations.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeNotificationConfigurations.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeNotificationConfigurations.
 
 As an example:
 
@@ -35,50 +34,24 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 AutoScalingGroupNames => ArrayRef[Str]
 
-  
+=head2 AutoScalingGroupNames => ArrayRef[Str|Undef]
 
 The name of the group.
 
 
 
-
-
-
-
-
-
-
 =head2 MaxRecords => Int
 
-  
-
-The maximum number of items to return with this call.
-
-
-
-
-
-
-
+The maximum number of items to return with this call. The default value
+is 50 and the maximum value is 100.
 
 
 
 =head2 NextToken => Str
 
-  
-
 The token for the next set of items to return. (You received this token
 from a previous call.)
-
-
-
-
-
-
-
-
 
 
 

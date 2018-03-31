@@ -1,10 +1,9 @@
 
-package Paws::IAM::GetServerCertificateResponse {
+package Paws::IAM::GetServerCertificateResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has ServerCertificate => (is => 'ro', isa => 'Paws::IAM::ServerCertificate', required => 1);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::IAM::GetServerCertificateResponse
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> ServerCertificate => Paws::IAM::ServerCertificate
 
-  
+=head2 B<REQUIRED> ServerCertificate => L<Paws::IAM::ServerCertificate>
 
-Information about the server certificate.
-
+A structure containing details about the server certificate.
 
 
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

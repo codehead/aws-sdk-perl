@@ -1,10 +1,9 @@
 
-package Paws::OpsWorks::DescribeRaidArraysResult {
+package Paws::OpsWorks::DescribeRaidArraysResult;
   use Moose;
-  with 'Paws::API::ResultParser';
   has RaidArrays => (is => 'ro', isa => 'ArrayRef[Paws::OpsWorks::RaidArray]');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::OpsWorks::DescribeRaidArraysResult
 
 =head1 ATTRIBUTES
 
-=head2 RaidArrays => ArrayRef[Paws::OpsWorks::RaidArray]
 
-  
+=head2 RaidArrays => ArrayRef[L<Paws::OpsWorks::RaidArray>]
 
 A C<RaidArrays> object that describes the specified RAID arrays.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

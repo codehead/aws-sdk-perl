@@ -1,14 +1,15 @@
 
-package Paws::CloudWatchLogs::CreateLogGroup {
+package Paws::CloudWatchLogs::CreateLogGroup;
   use Moose;
-  has logGroupName => (is => 'ro', isa => 'Str', required => 1);
+  has KmsKeyId => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'kmsKeyId' );
+  has LogGroupName => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'logGroupName' , required => 1);
+  has Tags => (is => 'ro', isa => 'Paws::CloudWatchLogs::Tags', traits => ['NameInRequest'], request_name => 'tags' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'CreateLogGroup');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -23,7 +24,7 @@ This class represents the parameters used for calling the method CreateLogGroup 
 Amazon CloudWatch Logs service. Use the attributes of this class
 as arguments to method CreateLogGroup.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to CreateLogGroup.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to CreateLogGroup.
 
 As an example:
 
@@ -33,9 +34,25 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> logGroupName => Str
 
-  
+=head2 KmsKeyId => Str
+
+The Amazon Resource Name (ARN) of the CMK to use when encrypting log
+data. For more information, see Amazon Resource Names - AWS Key
+Management Service (AWS KMS).
+
+
+
+=head2 B<REQUIRED> LogGroupName => Str
+
+The name of the log group.
+
+
+
+=head2 Tags => L<Paws::CloudWatchLogs::Tags>
+
+The key-value pairs to use for the tags.
+
 
 
 

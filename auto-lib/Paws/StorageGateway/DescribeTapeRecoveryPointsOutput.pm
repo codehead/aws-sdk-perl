@@ -1,12 +1,11 @@
 
-package Paws::StorageGateway::DescribeTapeRecoveryPointsOutput {
+package Paws::StorageGateway::DescribeTapeRecoveryPointsOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
   has GatewayARN => (is => 'ro', isa => 'Str');
   has Marker => (is => 'ro', isa => 'Str');
   has TapeRecoveryPointInfos => (is => 'ro', isa => 'ArrayRef[Paws::StorageGateway::TapeRecoveryPointInfo]');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -16,12 +15,13 @@ Paws::StorageGateway::DescribeTapeRecoveryPointsOutput
 
 =head1 ATTRIBUTES
 
+
 =head2 GatewayARN => Str
 
-  
-=head2 Marker => Str
 
-  
+
+
+=head2 Marker => Str
 
 An opaque string that indicates the position at which the virtual tape
 recovery points that were listed for description ended.
@@ -31,28 +31,13 @@ tape recovery points in the list. If there are no more recovery points
 to describe, this field does not appear in the response.
 
 
-
-
-
-
-
-
-
-=head2 TapeRecoveryPointInfos => ArrayRef[Paws::StorageGateway::TapeRecoveryPointInfo]
-
-  
+=head2 TapeRecoveryPointInfos => ArrayRef[L<Paws::StorageGateway::TapeRecoveryPointInfo>]
 
 An array of TapeRecoveryPointInfos that are available for the specified
 gateway.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

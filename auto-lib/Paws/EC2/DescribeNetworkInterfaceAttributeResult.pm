@@ -1,14 +1,13 @@
 
-package Paws::EC2::DescribeNetworkInterfaceAttributeResult {
+package Paws::EC2::DescribeNetworkInterfaceAttributeResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has Attachment => (is => 'ro', isa => 'Paws::EC2::NetworkInterfaceAttachment', xmlname => 'attachment', traits => ['Unwrapped',]);
-  has Description => (is => 'ro', isa => 'Paws::EC2::AttributeValue', xmlname => 'description', traits => ['Unwrapped',]);
-  has Groups => (is => 'ro', isa => 'ArrayRef[Paws::EC2::GroupIdentifier]', xmlname => 'groupSet', traits => ['Unwrapped',]);
-  has NetworkInterfaceId => (is => 'ro', isa => 'Str', xmlname => 'networkInterfaceId', traits => ['Unwrapped',]);
-  has SourceDestCheck => (is => 'ro', isa => 'Paws::EC2::AttributeBooleanValue', xmlname => 'sourceDestCheck', traits => ['Unwrapped',]);
+  has Attachment => (is => 'ro', isa => 'Paws::EC2::NetworkInterfaceAttachment', request_name => 'attachment', traits => ['NameInRequest',]);
+  has Description => (is => 'ro', isa => 'Paws::EC2::AttributeValue', request_name => 'description', traits => ['NameInRequest',]);
+  has Groups => (is => 'ro', isa => 'ArrayRef[Paws::EC2::GroupIdentifier]', request_name => 'groupSet', traits => ['NameInRequest',]);
+  has NetworkInterfaceId => (is => 'ro', isa => 'Str', request_name => 'networkInterfaceId', traits => ['NameInRequest',]);
+  has SourceDestCheck => (is => 'ro', isa => 'Paws::EC2::AttributeBooleanValue', request_name => 'sourceDestCheck', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -19,76 +18,33 @@ Paws::EC2::DescribeNetworkInterfaceAttributeResult
 
 =head1 ATTRIBUTES
 
-=head2 Attachment => Paws::EC2::NetworkInterfaceAttachment
 
-  
+=head2 Attachment => L<Paws::EC2::NetworkInterfaceAttachment>
 
 The attachment (if any) of the network interface.
 
 
-
-
-
-
-
-
-
-=head2 Description => Paws::EC2::AttributeValue
-
-  
+=head2 Description => L<Paws::EC2::AttributeValue>
 
 The description of the network interface.
 
 
-
-
-
-
-
-
-
-=head2 Groups => ArrayRef[Paws::EC2::GroupIdentifier]
-
-  
+=head2 Groups => ArrayRef[L<Paws::EC2::GroupIdentifier>]
 
 The security groups associated with the network interface.
 
 
-
-
-
-
-
-
-
 =head2 NetworkInterfaceId => Str
-
-  
 
 The ID of the network interface.
 
 
-
-
-
-
-
-
-
-=head2 SourceDestCheck => Paws::EC2::AttributeBooleanValue
-
-  
+=head2 SourceDestCheck => L<Paws::EC2::AttributeBooleanValue>
 
 Indicates whether source/destination checking is enabled.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

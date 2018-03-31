@@ -1,5 +1,5 @@
 
-package Paws::EC2::AuthorizeSecurityGroupEgress {
+package Paws::EC2::AuthorizeSecurityGroupEgress;
   use Moose;
   has CidrIp => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'cidrIp' );
   has DryRun => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'dryRun' );
@@ -14,9 +14,8 @@ package Paws::EC2::AuthorizeSecurityGroupEgress {
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'AuthorizeSecurityGroupEgress');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -31,7 +30,7 @@ This class represents the parameters used for calling the method AuthorizeSecuri
 Amazon Elastic Compute Cloud service. Use the attributes of this class
 as arguments to method AuthorizeSecurityGroupEgress.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to AuthorizeSecurityGroupEgress.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to AuthorizeSecurityGroupEgress.
 
 As an example:
 
@@ -41,25 +40,15 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
+
 =head2 CidrIp => Str
 
-  
-
-The CIDR IP address range. You can't specify this parameter when
-specifying a source security group.
-
-
-
-
-
-
-
+The CIDR IPv4 address range. We recommend that you specify the CIDR
+range in a set of IP permissions instead.
 
 
 
 =head2 DryRun => Bool
-
-  
 
 Checks whether you have the required permissions for the action,
 without actually making the request, and provides an error response. If
@@ -68,124 +57,55 @@ C<DryRunOperation>. Otherwise, it is C<UnauthorizedOperation>.
 
 
 
-
-
-
-
-
-
-
 =head2 FromPort => Int
 
-  
-
 The start of port range for the TCP and UDP protocols, or an ICMP type
-number. For the ICMP type number, use C<-1> to specify all ICMP types.
-
-
-
-
-
-
-
+number. We recommend that you specify the port range in a set of IP
+permissions instead.
 
 
 
 =head2 B<REQUIRED> GroupId => Str
 
-  
-
 The ID of the security group.
 
 
 
-
-
-
-
-
-
-
-=head2 IpPermissions => ArrayRef[Paws::EC2::IpPermission]
-
-  
+=head2 IpPermissions => ArrayRef[L<Paws::EC2::IpPermission>]
 
 A set of IP permissions. You can't specify a destination security group
 and a CIDR IP address range.
 
 
 
-
-
-
-
-
-
-
 =head2 IpProtocol => Str
 
-  
-
-The IP protocol name (C<tcp>, C<udp>, C<icmp>) or number (see Protocol
-Numbers). Use C<-1> to specify all.
-
-
-
-
-
-
-
+The IP protocol name or number. We recommend that you specify the
+protocol in a set of IP permissions instead.
 
 
 
 =head2 SourceSecurityGroupName => Str
 
-  
-
-[EC2-Classic, default VPC] The name of the destination security group.
-You can't specify a destination security group and a CIDR IP address
-range.
-
-
-
-
-
-
-
+The name of a destination security group. To authorize outbound access
+to a destination security group, we recommend that you use a set of IP
+permissions instead.
 
 
 
 =head2 SourceSecurityGroupOwnerId => Str
 
-  
-
-The ID of the destination security group. You can't specify a
-destination security group and a CIDR IP address range.
-
-
-
-
-
-
-
+The AWS account number for a destination security group. To authorize
+outbound access to a destination security group, we recommend that you
+use a set of IP permissions instead.
 
 
 
 =head2 ToPort => Int
 
-  
-
-The end of port range for the TCP and UDP protocols, or an ICMP code
-number. For the ICMP code number, use C<-1> to specify all ICMP codes
-for the ICMP type.
-
-
-
-
-
-
-
-
+The end of port range for the TCP and UDP protocols, or an ICMP type
+number. We recommend that you specify the port range in a set of IP
+permissions instead.
 
 
 

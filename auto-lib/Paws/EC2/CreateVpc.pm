@@ -1,6 +1,7 @@
 
-package Paws::EC2::CreateVpc {
+package Paws::EC2::CreateVpc;
   use Moose;
+  has AmazonProvidedIpv6CidrBlock => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'amazonProvidedIpv6CidrBlock' );
   has CidrBlock => (is => 'ro', isa => 'Str', required => 1);
   has DryRun => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'dryRun' );
   has InstanceTenancy => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'instanceTenancy' );
@@ -10,7 +11,6 @@ package Paws::EC2::CreateVpc {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'CreateVpc');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::EC2::CreateVpcResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +25,7 @@ This class represents the parameters used for calling the method CreateVpc on th
 Amazon Elastic Compute Cloud service. Use the attributes of this class
 as arguments to method CreateVpc.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to CreateVpc.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to CreateVpc.
 
 As an example:
 
@@ -35,25 +35,23 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
+
+=head2 AmazonProvidedIpv6CidrBlock => Bool
+
+Requests an Amazon-provided IPv6 CIDR block with a /56 prefix length
+for the VPC. You cannot specify the range of IP addresses, or the size
+of the CIDR block.
+
+
+
 =head2 B<REQUIRED> CidrBlock => Str
 
-  
-
-The network range for the VPC, in CIDR notation. For example,
+The IPv4 network range for the VPC, in CIDR notation. For example,
 C<10.0.0.0/16>.
 
 
 
-
-
-
-
-
-
-
 =head2 DryRun => Bool
-
-  
 
 Checks whether you have the required permissions for the action,
 without actually making the request, and provides an error response. If
@@ -62,35 +60,21 @@ C<DryRunOperation>. Otherwise, it is C<UnauthorizedOperation>.
 
 
 
-
-
-
-
-
-
-
 =head2 InstanceTenancy => Str
 
-  
+The tenancy options for instances launched into the VPC. For
+C<default>, instances are launched with shared tenancy by default. You
+can launch instances with any tenancy into a shared tenancy VPC. For
+C<dedicated>, instances are launched as dedicated tenancy instances by
+default. You can only launch instances with a tenancy of C<dedicated>
+or C<host> into a dedicated tenancy VPC.
 
-The supported tenancy options for instances launched into the VPC. A
-value of C<default> means that instances can be launched with any
-tenancy; a value of C<dedicated> means all instances launched into the
-VPC are launched as dedicated tenancy instances regardless of the
-tenancy assigned to the instance at launch. Dedicated tenancy instances
-run on single-tenant hardware.
+B<Important:> The C<host> value cannot be used with this parameter. Use
+the C<default> or C<dedicated> values only.
 
 Default: C<default>
 
-
-
-
-
-
-
-
-
-
+Valid values are: C<"default">, C<"dedicated">, C<"host">
 
 
 =head1 SEE ALSO

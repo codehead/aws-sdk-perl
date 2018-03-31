@@ -1,17 +1,16 @@
 
-package Paws::EC2::DescribeAddresses {
+package Paws::EC2::DescribeAddresses;
   use Moose;
-  has AllocationIds => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'AllocationId' );
+  has AllocationIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'AllocationId' );
   has DryRun => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'dryRun' );
   has Filters => (is => 'ro', isa => 'ArrayRef[Paws::EC2::Filter]', traits => ['NameInRequest'], request_name => 'Filter' );
-  has PublicIps => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'PublicIp' );
+  has PublicIps => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'PublicIp' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeAddresses');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::EC2::DescribeAddressesResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -26,7 +25,7 @@ This class represents the parameters used for calling the method DescribeAddress
 Amazon Elastic Compute Cloud service. Use the attributes of this class
 as arguments to method DescribeAddresses.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeAddresses.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeAddresses.
 
 As an example:
 
@@ -36,9 +35,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 AllocationIds => ArrayRef[Str]
 
-  
+=head2 AllocationIds => ArrayRef[Str|Undef]
 
 [EC2-VPC] One or more allocation IDs.
 
@@ -46,16 +44,7 @@ Default: Describes all your Elastic IP addresses.
 
 
 
-
-
-
-
-
-
-
 =head2 DryRun => Bool
-
-  
 
 Checks whether you have the required permissions for the action,
 without actually making the request, and provides an error response. If
@@ -64,16 +53,7 @@ C<DryRunOperation>. Otherwise, it is C<UnauthorizedOperation>.
 
 
 
-
-
-
-
-
-
-
-=head2 Filters => ArrayRef[Paws::EC2::Filter]
-
-  
+=head2 Filters => ArrayRef[L<Paws::EC2::Filter>]
 
 One or more filters. Filter names and values are case-sensitive.
 
@@ -120,27 +100,11 @@ C<public-ip> - The Elastic IP address.
 
 
 
-
-
-
-
-
-
-=head2 PublicIps => ArrayRef[Str]
-
-  
+=head2 PublicIps => ArrayRef[Str|Undef]
 
 [EC2-Classic] One or more Elastic IP addresses.
 
 Default: Describes all your Elastic IP addresses.
-
-
-
-
-
-
-
-
 
 
 

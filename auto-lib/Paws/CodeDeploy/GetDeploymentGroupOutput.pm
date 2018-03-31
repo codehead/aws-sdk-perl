@@ -1,10 +1,9 @@
 
-package Paws::CodeDeploy::GetDeploymentGroupOutput {
+package Paws::CodeDeploy::GetDeploymentGroupOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has deploymentGroupInfo => (is => 'ro', isa => 'Paws::CodeDeploy::DeploymentGroupInfo');
+  has DeploymentGroupInfo => (is => 'ro', isa => 'Paws::CodeDeploy::DeploymentGroupInfo', traits => ['NameInRequest'], request_name => 'deploymentGroupInfo' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::CodeDeploy::GetDeploymentGroupOutput
 
 =head1 ATTRIBUTES
 
-=head2 deploymentGroupInfo => Paws::CodeDeploy::DeploymentGroupInfo
 
-  
+=head2 DeploymentGroupInfo => L<Paws::CodeDeploy::DeploymentGroupInfo>
 
 Information about the deployment group.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

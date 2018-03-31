@@ -1,12 +1,11 @@
 
-package Paws::CodeDeploy::ListDeploymentGroupsOutput {
+package Paws::CodeDeploy::ListDeploymentGroupsOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has applicationName => (is => 'ro', isa => 'Str');
-  has deploymentGroups => (is => 'ro', isa => 'ArrayRef[Str]');
-  has nextToken => (is => 'ro', isa => 'Str');
+  has ApplicationName => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'applicationName' );
+  has DeploymentGroups => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'deploymentGroups' );
+  has NextToken => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'nextToken' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -16,51 +15,25 @@ Paws::CodeDeploy::ListDeploymentGroupsOutput
 
 =head1 ATTRIBUTES
 
-=head2 applicationName => Str
 
-  
+=head2 ApplicationName => Str
 
 The application name.
 
 
-
-
-
-
-
-
-
-=head2 deploymentGroups => ArrayRef[Str]
-
-  
+=head2 DeploymentGroups => ArrayRef[Str|Undef]
 
 A list of corresponding deployment group names.
 
 
+=head2 NextToken => Str
+
+If a large amount of information is returned, an identifier is also
+returned. It can be used in a subsequent list deployment groups call to
+return the next set of deployment groups in the list.
 
 
-
-
-
-
-
-=head2 nextToken => Str
-
-  
-
-If the amount of information that is returned is significantly large,
-an identifier will also be returned, which can be used in a subsequent
-list deployment groups call to return the next set of deployment groups
-in the list.
-
-
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

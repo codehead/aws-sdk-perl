@@ -1,16 +1,20 @@
 
-package Paws::SES::SendRawEmail {
+package Paws::SES::SendRawEmail;
   use Moose;
-  has Destinations => (is => 'ro', isa => 'ArrayRef[Str]');
+  has ConfigurationSetName => (is => 'ro', isa => 'Str');
+  has Destinations => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
+  has FromArn => (is => 'ro', isa => 'Str');
   has RawMessage => (is => 'ro', isa => 'Paws::SES::RawMessage', required => 1);
+  has ReturnPathArn => (is => 'ro', isa => 'Str');
   has Source => (is => 'ro', isa => 'Str');
+  has SourceArn => (is => 'ro', isa => 'Str');
+  has Tags => (is => 'ro', isa => 'ArrayRef[Paws::SES::MessageTag]');
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'SendRawEmail');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::SES::SendRawEmailResponse');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'SendRawEmailResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +29,7 @@ This class represents the parameters used for calling the method SendRawEmail on
 Amazon Simple Email Service service. Use the attributes of this class
 as arguments to method SendRawEmail.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to SendRawEmail.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to SendRawEmail.
 
 As an example:
 
@@ -35,58 +39,103 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 Destinations => ArrayRef[Str]
 
-  
+=head2 ConfigurationSetName => Str
+
+The name of the configuration set to use when you send an email using
+C<SendRawEmail>.
+
+
+
+=head2 Destinations => ArrayRef[Str|Undef]
 
 A list of destinations for the message, consisting of To:, CC:, and
 BCC: addresses.
 
 
 
+=head2 FromArn => Str
+
+This parameter is used only for sending authorization. It is the ARN of
+the identity that is associated with the sending authorization policy
+that permits you to specify a particular "From" address in the header
+of the raw email.
+
+Instead of using this parameter, you can use the X-header
+C<X-SES-FROM-ARN> in the raw message of the email. If you use both the
+C<FromArn> parameter and the corresponding X-header, Amazon SES uses
+the value of the C<FromArn> parameter.
+
+For information about when to use this parameter, see the description
+of C<SendRawEmail> in this guide, or see the Amazon SES Developer
+Guide.
 
 
 
-
-
-
-
-=head2 B<REQUIRED> RawMessage => Paws::SES::RawMessage
-
-  
+=head2 B<REQUIRED> RawMessage => L<Paws::SES::RawMessage>
 
 The raw text of the message. The client is responsible for ensuring the
 following:
 
 =over
 
-=item * Message must contain a header and a body, separated by a blank
-line.
+=item *
 
-=item * All required header fields must be present.
+Message must contain a header and a body, separated by a blank line.
 
-=item * Each part of a multipart MIME message must be formatted
-properly.
+=item *
 
-=item * MIME content types must be among those supported by Amazon SES.
-For more information, go to the Amazon SES Developer Guide.
+All required header fields must be present.
 
-=item * Content must be base64-encoded, if MIME requires it.
+=item *
+
+Each part of a multipart MIME message must be formatted properly.
+
+=item *
+
+MIME content types must be among those supported by Amazon SES. For
+more information, go to the Amazon SES Developer Guide.
+
+=item *
+
+Must be base64-encoded.
+
+=item *
+
+Per RFC 5321, the maximum length of each line of text, including the
+E<lt>CRLFE<gt>, must not exceed 1,000 characters.
 
 =back
 
 
 
 
+=head2 ReturnPathArn => Str
 
+This parameter is used only for sending authorization. It is the ARN of
+the identity that is associated with the sending authorization policy
+that permits you to use the email address specified in the
+C<ReturnPath> parameter.
 
+For example, if the owner of C<example.com> (which has ARN
+C<arn:aws:ses:us-east-1:123456789012:identity/example.com>) attaches a
+policy to it that authorizes you to use C<feedback@example.com>, then
+you would specify the C<ReturnPathArn> to be
+C<arn:aws:ses:us-east-1:123456789012:identity/example.com>, and the
+C<ReturnPath> to be C<feedback@example.com>.
 
+Instead of using this parameter, you can use the X-header
+C<X-SES-RETURN-PATH-ARN> in the raw message of the email. If you use
+both the C<ReturnPathArn> parameter and the corresponding X-header,
+Amazon SES uses the value of the C<ReturnPathArn> parameter.
+
+For information about when to use this parameter, see the description
+of C<SendRawEmail> in this guide, or see the Amazon SES Developer
+Guide.
 
 
 
 =head2 Source => Str
-
-  
 
 The identity's email address. If you do not provide a value for this
 parameter, you must specify a "From" address in the raw text of the
@@ -100,16 +149,42 @@ information, see RFC 2047.
 
 If you specify the C<Source> parameter and have feedback forwarding
 enabled, then bounces and complaints will be sent to this email
-address. This takes precedence over any I<Return-Path> header that you
+address. This takes precedence over any Return-Path header that you
 might include in the raw text of the message.
 
 
 
+=head2 SourceArn => Str
+
+This parameter is used only for sending authorization. It is the ARN of
+the identity that is associated with the sending authorization policy
+that permits you to send for the email address specified in the
+C<Source> parameter.
+
+For example, if the owner of C<example.com> (which has ARN
+C<arn:aws:ses:us-east-1:123456789012:identity/example.com>) attaches a
+policy to it that authorizes you to send from C<user@example.com>, then
+you would specify the C<SourceArn> to be
+C<arn:aws:ses:us-east-1:123456789012:identity/example.com>, and the
+C<Source> to be C<user@example.com>.
+
+Instead of using this parameter, you can use the X-header
+C<X-SES-SOURCE-ARN> in the raw message of the email. If you use both
+the C<SourceArn> parameter and the corresponding X-header, Amazon SES
+uses the value of the C<SourceArn> parameter.
+
+For information about when to use this parameter, see the description
+of C<SendRawEmail> in this guide, or see the Amazon SES Developer
+Guide.
 
 
 
+=head2 Tags => ArrayRef[L<Paws::SES::MessageTag>]
 
-
+A list of tags, in the form of name/value pairs, to apply to an email
+that you send using C<SendRawEmail>. Tags correspond to characteristics
+of the email that you define, so that you can publish email sending
+events.
 
 
 

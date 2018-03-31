@@ -1,4 +1,4 @@
-package Paws::Net::QueryCaller {
+package Paws::Net::QueryCaller;
   use Moose::Role;
   use HTTP::Request::Common;
   use POSIX qw(strftime); 
@@ -8,22 +8,21 @@ package Paws::Net::QueryCaller {
     return ($self->flattened_arrays)?'%s.%d':'%s.member.%d';
   }
 
-  sub _is_internal_type {
-    my ($self, $att_type) = @_;
-    return ($att_type eq 'Str' or $att_type eq 'Int' or $att_type eq 'Bool' or $att_type eq 'Num');
-  }
-
   # converts the objects that represent the call into parameters that the API can understand
   sub _to_querycaller_params {
     my ($self, $params) = @_;
     my %p;
     foreach my $att (grep { $_ !~ m/^_/ } $params->meta->get_attribute_list) {
-      my $key = $params->meta->get_attribute($att)->does('Paws::Net::Caller::Attribute::Trait::NameInRequest')?$params->meta->get_attribute($att)->request_name:$att;
+      my $key = $params->meta->get_attribute($att)->does('Paws::API::Attribute::Trait::NameInRequest')?$params->meta->get_attribute($att)->request_name:$att;
       if (defined $params->$att) {
         my $att_type = $params->meta->get_attribute($att)->type_constraint;
 
         if ($self->_is_internal_type($att_type)) {
-          $p{ $key } = $params->{$att};
+          if ($att_type eq 'Bool') {
+            $p{ $key } = ($params->{$att} == 1) ? 'true' : 'false';
+          } else {
+            $p{ $key } = $params->{$att};
+          }
         } elsif ($att_type =~ m/^ArrayRef\[(.*)\]/) {
           if ($self->_is_internal_type("$1")){
             my $i = 1;
@@ -47,11 +46,19 @@ package Paws::Net::QueryCaller {
             map { $p{ "$key.$i.Value.$_" } = $complex_value{$_} } keys %complex_value;
             $i++;
           }
-        } elsif ($params->$att->does('Paws::API::StrToStrMapParser')) {
+        } elsif ($params->$att->does('Paws::API::StrToNativeMapParser')) {
           my $i = 1;
           foreach my $map_key (keys %{ $params->$att->Map }){
             $p{ "$key.entry.$i.key" }   = $map_key;
             $p{ "$key.entry.$i.value" } = $params->$att->Map->{ $map_key };
+            $i++;
+          }
+        } elsif ($params->$att->does('Paws::API::MapParser')){
+          my $i = 1;
+          foreach my $map_key (sort $params->$att->meta->get_attribute_list){
+            next if (not defined $params->$att->$map_key);
+            $p{ "$key.$i.Name" } = $map_key;
+            $p{ "$key.$i.Value" } = $params->$att->$map_key;
             $i++;
           }
         } else {
@@ -61,6 +68,18 @@ package Paws::Net::QueryCaller {
       }
     }
     return %p;
+  }
+
+  sub generate_content_from_parameters {
+    my ($self, $request) = @_;
+
+    $request->headers->content_type('application/x-www-form-urlencoded');
+    my $url = URI->new('http:');
+    $url->query_form($request->parameters);
+    my $content = $url->query;
+    # HTML/4.01 says that line breaks are represented as "CR LF" pairs (i.e., `%0D%0A')
+    $content =~ s/(?<!%0D)%0A/%0D%0A/g if (defined $content);
+    return $content;
   }
 
   sub prepare_request_for_call {
@@ -77,12 +96,12 @@ package Paws::Net::QueryCaller {
                            $self->_to_querycaller_params($call) 
     });
 
-    $request->generate_content_from_parameters;
+    if (not $self->does('Paws::Net::V2Signature')){
+      $request->content($self->generate_content_from_parameters($request));
+    }
 
     $self->sign($request);
 
     return $request;
   }
-}
-
 1;

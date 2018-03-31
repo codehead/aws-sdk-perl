@@ -1,5 +1,5 @@
 
-package Paws::IAM::DetachRolePolicy {
+package Paws::IAM::DetachRolePolicy;
   use Moose;
   has PolicyArn => (is => 'ro', isa => 'Str', required => 1);
   has RoleName => (is => 'ro', isa => 'Str', required => 1);
@@ -7,9 +7,8 @@ package Paws::IAM::DetachRolePolicy {
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DetachRolePolicy');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -24,7 +23,7 @@ This class represents the parameters used for calling the method DetachRolePolic
 AWS Identity and Access Management service. Use the attributes of this class
 as arguments to method DetachRolePolicy.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DetachRolePolicy.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DetachRolePolicy.
 
 As an example:
 
@@ -34,24 +33,24 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
+
 =head2 B<REQUIRED> PolicyArn => Str
 
-  
+The Amazon Resource Name (ARN) of the IAM policy you want to detach.
+
+For more information about ARNs, see Amazon Resource Names (ARNs) and
+AWS Service Namespaces in the I<AWS General Reference>.
+
+
 
 =head2 B<REQUIRED> RoleName => Str
 
-  
-
-The name (friendly name, not ARN) of the role to detach the policy
+The name (friendly name, not ARN) of the IAM role to detach the policy
 from.
 
-
-
-
-
-
-
-
+This parameter allows (per its regex pattern) a string of characters
+consisting of upper and lowercase alphanumeric characters with no
+spaces. You can also include any of the following characters: _+=,.@-
 
 
 

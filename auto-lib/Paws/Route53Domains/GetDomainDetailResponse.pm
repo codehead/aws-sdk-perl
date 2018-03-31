@@ -1,7 +1,6 @@
 
-package Paws::Route53Domains::GetDomainDetailResponse {
+package Paws::Route53Domains::GetDomainDetailResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has AbuseContactEmail => (is => 'ro', isa => 'Str');
   has AbuseContactPhone => (is => 'ro', isa => 'Str');
   has AdminContact => (is => 'ro', isa => 'Paws::Route53Domains::ContactDetail', required => 1);
@@ -18,13 +17,13 @@ package Paws::Route53Domains::GetDomainDetailResponse {
   has RegistrarUrl => (is => 'ro', isa => 'Str');
   has RegistryDomainId => (is => 'ro', isa => 'Str');
   has Reseller => (is => 'ro', isa => 'Str');
-  has StatusList => (is => 'ro', isa => 'ArrayRef[Str]');
+  has StatusList => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
   has TechContact => (is => 'ro', isa => 'Paws::Route53Domains::ContactDetail', required => 1);
   has TechPrivacy => (is => 'ro', isa => 'Bool');
   has UpdatedDate => (is => 'ro', isa => 'Str');
   has WhoIsServer => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -34,282 +33,103 @@ Paws::Route53Domains::GetDomainDetailResponse
 
 =head1 ATTRIBUTES
 
-=head2 AbuseContactEmail => Str
 
-  
+=head2 AbuseContactEmail => Str
 
 Email address to contact to report incorrect contact information for a
 domain, to report that the domain is being used to send spam, to report
 that someone is cybersquatting on a domain name, or report some other
 type of abuse.
 
-Type: String
-
-
-
-
-
-
-
-
 
 =head2 AbuseContactPhone => Str
 
-  
-
 Phone number for reporting abuse.
 
-Type: String
 
-
-
-
-
-
-
-
-
-=head2 B<REQUIRED> AdminContact => Paws::Route53Domains::ContactDetail
-
-  
+=head2 B<REQUIRED> AdminContact => L<Paws::Route53Domains::ContactDetail>
 
 Provides details about the domain administrative contact.
 
-Type: Complex
-
-Children: C<FirstName>, C<MiddleName>, C<LastName>, C<ContactType>,
-C<OrganizationName>, C<AddressLine1>, C<AddressLine2>, C<City>,
-C<State>, C<CountryCode>, C<ZipCode>, C<PhoneNumber>, C<Email>, C<Fax>,
-C<ExtraParams>
-
-
-
-
-
-
-
-
 
 =head2 AdminPrivacy => Bool
-
-  
 
 Specifies whether contact information for the admin contact is
 concealed from WHOIS queries. If the value is C<true>, WHOIS ("who is")
 queries will return contact information for our registrar partner,
 Gandi, instead of the contact information that you enter.
 
-Type: Boolean
-
-
-
-
-
-
-
-
 
 =head2 AutoRenew => Bool
-
-  
 
 Specifies whether the domain registration is set to renew
 automatically.
 
-Type: Boolean
-
-
-
-
-
-
-
-
 
 =head2 CreationDate => Str
-
-  
 
 The date when the domain was created as found in the response to a
 WHOIS query. The date format is Unix time.
 
 
-
-
-
-
-
-
-
 =head2 DnsSec => Str
-
-  
 
 Reserved for future use.
 
 
-
-
-
-
-
-
-
 =head2 B<REQUIRED> DomainName => Str
-
-  
 
 The name of a domain.
 
-Type: String
-
-
-
-
-
-
-
-
 
 =head2 ExpirationDate => Str
-
-  
 
 The date when the registration for the domain is set to expire. The
 date format is Unix time.
 
 
-
-
-
-
-
-
-
-=head2 B<REQUIRED> Nameservers => ArrayRef[Paws::Route53Domains::Nameserver]
-
-  
+=head2 B<REQUIRED> Nameservers => ArrayRef[L<Paws::Route53Domains::Nameserver>]
 
 The name of the domain.
 
-Type: String
 
-
-
-
-
-
-
-
-
-=head2 B<REQUIRED> RegistrantContact => Paws::Route53Domains::ContactDetail
-
-  
+=head2 B<REQUIRED> RegistrantContact => L<Paws::Route53Domains::ContactDetail>
 
 Provides details about the domain registrant.
 
-Type: Complex
-
-Children: C<FirstName>, C<MiddleName>, C<LastName>, C<ContactType>,
-C<OrganizationName>, C<AddressLine1>, C<AddressLine2>, C<City>,
-C<State>, C<CountryCode>, C<ZipCode>, C<PhoneNumber>, C<Email>, C<Fax>,
-C<ExtraParams>
-
-
-
-
-
-
-
-
 
 =head2 RegistrantPrivacy => Bool
-
-  
 
 Specifies whether contact information for the registrant contact is
 concealed from WHOIS queries. If the value is C<true>, WHOIS ("who is")
 queries will return contact information for our registrar partner,
 Gandi, instead of the contact information that you enter.
 
-Type: Boolean
-
-
-
-
-
-
-
-
 
 =head2 RegistrarName => Str
-
-  
 
 Name of the registrar of the domain as identified in the registry.
 Amazon Route 53 domains are registered by registrar Gandi. The value is
 C<"GANDI SAS">.
 
-Type: String
-
-
-
-
-
-
-
-
 
 =head2 RegistrarUrl => Str
 
-  
-
 Web address of the registrar.
-
-Type: String
-
-
-
-
-
-
-
 
 
 =head2 RegistryDomainId => Str
 
-  
-
 Reserved for future use.
-
-
-
-
-
-
-
 
 
 =head2 Reseller => Str
 
-  
-
 Reseller of the domain. Domains registered or transferred using Amazon
 Route 53 domains will have C<"Amazon"> as the reseller.
 
-Type: String
 
-
-
-
-
-
-
-
-
-=head2 StatusList => ArrayRef[Str]
-
-  
+=head2 StatusList => ArrayRef[Str|Undef]
 
 An array of domain name status codes, also known as Extensible
 Provisioning Protocol (EPP) status codes.
@@ -326,88 +146,33 @@ what each code means, go to the ICANN website and search for C<epp
 status codes>. (Search on the ICANN website; web searches sometimes
 return an old version of the document.)
 
-Type: Array of String
 
-
-
-
-
-
-
-
-
-=head2 B<REQUIRED> TechContact => Paws::Route53Domains::ContactDetail
-
-  
+=head2 B<REQUIRED> TechContact => L<Paws::Route53Domains::ContactDetail>
 
 Provides details about the domain technical contact.
 
-Type: Complex
-
-Children: C<FirstName>, C<MiddleName>, C<LastName>, C<ContactType>,
-C<OrganizationName>, C<AddressLine1>, C<AddressLine2>, C<City>,
-C<State>, C<CountryCode>, C<ZipCode>, C<PhoneNumber>, C<Email>, C<Fax>,
-C<ExtraParams>
-
-
-
-
-
-
-
-
 
 =head2 TechPrivacy => Bool
-
-  
 
 Specifies whether contact information for the tech contact is concealed
 from WHOIS queries. If the value is C<true>, WHOIS ("who is") queries
 will return contact information for our registrar partner, Gandi,
 instead of the contact information that you enter.
 
-Type: Boolean
-
-
-
-
-
-
-
-
 
 =head2 UpdatedDate => Str
-
-  
 
 The last updated date of the domain as found in the response to a WHOIS
 query. The date format is Unix time.
 
 
-
-
-
-
-
-
-
 =head2 WhoIsServer => Str
-
-  
 
 The fully qualified name of the WHOIS server that can answer the WHOIS
 query for the domain.
 
-Type: String
 
-
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

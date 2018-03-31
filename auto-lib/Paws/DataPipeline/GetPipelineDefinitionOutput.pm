@@ -1,12 +1,11 @@
 
-package Paws::DataPipeline::GetPipelineDefinitionOutput {
+package Paws::DataPipeline::GetPipelineDefinitionOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has parameterObjects => (is => 'ro', isa => 'ArrayRef[Paws::DataPipeline::ParameterObject]');
-  has parameterValues => (is => 'ro', isa => 'ArrayRef[Paws::DataPipeline::ParameterValue]');
-  has pipelineObjects => (is => 'ro', isa => 'ArrayRef[Paws::DataPipeline::PipelineObject]');
+  has ParameterObjects => (is => 'ro', isa => 'ArrayRef[Paws::DataPipeline::ParameterObject]', traits => ['NameInRequest'], request_name => 'parameterObjects' );
+  has ParameterValues => (is => 'ro', isa => 'ArrayRef[Paws::DataPipeline::ParameterValue]', traits => ['NameInRequest'], request_name => 'parameterValues' );
+  has PipelineObjects => (is => 'ro', isa => 'ArrayRef[Paws::DataPipeline::PipelineObject]', traits => ['NameInRequest'], request_name => 'pipelineObjects' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -16,48 +15,23 @@ Paws::DataPipeline::GetPipelineDefinitionOutput
 
 =head1 ATTRIBUTES
 
-=head2 parameterObjects => ArrayRef[Paws::DataPipeline::ParameterObject]
 
-  
+=head2 ParameterObjects => ArrayRef[L<Paws::DataPipeline::ParameterObject>]
 
 The parameter objects used in the pipeline definition.
 
 
-
-
-
-
-
-
-
-=head2 parameterValues => ArrayRef[Paws::DataPipeline::ParameterValue]
-
-  
+=head2 ParameterValues => ArrayRef[L<Paws::DataPipeline::ParameterValue>]
 
 The parameter values used in the pipeline definition.
 
 
-
-
-
-
-
-
-
-=head2 pipelineObjects => ArrayRef[Paws::DataPipeline::PipelineObject]
-
-  
+=head2 PipelineObjects => ArrayRef[L<Paws::DataPipeline::PipelineObject>]
 
 The objects defined in the pipeline.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

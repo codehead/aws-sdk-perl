@@ -1,10 +1,9 @@
 
-package Paws::EC2::DescribeNetworkAclsResult {
+package Paws::EC2::DescribeNetworkAclsResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has NetworkAcls => (is => 'ro', isa => 'ArrayRef[Paws::EC2::NetworkAcl]', xmlname => 'networkAclSet', traits => ['Unwrapped',]);
+  has NetworkAcls => (is => 'ro', isa => 'ArrayRef[Paws::EC2::NetworkAcl]', request_name => 'networkAclSet', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::EC2::DescribeNetworkAclsResult
 
 =head1 ATTRIBUTES
 
-=head2 NetworkAcls => ArrayRef[Paws::EC2::NetworkAcl]
 
-  
+=head2 NetworkAcls => ArrayRef[L<Paws::EC2::NetworkAcl>]
 
 Information about one or more network ACLs.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

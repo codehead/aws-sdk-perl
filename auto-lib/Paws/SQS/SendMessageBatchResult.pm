@@ -1,11 +1,10 @@
 
-package Paws::SQS::SendMessageBatchResult {
+package Paws::SQS::SendMessageBatchResult;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has Failed => (is => 'ro', isa => 'ArrayRef[Paws::SQS::BatchResultErrorEntry]', xmlname => 'BatchResultErrorEntry', traits => ['Unwrapped',], required => 1);
-  has Successful => (is => 'ro', isa => 'ArrayRef[Paws::SQS::SendMessageBatchResultEntry]', xmlname => 'SendMessageBatchResultEntry', traits => ['Unwrapped',], required => 1);
+  has Failed => (is => 'ro', isa => 'ArrayRef[Paws::SQS::BatchResultErrorEntry]', request_name => 'BatchResultErrorEntry', traits => ['NameInRequest',], required => 1);
+  has Successful => (is => 'ro', isa => 'ArrayRef[Paws::SQS::SendMessageBatchResultEntry]', request_name => 'SendMessageBatchResultEntry', traits => ['NameInRequest',], required => 1);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -16,35 +15,19 @@ Paws::SQS::SendMessageBatchResult
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> Failed => ArrayRef[Paws::SQS::BatchResultErrorEntry]
 
-  
+=head2 B<REQUIRED> Failed => ArrayRef[L<Paws::SQS::BatchResultErrorEntry>]
 
-A list of BatchResultErrorEntry items with the error detail about each
-message that could not be enqueued.
-
+A list of C< BatchResultErrorEntry > items with error details about
+each message that can't be enqueued.
 
 
+=head2 B<REQUIRED> Successful => ArrayRef[L<Paws::SQS::SendMessageBatchResultEntry>]
+
+A list of C< SendMessageBatchResultEntry > items.
 
 
-
-
-
-
-=head2 B<REQUIRED> Successful => ArrayRef[Paws::SQS::SendMessageBatchResultEntry]
-
-  
-
-A list of SendMessageBatchResultEntry items.
-
-
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

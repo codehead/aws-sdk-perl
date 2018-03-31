@@ -1,11 +1,10 @@
 
-package Paws::RedShift::ClusterSubnetGroupMessage {
+package Paws::RedShift::ClusterSubnetGroupMessage;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has ClusterSubnetGroups => (is => 'ro', isa => 'ArrayRef[Paws::RedShift::ClusterSubnetGroup]', xmlname => 'ClusterSubnetGroup', traits => ['Unwrapped',]);
+  has ClusterSubnetGroups => (is => 'ro', isa => 'ArrayRef[Paws::RedShift::ClusterSubnetGroup]', request_name => 'ClusterSubnetGroup', traits => ['NameInRequest',]);
   has Marker => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -16,23 +15,13 @@ Paws::RedShift::ClusterSubnetGroupMessage
 
 =head1 ATTRIBUTES
 
-=head2 ClusterSubnetGroups => ArrayRef[Paws::RedShift::ClusterSubnetGroup]
 
-  
+=head2 ClusterSubnetGroups => ArrayRef[L<Paws::RedShift::ClusterSubnetGroup>]
 
 A list of ClusterSubnetGroup instances.
 
 
-
-
-
-
-
-
-
 =head2 Marker => Str
-
-  
 
 A value that indicates the starting point for the next set of response
 records in a subsequent request. If a value is returned in a response,
@@ -42,13 +31,7 @@ the C<Marker> field is empty, all response records have been retrieved
 for the request.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

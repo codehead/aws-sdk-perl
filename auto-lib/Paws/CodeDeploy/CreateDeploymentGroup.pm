@@ -1,20 +1,27 @@
 
-package Paws::CodeDeploy::CreateDeploymentGroup {
+package Paws::CodeDeploy::CreateDeploymentGroup;
   use Moose;
-  has applicationName => (is => 'ro', isa => 'Str', required => 1);
-  has autoScalingGroups => (is => 'ro', isa => 'ArrayRef[Str]');
-  has deploymentConfigName => (is => 'ro', isa => 'Str');
-  has deploymentGroupName => (is => 'ro', isa => 'Str', required => 1);
-  has ec2TagFilters => (is => 'ro', isa => 'ArrayRef[Paws::CodeDeploy::EC2TagFilter]');
-  has onPremisesInstanceTagFilters => (is => 'ro', isa => 'ArrayRef[Paws::CodeDeploy::TagFilter]');
-  has serviceRoleArn => (is => 'ro', isa => 'Str', required => 1);
+  has AlarmConfiguration => (is => 'ro', isa => 'Paws::CodeDeploy::AlarmConfiguration', traits => ['NameInRequest'], request_name => 'alarmConfiguration' );
+  has ApplicationName => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'applicationName' , required => 1);
+  has AutoRollbackConfiguration => (is => 'ro', isa => 'Paws::CodeDeploy::AutoRollbackConfiguration', traits => ['NameInRequest'], request_name => 'autoRollbackConfiguration' );
+  has AutoScalingGroups => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'autoScalingGroups' );
+  has BlueGreenDeploymentConfiguration => (is => 'ro', isa => 'Paws::CodeDeploy::BlueGreenDeploymentConfiguration', traits => ['NameInRequest'], request_name => 'blueGreenDeploymentConfiguration' );
+  has DeploymentConfigName => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'deploymentConfigName' );
+  has DeploymentGroupName => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'deploymentGroupName' , required => 1);
+  has DeploymentStyle => (is => 'ro', isa => 'Paws::CodeDeploy::DeploymentStyle', traits => ['NameInRequest'], request_name => 'deploymentStyle' );
+  has Ec2TagFilters => (is => 'ro', isa => 'ArrayRef[Paws::CodeDeploy::EC2TagFilter]', traits => ['NameInRequest'], request_name => 'ec2TagFilters' );
+  has Ec2TagSet => (is => 'ro', isa => 'Paws::CodeDeploy::EC2TagSet', traits => ['NameInRequest'], request_name => 'ec2TagSet' );
+  has LoadBalancerInfo => (is => 'ro', isa => 'Paws::CodeDeploy::LoadBalancerInfo', traits => ['NameInRequest'], request_name => 'loadBalancerInfo' );
+  has OnPremisesInstanceTagFilters => (is => 'ro', isa => 'ArrayRef[Paws::CodeDeploy::TagFilter]', traits => ['NameInRequest'], request_name => 'onPremisesInstanceTagFilters' );
+  has OnPremisesTagSet => (is => 'ro', isa => 'Paws::CodeDeploy::OnPremisesTagSet', traits => ['NameInRequest'], request_name => 'onPremisesTagSet' );
+  has ServiceRoleArn => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'serviceRoleArn' , required => 1);
+  has TriggerConfigurations => (is => 'ro', isa => 'ArrayRef[Paws::CodeDeploy::TriggerConfig]', traits => ['NameInRequest'], request_name => 'triggerConfigurations' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'CreateDeploymentGroup');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::CodeDeploy::CreateDeploymentGroupOutput');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -29,7 +36,7 @@ This class represents the parameters used for calling the method CreateDeploymen
 AWS CodeDeploy service. Use the attributes of this class
 as arguments to method CreateDeploymentGroup.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to CreateDeploymentGroup.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to CreateDeploymentGroup.
 
 As an example:
 
@@ -39,150 +46,122 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> applicationName => Str
 
-  
+=head2 AlarmConfiguration => L<Paws::CodeDeploy::AlarmConfiguration>
 
-The name of an existing AWS CodeDeploy application associated with the
+Information to add about Amazon CloudWatch alarms when the deployment
+group is created.
+
+
+
+=head2 B<REQUIRED> ApplicationName => Str
+
+The name of an AWS CodeDeploy application associated with the
 applicable IAM user or AWS account.
 
 
 
+=head2 AutoRollbackConfiguration => L<Paws::CodeDeploy::AutoRollbackConfiguration>
+
+Configuration information for an automatic rollback that is added when
+a deployment group is created.
 
 
 
-
-
-
-
-=head2 autoScalingGroups => ArrayRef[Str]
-
-  
+=head2 AutoScalingGroups => ArrayRef[Str|Undef]
 
 A list of associated Auto Scaling groups.
 
 
 
+=head2 BlueGreenDeploymentConfiguration => L<Paws::CodeDeploy::BlueGreenDeploymentConfiguration>
+
+Information about blue/green deployment options for a deployment group.
 
 
 
+=head2 DeploymentConfigName => Str
+
+If specified, the deployment configuration name can be either one of
+the predefined configurations provided with AWS CodeDeploy or a custom
+deployment configuration that you create by calling the create
+deployment configuration operation.
+
+CodeDeployDefault.OneAtATime is the default deployment configuration.
+It is used if a configuration isn't specified for the deployment or the
+deployment group.
+
+For more information about the predefined deployment configurations in
+AWS CodeDeploy, see Working with Deployment Groups in AWS CodeDeploy in
+the AWS CodeDeploy User Guide.
 
 
 
+=head2 B<REQUIRED> DeploymentGroupName => Str
 
-=head2 deploymentConfigName => Str
-
-  
-
-If specified, the deployment configuration name must be one of the
-predefined values, or it can be a custom deployment configuration:
-
-=over
-
-=item * CodeDeployDefault.AllAtOnce deploys an application revision to
-up to all of the instances at once. The overall deployment succeeds if
-the application revision deploys to at least one of the instances. The
-overall deployment fails after the application revision fails to deploy
-to all of the instances. For example, for 9 instances, deploy to up to
-all 9 instances at once. The overall deployment succeeds if any of the
-9 instances is successfully deployed to, and it fails if all 9
-instances fail to be deployed to.
-
-=item * CodeDeployDefault.HalfAtATime deploys to up to half of the
-instances at a time (with fractions rounded down). The overall
-deployment succeeds if the application revision deploys to at least
-half of the instances (with fractions rounded up); otherwise, the
-deployment fails. For example, for 9 instances, deploy to up to 4
-instances at a time. The overall deployment succeeds if 5 or more
-instances are successfully deployed to; otherwise, the deployment
-fails. Note that the deployment may successfully deploy to some
-instances, even if the overall deployment fails.
-
-=item * CodeDeployDefault.OneAtATime deploys the application revision
-to only one of the instances at a time. The overall deployment succeeds
-if the application revision deploys to all of the instances. The
-overall deployment fails after the application revision first fails to
-deploy to any one instances. For example, for 9 instances, deploy to
-one instance at a time. The overall deployment succeeds if all 9
-instances are successfully deployed to, and it fails if any of one of
-the 9 instances fail to be deployed to. Note that the deployment may
-successfully deploy to some instances, even if the overall deployment
-fails. This is the default deployment configuration if a configuration
-isn't specified for either the deployment or the deployment group.
-
-=back
-
-To create a custom deployment configuration, call the create deployment
-configuration operation.
+The name of a new deployment group for the specified application.
 
 
 
+=head2 DeploymentStyle => L<Paws::CodeDeploy::DeploymentStyle>
+
+Information about the type of deployment, in-place or blue/green, that
+you want to run and whether to route deployment traffic behind a load
+balancer.
 
 
 
+=head2 Ec2TagFilters => ArrayRef[L<Paws::CodeDeploy::EC2TagFilter>]
+
+The Amazon EC2 tags on which to filter. The deployment group will
+include EC2 instances with any of the specified tags. Cannot be used in
+the same call as ec2TagSet.
 
 
 
+=head2 Ec2TagSet => L<Paws::CodeDeploy::EC2TagSet>
 
-=head2 B<REQUIRED> deploymentGroupName => Str
-
-  
-
-The name of an existing deployment group for the specified application.
-
+Information about groups of tags applied to EC2 instances. The
+deployment group will include only EC2 instances identified by all the
+tag groups. Cannot be used in the same call as ec2TagFilters.
 
 
 
+=head2 LoadBalancerInfo => L<Paws::CodeDeploy::LoadBalancerInfo>
+
+Information about the load balancer used in a deployment.
 
 
 
+=head2 OnPremisesInstanceTagFilters => ArrayRef[L<Paws::CodeDeploy::TagFilter>]
+
+The on-premises instance tags on which to filter. The deployment group
+will include on-premises instances with any of the specified tags.
+Cannot be used in the same call as OnPremisesTagSet.
 
 
 
-=head2 ec2TagFilters => ArrayRef[Paws::CodeDeploy::EC2TagFilter]
+=head2 OnPremisesTagSet => L<Paws::CodeDeploy::OnPremisesTagSet>
 
-  
-
-The Amazon EC2 tags to filter on.
-
-
-
+Information about groups of tags applied to on-premises instances. The
+deployment group will include only on-premises instances identified by
+all the tag groups. Cannot be used in the same call as
+onPremisesInstanceTagFilters.
 
 
 
-
-
-
-
-=head2 onPremisesInstanceTagFilters => ArrayRef[Paws::CodeDeploy::TagFilter]
-
-  
-
-The on-premises instance tags to filter on.
-
-
-
-
-
-
-
-
-
-
-=head2 B<REQUIRED> serviceRoleArn => Str
-
-  
+=head2 B<REQUIRED> ServiceRoleArn => Str
 
 A service role ARN that allows AWS CodeDeploy to act on the user's
 behalf when interacting with AWS services.
 
 
 
+=head2 TriggerConfigurations => ArrayRef[L<Paws::CodeDeploy::TriggerConfig>]
 
-
-
-
-
+Information about triggers to create when the deployment group is
+created. For examples, see Create a Trigger for an AWS CodeDeploy Event
+in the AWS CodeDeploy User Guide.
 
 
 

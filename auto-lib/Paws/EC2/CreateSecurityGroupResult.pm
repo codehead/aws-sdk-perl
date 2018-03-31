@@ -1,10 +1,9 @@
 
-package Paws::EC2::CreateSecurityGroupResult {
+package Paws::EC2::CreateSecurityGroupResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has GroupId => (is => 'ro', isa => 'Str', xmlname => 'groupId', traits => ['Unwrapped',]);
+  has GroupId => (is => 'ro', isa => 'Str', request_name => 'groupId', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::EC2::CreateSecurityGroupResult
 
 =head1 ATTRIBUTES
 
-=head2 GroupId => Str
 
-  
+=head2 GroupId => Str
 
 The ID of the security group.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

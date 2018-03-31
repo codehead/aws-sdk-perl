@@ -1,5 +1,5 @@
 
-package Paws::Kinesis::DescribeStream {
+package Paws::Kinesis::DescribeStream;
   use Moose;
   has ExclusiveStartShardId => (is => 'ro', isa => 'Str');
   has Limit => (is => 'ro', isa => 'Int');
@@ -10,7 +10,6 @@ package Paws::Kinesis::DescribeStream {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeStream');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::Kinesis::DescribeStreamOutput');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method DescribeStream 
 Amazon Kinesis service. Use the attributes of this class
 as arguments to method DescribeStream.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeStream.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeStream.
 
 As an example:
 
@@ -35,49 +34,24 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 ExclusiveStartShardId => Str
 
-  
+=head2 ExclusiveStartShardId => Str
 
 The shard ID of the shard to start with.
 
 
 
-
-
-
-
-
-
-
 =head2 Limit => Int
 
-  
-
-The maximum number of shards to return.
-
-
-
-
-
-
-
+The maximum number of shards to return in a single call. The default
+value is 100. If you specify a value greater than 100, at most 100
+shards are returned.
 
 
 
 =head2 B<REQUIRED> StreamName => Str
 
-  
-
 The name of the stream to describe.
-
-
-
-
-
-
-
-
 
 
 

@@ -5,8 +5,11 @@ package Paws::API::Builder {
   use Data::Dumper;
   use Data::Printer;
   use Template;
-  use File::Slurp;
-  use JSON;
+  use File::Slurper 'read_binary';
+  use JSON::MaybeXS;
+  use v5.10;
+
+  use Paws::API::RegionBuilder; 
 
   has api => (is => 'ro', required => 1);
 
@@ -17,12 +20,43 @@ package Paws::API::Builder {
     return $svc;
   }
 
+  has service => (is => 'ro', lazy => 1, default => sub { $_[0]->api_struct->{metadata}->{ endpointPrefix } });
+  has version => (is => 'ro', lazy => 1, default => sub { $_[0]->api_struct->{metadata}->{ apiVersion } });
+  has endpoint_role => (is => 'ro', lazy => 1, default => 'Paws::API::EndpointResolver' );
+
   has api_file => (is => 'ro', required => 1);
 
   has api_struct => (is => 'ro', lazy => 1, default => sub {
     my $self = shift;
     return $self->_load_json_file($self->api_file);
   });
+
+  has retry_file => (is => 'ro', lazy => 1, default => sub {
+    my $file = shift->api_file;
+    $file =~ s|/[^/]*?/[^/]*?/service-2\.|/_retry.|;
+    return $file;
+  });
+  has retry_struct => (is => 'ro', lazy => 1, default => sub {
+    my $self = shift;
+    return $self->_load_json_file($self->retry_file)->{ retry };
+  });
+  has default_retry => (is => 'ro', lazy => 1, default => sub {
+    my $self = shift;
+    $self->retry_struct->{ __default__ };
+  });
+  has retry => (is => 'ro', lazy => 1, default => sub {
+    my $self = shift;
+    $self->retry_struct->{ $self->service }->{ __default__ };
+  });
+  has service_max_attempts => (is => 'ro', lazy => 1, default => sub {
+    my $self = shift;
+    return (defined $self->retry and defined $self->retry->{ max_attempts }) ? $self->retry->{ max_attempts } : $self->default_retry->{ max_attempts };
+  });
+  has service_retry => (is => 'ro', lazy => 1, default => sub {
+    my $self = shift;
+    return (defined $self->retry and defined $self->retry->{ delay }) ? $self->retry->{ delay } : $self->default_retry->{ delay };
+  });
+
 
   has waiters_file => (is => 'ro', lazy => 1, default => sub {
     my $file = shift->api_file;
@@ -37,9 +71,7 @@ package Paws::API::Builder {
 
   has paginators_file => (is => 'ro', lazy => 1, default => sub {
     my $file = shift->api_file;
-print "PAG: FILE: $file\n";
     $file =~ s/\/service-2\./\/paginators-1./;
-print "PAG: FILE: $file\n";
     return $file;
   });
 
@@ -64,12 +96,17 @@ print "PAG: FILE: $file\n";
     return $name if ($name =~ s/^Describe/DescribeAll/);
     return $name if ($name =~ s/^List/ListAll/);
     return $name if ($name =~ s/^Query/QueryAll/);
+    return $name if ($name =~ s/^Get/GetAll/);
     return 'GetAllGroups' if ($name eq 'GetGroup');
     return 'DownloadAllDBLogFilePortions' if ($name eq 'DownloadDBLogFilePortion');
     return 'SelectAll' if ($name eq 'Select');
     return 'GetAllWorkflowExecutionHistories' if ($name eq 'GetWorkflowExecutionHistory');
     return 'ScanAll' if ($name eq 'Scan');
     return 'PollForAllDecisionTasks' if ($name eq 'PollForDecisionTask');
+    return 'FilterAllLogEvents' if ($name eq 'FilterLogEvents');
+    return 'SimulateAllCustomPolicies' if ($name eq 'SimulateCustomPolicy');
+    return 'SimulateAllPrincipalPolicies' if ($name eq 'SimulatePrincipalPolicy');
+    return 'LookupAllEvents' if ($name eq 'LookupEvents');
     die "Please help me generate a good name for the paginator $name";
   }
 
@@ -94,6 +131,19 @@ print "PAG: FILE: $file\n";
     },
   );
 
+  has endpoints_file => (is => 'ro', isa => 'Str', default => sub {
+    'botocore/botocore/data/_endpoints.json';
+  });
+
+  has service_endpoint_rules => (is => 'ro', lazy => 1, default => sub { 
+    my $self = shift; 
+    my $s = Paws::API::RegionBuilder->new( 
+      rules    => $self->endpoints_file, 
+      service  => $self->service, 
+    ); 
+    $s->region_accessor; 
+  });
+
   has operations_struct => (
     is => 'ro', 
     lazy => 1, 
@@ -110,23 +160,150 @@ print "PAG: FILE: $file\n";
   has shape_struct => (
     is => 'ro',
     lazy => 1,
-    default => sub { $_[0]->api_struct->{shapes} },
+    default => sub { 
+      my $self = shift;
+      my $shapes = $self->api_struct->{shapes};
+      return $shapes;
+    },
     isa => 'HashRef',
     traits => [ 'Hash' ],
     handles => {
       shape  => 'get',
       set_shape => 'set',
       has_shape => 'exists',
+      shapes => 'keys',
     },
+  );
+
+  has _input_shapes => (
+    is => 'ro',
+    isa => 'HashRef',
+    lazy => 1,
+    default => sub {
+      my $self = shift;
+      my $ret = {};
+      foreach my $op ($self->operations) {
+        my $operation = $self->operation($op);
+        my $sh_name = $operation->{ input }->{ shape };
+        if (defined $sh_name){
+          my $shape = $self->shape($sh_name);
+          $shape = $self->capitalize_shape($shape);
+          $ret->{ $sh_name } = $shape
+        }
+      }
+      return $ret;
+    },
+    traits => [ 'Hash' ],
+    handles => {
+      input_shape => 'get',
+      input_shapes => 'keys',
+      is_input_shape => 'exists',
+    }
+  );
+
+  has _output_shapes => (
+    is => 'ro',
+    isa => 'HashRef',
+    lazy => 1,
+    default => sub {
+      my $self = shift;
+      my $ret = {};
+      foreach my $op ($self->operations) {
+        my $operation = $self->operation($op);
+        my $sh_name = $operation->{ output }->{ shape };
+        if (defined $sh_name){
+          my $shape = $self->shape($sh_name);
+          $shape = $self->capitalize_shape($shape);
+          $ret->{ $sh_name } = $shape
+        }
+      }
+      return $ret;
+    },
+    traits => [ 'Hash' ],
+    handles => {
+      output_shape => 'get',
+      output_shapes => 'keys',
+      is_output_shape => 'exists',
+    }
+  );
+
+  has _exception_shapes => (
+    is => 'ro',
+    isa => 'HashRef',
+    lazy => 1,
+    default => sub {
+      my $self = shift;
+      my $ret = {};
+      foreach my $shape_name ($self->shapes) {
+        my $shape = $self->shape($shape_name);
+        $ret->{ $shape_name } = $shape if (defined $shape->{ exception });
+      }
+      return $ret;
+    },
+    traits => [ 'Hash' ],
+    handles => {
+      exception_shape => 'get',
+      exception_shapes => 'keys',
+      is_exception_shape => 'exists',
+    }
+  );
+
+  sub capitalize {
+    my ($self, $shape) = @_;
+    substr($shape,0,1) = uc(substr($shape,0,1));
+    return $shape;
+  }
+
+  sub capitalize_shape {
+    my ($self, $shape) = @_;
+
+    if ($shape->{ type } eq 'structure'){
+      foreach my $member (keys %{ $shape->{ members } }){
+        next if ($member =~ m/^[A-Z]/); # if we already start with capital, don't touch
+        my $s = delete $shape->{ members }->{ $member };
+        $s->{ locationName } = $member;
+        $shape->{ members }->{ $self->capitalize($member) } = $s;
+      }
+      $shape->{ required } = [ map { $self->capitalize($_) } @{ $shape->{ required } } ];
+    }
+
+    return $shape;
+  };
+
+  has _inner_shapes => (
+    is => 'ro',
+    lazy => 1,
+    isa => 'HashRef',
+    default => sub { 
+      my $self = shift;
+      my $ret = {};
+      foreach my $shape_name ($self->shapes) {
+        my $shape = $self->shape($shape_name);
+
+        $self->capitalize_shape($shape);
+
+        $ret->{ $shape_name } = $shape if (( $shape->{type} eq 'structure' or $shape->{type} eq 'map')
+                                           and not $self->is_exception_shape($shape_name)
+                                           and not $self->is_output_shape($shape_name)
+                                           and not $self->is_input_shape($shape_name)
+                                          );
+      }
+      return $ret;
+    },
+    traits => [ 'Hash' ],
+    handles => {
+      inner_shape => 'get',
+      inner_shapes => 'keys',
+      is_inner_shape => 'exists',
+    }
   );
 
   has flattened_arrays => (is => 'rw', isa => 'Bool', default => sub { 0 });
 
   sub _load_json_file {
     my ($self,$file) = @_;
-print "Trying to load $file\n";
     return {} if (not -e $file);
-    return from_json(read_file($file));
+    return decode_json(read_binary($file));
   }
 
   has class_documentation_template => (is => 'ro', isa => 'Str', default => q#
@@ -139,11 +316,15 @@ print "Trying to load $file\n";
 =head1 ATTRIBUTES
 
 [% FOREACH param_name IN shape.members.keys.sort -%]
-  [%- member = c.shape(shape.members.$param_name.shape) -%]
-=head2 [%- IF (c.required_in_shape(shape,param_name)) %]B<REQUIRED> [% END %][% param_name %] => [% member.perl_type %]
+  [%- member = c.shape(shape.members.$param_name.shape) %]
+=head2 [%- IF (c.required_in_shape(shape,param_name)) %]B<REQUIRED> [% END %][% param_name %] => [% c.perl_type_to_pod(member.perl_type) %]
 
-  [% c.doc_for_param_name_in_shape(shape, param_name) %]
-[% END %]
+[% c.doc_for_param_name_in_shape(shape, param_name) %]
+
+[% IF member.enum %]Valid values are: [% FOR value=member.enum %]C<"[% value %]">[% IF NOT loop.last %], [% END %][% END %][% END -%][% END -%]
+
+=head2 _request_id => Str
+
 
 =cut
 #);
@@ -153,7 +334,7 @@ print "Trying to load $file\n";
 
 =head1 NAME
 
-[% c.api %]::[% operation.name %] - Arguments for method [% operation.name %] on [% c.api %]
+[% c.api %]::[% op_name %] - Arguments for method [% op_name %] on [% c.api %]
 
 =head1 DESCRIPTION
 
@@ -161,7 +342,7 @@ This class represents the parameters used for calling the method [% operation.na
 [% c.api_struct.metadata.serviceFullName %] service. Use the attributes of this class
 as arguments to method [% operation.name %].
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to [% operation.name %].
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to [% operation.name %].
 
 As an example:
 
@@ -172,10 +353,12 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 =head1 ATTRIBUTES
 
 [% FOREACH param_name IN shape.members.keys.sort -%]
-  [%- member = c.shape(shape.members.$param_name.shape) -%]
-=head2 [%- IF (c.required_in_shape(shape,param_name)) %]B<REQUIRED> [% END %][% param_name %] => [% member.perl_type %]
+  [%- member = c.shape(shape.members.$param_name.shape) %]
+=head2 [%- IF (c.required_in_shape(shape,param_name)) %]B<REQUIRED> [% END %][% param_name %] => [% c.perl_type_to_pod(member.perl_type) %]
 
-  [% c.doc_for_param_name_in_shape(shape, param_name) %]
+[% c.doc_for_param_name_in_shape(shape, param_name) %]
+
+[% IF member.enum %]Valid values are: [% FOR value=member.enum %]C<"[% value %]">[% IF NOT loop.last %], [% END %][% END %][% END -%]
 
 [% END %]
 
@@ -203,7 +386,7 @@ Please report bugs to: https://github.com/pplu/aws-sdk-perl/issues
 
   use Paws;
 
-  my $obj = Paws->service('[% c.service_name %]')->new;
+  my $obj = Paws->service('[% c.service_name %]');
   my $res = $obj->Method(
     Arg1 => $val1,
     Arg2 => [ 'V1', 'V2' ],
@@ -221,13 +404,13 @@ Please report bugs to: https://github.com/pplu/aws-sdk-perl/issues
 
 =head1 METHODS
 [% FOR op IN c.api_struct.operations.keys.sort %]
-  [%- op_name = c.api_struct.operations.$op.name %]
+  [%- op_name = op %]
 =head2 [% op_name %](
 [%- out_shape = c.input_for_operation(op_name) %]
 [%- req_list = out_shape.required.sort %]
 [%- FOREACH out_name IN req_list.sort -%]
   [%- member = c.shape(out_shape.members.$out_name.shape) -%]
-  [%- out_name %] => [% member.perl_type %]
+  [%- out_name %] => [% c.perl_type_to_pod(member.perl_type) %]
   [%- IF (NOT loop.last) %], [% END %]
 [%- END %]
 [%- opt_list = c.optional_params_in_shape(out_shape) %]
@@ -235,7 +418,7 @@ Please report bugs to: https://github.com/pplu/aws-sdk-perl/issues
 [%- IF (req_list.size > 0) %], [% END %][
 [%- FOREACH out_name IN opt_list.sort %]
   [%- member = c.shape(out_shape.members.$out_name.shape) -%]
-  [%- out_name %] => [% member.perl_type %]
+  [%- out_name %] => [% c.perl_type_to_pod(member.perl_type) %]
   [%- IF (NOT loop.last) %], [% END %]
 [%- END %]]
 [%- END %])
@@ -247,6 +430,9 @@ Returns: [% out_shape = c.shapename_for_operation_output(op_name); IF (out_shape
   [% c.doc_for_method(op_name) %]
 
 [% END %]
+
+[% c.paginator_documentation_template | eval %]
+
 =head1 SEE ALSO
 
 This service class forms part of L<Paws>
@@ -260,6 +446,59 @@ Please report bugs to: https://github.com/pplu/aws-sdk-perl/issues
 =cut
 #);
 
+  has innerclass_documentation_template => (is => 'ro', isa => 'Str', default => q#
+\#\#\# main pod documentation begin \#\#\#
+
+=head1 NAME
+
+[% inner_class %]
+
+=head1 USAGE
+
+This class represents one of two things:
+
+=head3 Arguments in a call to a service
+
+Use the attributes of this class as arguments to methods. You shouldn't make instances of this class. 
+Each attribute should be used as a named argument in the calls that expect this type of object.
+
+As an example, if Att1 is expected to be a [% inner_class %] object:
+
+  $service_obj->Method(Att1 => { [% shape.members.keys.sort.0 %] => $value, ..., [% shape.members.keys.sort.-1 %] => $value  });
+
+=head3 Results returned from an API call
+
+Use accessors for each attribute. If Att1 is expected to be an [% inner_class %] object:
+
+  $result = $service_obj->Method(...);
+  $result->Att1->[% shape.members.keys.sort.0 %]
+
+=head1 DESCRIPTION
+
+[% desc = c.doc_for_shape(iclass); IF(desc); desc; ELSE; 'This class has no description'; END %]
+
+=head1 ATTRIBUTES
+
+[% FOREACH param_name IN shape.members.keys.sort -%]
+  [%- member = c.shape(shape.members.$param_name.shape) %]
+=head2 [%- IF (c.required_in_shape(shape,param_name)) %]B<REQUIRED> [% END %][% param_name %] => [% c.perl_type_to_pod(member.perl_type) %]
+
+  [% c.doc_for_param_name_in_shape(shape, param_name) %]
+
+[% END %]
+
+=head1 SEE ALSO
+
+This class forms part of L<Paws>, describing an object used in L<[% c.api %]>
+
+=head1 BUGS and CONTRIBUTIONS
+
+The source code is located here: https://github.com/pplu/aws-sdk-perl
+
+Please report bugs to: https://github.com/pplu/aws-sdk-perl/issues
+
+=cut
+#);
 
   sub required_in_shape {
     my ($self, $shape, $attribute) = @_;
@@ -290,7 +529,7 @@ Please report bugs to: https://github.com/pplu/aws-sdk-perl/issues
     my $shape = $self->shapename_for_operation_output($operation);
     return if (not $shape);
 
-    return $self->shape($shape);
+    return $self->output_shape($shape);
   }
 
   sub shapename_for_operation_input {
@@ -309,7 +548,7 @@ Please report bugs to: https://github.com/pplu/aws-sdk-perl/issues
     my $shape = $self->shapename_for_operation_input($operation);
     return if (not $shape);
 
-    return $self->shape($shape);
+    return $self->input_shape($shape);
   }
 
   use autodie;
@@ -320,10 +559,7 @@ Please report bugs to: https://github.com/pplu/aws-sdk-perl/issues
     my $class_file_name = "auto-lib/" . ( join '/', @class_parts ) . ".pm";
     if (0) {#-e $class_file_name) { #not doing this, because there are unimportant differences in files
       {
-      open my $read, '<', $class_file_name;
-      local $/=undef;
-      my $read_content = <$read>;
-      close $read;
+      my $read_content = read_text($class_file_name);
       die "Non matching for $class_file_name: going to store $content\nvs stored: $read_content" if ($read_content ne $content);
       }
     }
@@ -377,23 +613,27 @@ Please report bugs to: https://github.com/pplu/aws-sdk-perl/issues
     );
   }
 
+  use Carp;
+
   sub get_caller_class_type {
     my ($self, $for_shape) = @_;
     my $param_props = $self->shape($for_shape);
 
     my $type;
     if (not exists $param_props->{ type }) {
-      die "Shape $for_shape doesn't have a type entry in def " . Dumper($param_props);
+      confess "Shape $for_shape doesn't have a type entry in def " . Dumper($param_props);
     } elsif (exists $param_props->{ type } and $param_props->{ type } eq 'list') {
       $self->flattened_arrays(1) if ($param_props->{ flattened });
+      die "Invalid list type: " . Dumper($param_props) if (not defined $param_props->{member}->{shape});
       my $inner_type = $self->get_caller_class_type($param_props->{member}->{shape});
+      $inner_type = 'Str|Undef' if ($inner_type eq 'Str');
       $type = "ArrayRef[$inner_type]";
     } elsif (exists $param_props->{ type } and $param_props->{ type } eq 'timestamp') {
       # TODO: Paws::API::TimeStamp
       $type = 'Str';
     } elsif (exists $param_props->{ type } and $param_props->{ type } eq 'long') {
       #TODO: Check
-      $type = 'Num';
+      $type = 'Int';
     } elsif (exists $param_props->{ type } and $param_props->{ type } eq 'double') {
       #TODO: Check
       $type = 'Num';
@@ -412,10 +652,8 @@ Please report bugs to: https://github.com/pplu/aws-sdk-perl/issues
       $type = 'Str';
     } elsif (exists $param_props->{ type } and $param_props->{ type } eq 'map') {
       $type = $self->namespace_shape($for_shape);
-      $self->make_inner_class($param_props, $type);
     } elsif (exists $param_props->{ type } and $param_props->{ type } eq 'structure') {
       $type = $self->namespace_shape($for_shape);
-      $self->make_inner_class($param_props, $type);
     }
     if (not defined $type) {
       p $param_props;
@@ -426,6 +664,7 @@ Please report bugs to: https://github.com/pplu/aws-sdk-perl/issues
 
   sub namespace_shape {
     my ($self, $shape) = @_;
+    substr($shape,0,1) = uc(substr($shape,0,1));
     return $self->api . '::' . $shape;
   }
 
@@ -441,64 +680,35 @@ Please report bugs to: https://github.com/pplu/aws-sdk-perl/issues
     my $self = shift;
     my $output = '';
     my ($calls, $results);
+    $self->validate_shapes;
 
-    foreach my $op (sort $self->operations){
-      my $operation = $self->operation($op);
-      my $api_call = $operation->{name};
-
-      #
-      # Parse inputs for the operation
-      #
-      if      (not keys %{$operation->{ input }}) {
-        # There is no input inner classes in a class with no memebers
-      } elsif (defined $operation->{input}->{shape}) {
-        my $input_shape = $self->shape($operation->{input}->{shape});
-        if (keys %{ $input_shape->{members} }){
-          foreach my $member (keys %{ $input_shape->{members} }) {
-            my $ishape = $self->shape($input_shape->{members}->{$member}->{shape});
-            $ishape->{perl_type} = $self->get_caller_class_type($input_shape->{members}{ $member }{shape});
-            $self->make_inner_class($ishape, $ishape->{perl_type});
-          }
-        }
-      } else {
-        die "Found an input that's not a structure " . Dumper($operation->{ input });
-      }
-      #
-      # Parse outputs for the operation
-      #
-      if      (not keys %{$operation->{ output }}){
-        # There is no output class
-      } elsif (defined $operation->{output}->{shape}) {
-        my $output_shape = $self->shape($operation->{output}->{shape});
-        if (keys %{ $output_shape->{members} }){
-          foreach my $member (keys %{ $output_shape->{members} }) {
-            my $member_shape_name = $output_shape->{members}->{$member}->{shape};
-            my $oshape = $self->shape($member_shape_name);
-            $oshape->{perl_type} = $self->get_caller_class_type($member_shape_name);
-          }
-        }
-      } else {
-        die "Found an output that's not a structure " . Dumper($operation->{ output });
-      }
+    foreach my $shape_name ($self->shapes) {
+      $self->shape($shape_name)->{perl_type} = $self->get_caller_class_type($shape_name);
     }
 
     foreach my $op_name ($self->operations) {
-      next if (not defined $self->operation($op_name)->{name});
-      my $class_name = $self->namespace_shape($self->operation($op_name)->{name});
-      my $output = $self->process_template(
-        $self->callargs_class_template,
-        { c => $self, op_name => $op_name }
-      );
-      $self->save_class($class_name, $output);
+      if (defined $self->operation($op_name)->{name}) {
+        my $class_name = $self->namespace_shape($op_name);
+        my $output = $self->process_template(
+          $self->callargs_class_template,
+          { c => $self, op_name => $op_name }
+        );
+        $self->save_class($class_name, $output);
+      }
+      if (defined $self->shapename_for_operation_output($op_name)) {
+        my $class_name = $self->namespace_shape($self->shapename_for_operation_output($op_name));
+        my $output = $self->process_template(
+          $self->callresult_class_template,
+          { c => $self, op_name => $op_name }
+        );
+        $self->save_class($class_name, $output);
+      }
     }
 
-    foreach my $op_name ($self->operations) {
-      next if (not defined $self->shapename_for_operation_output($op_name));
-      my $class_name = $self->namespace_shape($self->shapename_for_operation_output($op_name));
-      my $output = $self->process_template(
-        $self->callresult_class_template,
-        { c => $self, op_name => $op_name }
-      );
+    foreach my $shape_name ($self->inner_shapes) {
+      my $shape = $self->shape($shape_name);
+      my $class_name = $self->namespace_shape($shape_name);
+      my $output = $self->make_inner_class($shape, $class_name);
       $self->save_class($class_name, $output);
     }
 
@@ -506,11 +716,38 @@ Please report bugs to: https://github.com/pplu/aws-sdk-perl/issues
     $self->save_class($self->api, $class_out);
   }
 
+  sub validate_shapes {
+    my $self = shift;
+    foreach my $shape_name ($self->shapes) {
+      my $shape = $self->shape($shape_name);
+      next  unless(defined $shape->{ members });
+      foreach my $member_name (keys %{ $shape->{members} }) {
+        my $member = $shape->{members}->{$member_name};
+        die "Shape '$shape_name' has a member '$member_name' with an undefined shape"
+            unless(defined $member->{shape});
+        die "Shape '$shape_name' has a member '$member_name' with an unrecognized shape: '$member->{shape}'"
+            unless ($self->has_shape($member->{shape}));
+        }
+    }
+  }
+
+  sub perl_type_to_pod {
+    my ($self, $type) = @_;
+    if ($type =~ m/^(\w+Ref)\[(.+?)\]$/) {
+      my ($param_type, $inner_type) = ($1, $2);
+      return "$param_type\[L<$inner_type>\]" if ($type =~ m/\:\:/);
+      return $type;
+    } else {
+      return "L<$type>" if ($type =~ m/\:\:/);
+      return $type;  
+    }
+  }
+
   sub doc_for_shape {
     my ($self, $shape) = @_;
+    return if (not $shape);
     my $doc = $shape->{documentation};
     if (not $doc) {
-      warn "No documentation for shape $shape in " . $self->api;
       return '';
     }
     return $self->html_to_pod($doc);
@@ -520,16 +757,16 @@ Please report bugs to: https://github.com/pplu/aws-sdk-perl/issues
     my ($self, $shape, $param_name) = @_;
     my $doc = $shape->{members}->{$param_name}->{documentation};
     if (not $doc) {
-      warn "No documentation for $param_name in " . $self->api;
       return '';
     }
+    $doc =~ s/&amp;/\&/gsmix;
+    $doc =~ s|(\(ampersand\))(\#)(\w+?;)|$1(hash)$3|gsmix;
     return $self->html_to_pod($doc);
   }
 
   sub doc_for_service {
     my ($self) = @_;
     if (not $self->api_struct->{documentation}) {
-      warn "No documentation for service " . $self->api;
       return '';
     }
     return $self->html_to_pod($self->api_struct->{documentation});
@@ -538,7 +775,6 @@ Please report bugs to: https://github.com/pplu/aws-sdk-perl/issues
     my ($self, $method) = @_;
     my $op = $self->operation($method);
     if (not $op->{ documentation }) {
-      warn "No documentation for " . $self->api . "::" . $method;
       return '';
     }
     return $self->html_to_pod($op->{ documentation });
@@ -555,8 +791,399 @@ Please report bugs to: https://github.com/pplu/aws-sdk-perl/issues
     );
     $pod =~ s/=pod//;
     $pod =~ s/=cut$//m;
-    $pod =~ s/#.*$//mg;
+    # Pod2Html leaves lines started with hashes at the end of the pod:
+    # #Pod::HTML2Pod conversion notes:
+    # # xx bytes of input
+    # #Fri Dec  2 17:33:47 2016 devel
+    # # No a_name switch not specified, so will not try to render <a name='...'>
+    # # No a_href switch not specified, so will not try to render <a href='...'>
+    # We want to strip that out
+    $pod =~ s/^#.*$//mg;
+    $pod =~ s/^(?:\s*\n)*//;
+    $pod =~ s/(?:\s*\n)*$//;
+    $pod .= "\n" if ($pod =~ m/=back$/);
     return $pod;
+  }
+
+  has map_enum_documentation_template => (is => 'ro', isa => 'Str', default => q#
+\#\#\# main pod documentation begin \#\#\#
+
+=head1 NAME
+
+[% inner_class %]
+
+=head1 USAGE
+
+This class represents one of two things:
+
+=head3 Arguments in a call to a service
+
+Use the attributes of this class as arguments to methods. You shouldn't make instances of this class. 
+Each attribute should be used as a named argument in the calls that expect this type of object.
+
+As an example, if Att1 is expected to be a [% inner_class %] object:
+
+  $service_obj->Method(Att1 => { [% keys_shape.enum.sort.0 %] => $value, ..., [% keys_shape.enum.sort.-1 %] => $value  });
+
+=head3 Results returned from an API call
+
+Use accessors for each attribute. If Att1 is expected to be an [% inner_class %] object:
+
+  $result = $service_obj->Method(...);
+  $result->Att1->[% keys_shape.enum.sort.0 %]
+
+=head1 DESCRIPTION
+
+[% desc = c.doc_for_shape(iclass); IF(desc); desc; ELSE; 'This class has no description'; END %]
+
+=head1 ATTRIBUTES
+
+[% FOREACH param_name IN keys_shape.enum.sort %]
+=head2 [% param_name %] => [% c.perl_type_to_pod(c.get_caller_class_type(iclass.value.shape)) %]
+
+[% END %]
+
+=head1 SEE ALSO
+
+This class forms part of L<Paws>, describing an object used in L<[% c.api %]>
+
+=head1 BUGS and CONTRIBUTIONS
+
+The source code is located here: https://github.com/pplu/aws-sdk-perl
+
+Please report bugs to: https://github.com/pplu/aws-sdk-perl/issues
+
+=cut
+#);
+
+  has map_enum_template => (is => 'ro', isa => 'Str', default => q#
+[%- -%]
+package [% inner_class %];
+  use Moose;
+  with 'Paws::API::MapParser';
+
+  use MooseX::ClassAttribute;
+  class_has xml_keys =>(is => 'ro', default => '[% iclass.key.locationName || 'key' %]');
+  class_has xml_values =>(is => 'ro', default => '[% iclass.value.locationName || 'value' %]');
+
+[% FOREACH param_name=keys_shape.enum.sort -%]
+  has [% param_name %] => (is => 'ro', isa => '[% c.get_caller_class_type(iclass.value.shape) %]');
+[% END -%]
+1;
+[% c.map_enum_documentation_template | eval %]
+#);
+
+  has map_str_to_whatever_template => (is => 'ro', isa => 'Str', default => q#
+\#\#\# main pod documentation begin \#\#\#
+
+=head1 NAME
+
+[% inner_class %]
+
+=head1 USAGE
+
+This class represents one of two things:
+
+=head3 Arguments in a call to a service
+
+Use the attributes of this class as arguments to methods. You shouldn't make instances of this class. 
+Each attribute should be used as a named argument in the calls that expect this type of object.
+
+As an example, if Att1 is expected to be a [% inner_class %] object:
+
+  $service_obj->Method(Att1 => { key1 => $value, ..., keyN => $value  });
+
+=head3 Results returned from an API call
+
+Use accessors for each attribute. If Att1 is expected to be an [% inner_class %] object:
+
+  $result = $service_obj->Method(...);
+  $result->Att1->Map->{ key1 }
+
+=head1 DESCRIPTION
+
+[% desc = c.doc_for_shape(iclass); IF(desc); desc; ELSE; 'This class has no description'; END %]
+
+=head1 ATTRIBUTES
+
+=head2 Map => [% c.perl_type_to_pod(c.get_caller_class_type(iclass.value.shape)) %]
+
+Use the Map method to retrieve a HashRef to the map
+
+=head1 SEE ALSO
+
+This class forms part of L<Paws>, describing an object used in L<[% c.api %]>
+
+=head1 BUGS and CONTRIBUTIONS
+
+The source code is located here: https://github.com/pplu/aws-sdk-perl
+
+Please report bugs to: https://github.com/pplu/aws-sdk-perl/issues
+
+=cut
+#);
+
+  has map_str_to_native_template => (is => 'ro', isa => 'Str', default => q#
+[%- -%]
+package [% inner_class %];
+  use Moose;
+  with 'Paws::API::StrToNativeMapParser';
+
+  use MooseX::ClassAttribute;
+  class_has xml_keys =>(is => 'ro', default => '[% iclass.key.locationName || 'key' %]');
+  class_has xml_values =>(is => 'ro', default => '[% iclass.value.locationName || 'value' %]');
+
+  has Map => (is => 'ro', isa => '[% map_class %]');
+1;
+[% c.map_str_to_whatever_template | eval %]
+#);
+
+  has map_str_to_obj_template => (is => 'ro', isa => 'Str', default => q#
+[%- -%]
+package [% inner_class %];
+  use Moose;
+  with 'Paws::API::StrToObjMapParser';
+
+  use MooseX::ClassAttribute;
+  class_has xml_keys =>(is => 'ro', default => '[% iclass.key.locationName || 'key' %]');
+  class_has xml_values =>(is => 'ro', default => '[% iclass.value.locationName || 'value' %]');
+
+  has Map => (is => 'ro', isa => '[% map_class %]');
+1;
+[% c.map_str_to_whatever_template | eval %]
+#);
+
+  has object_template => (is => 'ro', isa => 'Str', default => q#
+[%- -%]
+package [% inner_class %];
+  use Moose;
+[% FOREACH param_name IN shape.members.keys.sort -%]
+  [%- traits = [] -%]
+  [%- member_shape_name = shape.members.$param_name.shape %]
+  [%- member = c.shape(member_shape_name) -%]
+  has [% param_name %] => (is => 'ro', isa => '[% member.perl_type %]'
+  [%- IF (member.type == 'list' and member.member.locationName.defined) %][% traits.push('NameInRequest') %], request_name => '[% member.member.locationName %]'[% END %]
+  [%- IF (shape.members.${param_name}.locationName); traits.push('NameInRequest') %], request_name => '[% shape.members.${param_name}.locationName %]'[% END %]
+  [%- IF (shape.members.$param_name.streaming == 1); traits.push('ParamInBody'); END %]
+  [%- encoder = c.encoders_struct.$member_shape_name; IF (encoder); traits.push('JSONAttribute') %], decode_as => '[% encoder.encoding %]', method => '[% encoder.alias %]'[% END %]
+  [%- IF (member.members.xmlname and (member.members.xmlname != 'item')) %], traits => ['NameInRequest'], request_name => '[% member.members.xmlname %]'[% END %]
+  [%- IF (traits.size) %], traits => [[% FOREACH trait=traits %]'[% trait %]'[% IF (NOT loop.last) %],[% END %][% END %]][% END -%]
+  [%- IF (c.required_in_shape(shape,param_name)) %], required => 1[% END %]);
+[% END -%]
+1;
+[% iclass=shape; c.innerclass_documentation_template | eval %]
+#);
+
+  sub paginator_accessor {
+    my ($self, $accessor, $wanted_prefix) = @_;
+  
+    my $prefix = '$' . ((defined $wanted_prefix) ? $wanted_prefix : 'result');
+    if (ref($accessor) eq 'ARRAY'){
+      warn "Complex accessor ", join ',', @$accessor;
+    }
+ 
+    if ($accessor =~ m/ /) {
+      warn "Complex accessor $accessor";
+    }
+    if ($accessor eq 'NextMarker || Contents[-1].Key') {
+      return '$result->NextMarker || ( (defined $result->Contents->[-1]) ? $result->Contents->[-1]->Key : undef )';
+    }
+
+    $accessor =~ s|\.|->|g;
+    $accessor =~ s|(\w+)([.*?])|$1->$2|g;
+    $accessor =~ s|(\w+)\[|$1\-\>\[|g;
+
+    $accessor = "${prefix}->${accessor}";
+    return $accessor;
+  }
+  sub paginator_result_key {
+    my ($self, $paginator) = @_;
+    if (ref($paginator->{ result_key }) eq 'ARRAY'){
+      return $paginator->{ result_key };
+    } else {
+      return [ $paginator->{ result_key } ];
+    }
+  }
+  sub paginator_pass_params {
+    my ($self, $paginator, $res_name) = @_;
+    if (ref($paginator->{ input_token }) eq 'ARRAY'){
+      my $i = 0;
+      return join ', ', map { "$_ => " . $self->paginator_accessor($paginator->{ output_token }->[ $i++ ], $res_name) } @{ $paginator->{ input_token } };
+    } else {
+      return "$paginator->{ input_token } => " . $self->paginator_accessor($paginator->{ output_token }, $res_name);
+    }
+  }
+
+  has paginator_documentation_template => (is => 'ro', isa => 'Str', default => q#
+=head1 PAGINATORS
+
+Paginator methods are helpers that repetively call methods that return partial results
+
+[%- FOR op IN c.paginators_struct.keys.sort %]
+[%- op_name = op %]
+=head2 [% c.get_paginator_name(op) %](sub { },
+[%- out_shape = c.input_for_operation(op_name) %]
+[%- req_list = out_shape.required.sort %]
+[%- FOREACH out_name IN req_list.sort -%]
+  [%- member = c.shape(out_shape.members.$out_name.shape) -%]
+  [%- out_name %] => [% c.perl_type_to_pod(member.perl_type) %]
+  [%- IF (NOT loop.last) %], [% END %]
+[%- END %]
+[%- opt_list = c.optional_params_in_shape(out_shape) %]
+[%- IF (opt_list.size > 0) %]
+[%- IF (req_list.size > 0) %], [% END %][
+[%- FOREACH out_name IN opt_list.sort %]
+  [%- member = c.shape(out_shape.members.$out_name.shape) -%]
+  [%- out_name %] => [% c.perl_type_to_pod(member.perl_type) %]
+  [%- IF (NOT loop.last) %], [% END %]
+[%- END %]]
+[%- END %])
+
+=head2 [% c.get_paginator_name(op) %](
+[%- out_shape = c.input_for_operation(op_name) %]
+[%- req_list = out_shape.required.sort %]
+[%- FOREACH out_name IN req_list.sort -%]
+  [%- member = c.shape(out_shape.members.$out_name.shape) -%]
+  [%- out_name %] => [% c.perl_type_to_pod(member.perl_type) %]
+  [%- IF (NOT loop.last) %], [% END %]
+[%- END %]
+[%- opt_list = c.optional_params_in_shape(out_shape) %]
+[%- IF (opt_list.size > 0) %]
+[%- IF (req_list.size > 0) %], [% END %][
+[%- FOREACH out_name IN opt_list.sort %]
+  [%- member = c.shape(out_shape.members.$out_name.shape) -%]
+  [%- out_name %] => [% c.perl_type_to_pod(member.perl_type) %]
+  [%- IF (NOT loop.last) %], [% END %]
+[%- END %]]
+[%- END %])
+
+[%- paginator = c.paginators_struct.$op %]
+
+If passed a sub as first parameter, it will call the sub for each element found in :
+
+[%- FOREACH param = c.paginator_result_key(paginator) %]
+ - [% param %], passing the object as the first parameter, and the string '[% param %]' as the second parameter 
+[% END -%]
+
+If not, it will return a [% out_shape = c.shapename_for_operation_output(op_name); IF (out_shape) %]a L<[% c.api %]::[% out_shape %]> instance[% ELSE %]nothing[% END %] with all the [%- FOREACH param = c.paginator_result_key(paginator) %]C<param>s; [% 'and' IF (not loop.last)%][% END %] from all the responses. Please take into account that this mode can potentially consume vasts ammounts of memory.
+
+[% END %]
+
+#);
+
+  has paginator_template => (is => 'ro', isa => 'Str', default => q#
+  [%- FOR op IN c.paginators_struct.keys.sort %]
+  sub [% c.get_paginator_name(op) %] {
+    [%- paginator = c.paginators_struct.$op %]
+    my $self = shift;
+
+    my $callback = shift @_ if (ref($_[0]) eq 'CODE');
+    my $result = $self->[% op %](@_);
+    my $next_result = $result;
+
+    if (not defined $callback) {
+      [%- IF (paginator.more_results.defined) %]
+      while ([% c.paginator_accessor(paginator.more_results, 'next_result') %]) {
+        $next_result = $self->[% op %](@_, [% c.paginator_pass_params(paginator, 'next_result') %]);
+        [%- FOREACH param = c.paginator_result_key(paginator) %]
+        push @{ [% c.paginator_accessor(param) %] }, @{ [% c.paginator_accessor(param, 'next_result') %] };
+        [%- END %]
+      }
+      [%- ELSE %]
+      while ([% c.paginator_accessor(paginator.output_token, 'next_result') %]) {
+        $next_result = $self->[% op %](@_, [% c.paginator_pass_params(paginator, 'next_result') %]);
+        [%- FOREACH param = c.paginator_result_key(paginator) %]
+        push @{ [% c.paginator_accessor(param) %] }, @{ [% c.paginator_accessor(param, 'next_result') %] };
+        [%- END %]
+      }
+      [%- END %]
+      return $result;
+    } else {
+      [%- IF (paginator.more_results.defined) %]
+      while ([% c.paginator_accessor(paginator.more_results) %]) {
+        [%- FOREACH param = c.paginator_result_key(paginator) %]
+        $callback->($_ => '[% param %]') foreach (@{ [% c.paginator_accessor(param) %] });
+        [%- END %]
+        $result = $self->[% op %](@_, [% c.paginator_pass_params(paginator) %]);
+      }
+      [%- FOREACH param = c.paginator_result_key(paginator) %]
+      $callback->($_ => '[% param %]') foreach (@{ [% c.paginator_accessor(param) %] });
+      [%- END %]
+      [%- ELSE %]
+      while ([% c.paginator_accessor(paginator.output_token) %]) {
+        [%- FOREACH param = c.paginator_result_key(paginator) %]
+        $callback->($_ => '[% param %]') foreach (@{ [% c.paginator_accessor(param) %] });
+        [%- END %]
+        $result = $self->[% op %](@_, [% c.paginator_pass_params(paginator) %]);
+      }
+      [%- FOREACH param = c.paginator_result_key(paginator) %]
+      $callback->($_ => '[% param %]') foreach (@{ [% c.paginator_accessor(param) %] });
+      [%- END %]
+      [%- END %]
+    }
+
+    return undef
+  }
+  [%- END %]
+#);
+
+  sub to_payload_shape_name {
+    my ($self, $shape_name) = @_;
+    substr($shape_name,0,1) = uc(substr($shape_name,0,1));
+    return $shape_name;
+  }
+
+  sub make_inner_class {
+    my $self = shift;
+    my $iclass = shift;
+    my $inner_class = shift;
+
+    return if (not defined $inner_class);
+
+    my $output = '';
+    if ($iclass->{type} eq 'map') {
+      my $keys_shape = $self->shape($iclass->{key}->{shape});
+      my $values_shape = $self->shape($iclass->{value}->{shape});
+
+      if ($keys_shape->{enum}){
+        $self->process_template($self->map_enum_template, { c => $self, iclass => $iclass, inner_class => $inner_class, keys_shape => $keys_shape, values_shape => $values_shape, });
+      } elsif ($keys_shape->{type} eq 'string' and $values_shape->{type} eq 'string') {
+        $self->process_template($self->map_str_to_native_template, { c => $self, iclass => $iclass, inner_class => $inner_class, keys_shape => $keys_shape, values_shape => $values_shape, map_class => 'HashRef[Maybe[Str]]' });
+      } elsif ($keys_shape->{type} eq 'string' and $values_shape->{type} eq 'boolean') {
+        $self->process_template($self->map_str_to_native_template, { c => $self, iclass => $iclass, inner_class => $inner_class, keys_shape => $keys_shape, values_shape => $values_shape, map_class => 'HashRef[Str]' });
+      } elsif ($keys_shape->{type} eq 'string' and $values_shape->{type} eq 'float') {
+        $self->process_template($self->map_str_to_native_template, { c => $self, iclass => $iclass, inner_class => $inner_class, keys_shape => $keys_shape, values_shape => $values_shape, map_class => 'HashRef[Num]' });
+      } elsif ($keys_shape->{type} eq 'string' and $values_shape->{type} eq 'integer') {
+        $self->process_template($self->map_str_to_native_template, { c => $self, iclass => $iclass, inner_class => $inner_class, keys_shape => $keys_shape, values_shape => $values_shape, map_class => 'HashRef[Int]' });
+      } elsif ($keys_shape->{type} eq 'string' and $values_shape->{type} eq 'double') {
+        $self->process_template($self->map_str_to_native_template, { c => $self, iclass => $iclass, inner_class => $inner_class, keys_shape => $keys_shape, values_shape => $values_shape, map_class => 'HashRef[Num]' });
+      } elsif ($keys_shape->{type} eq 'string' and $values_shape->{type} eq 'list') {
+        my $type = $self->get_caller_class_type($iclass->{value}->{shape});
+        
+        #Sometimes it's a list of objects, and sometimes it's a list of native things
+        my $inner_shape = $self->shape($values_shape->{member}->{shape});
+
+        if ($inner_shape->{type} eq 'structure'){
+          $self->process_template($self->map_str_to_obj_template, { c => $self, iclass => $iclass, inner_class => $inner_class, keys_shape => $keys_shape, values_shape => $values_shape, map_class => "HashRef[$type]" });
+        } else {
+          if ($type =~ /::/) {
+            $self->process_template($self->map_str_to_obj_template, { c => $self, iclass => $iclass, inner_class => $inner_class, keys_shape => $keys_shape, values_shape => $values_shape, map_class => "HashRef[$type]" });
+          } else {
+            $self->process_template($self->map_str_to_native_template, { c => $self, iclass => $iclass, inner_class => $inner_class, keys_shape => $keys_shape, values_shape => $values_shape, map_class => "HashRef[$type]" });
+          }
+        }
+      } elsif ($keys_shape->{type} eq 'string' and $values_shape->{type} eq 'structure') {
+        my $type = $self->get_caller_class_type($iclass->{value}->{shape});
+        $self->process_template($self->map_str_to_obj_template, { c => $self, iclass => $iclass, inner_class => $inner_class, keys_shape => $keys_shape, values_shape => $values_shape, map_class => "HashRef[$type]" });
+      } elsif ($keys_shape->{type} eq 'string' and $values_shape->{type} eq 'map') {
+        my $type = $self->get_caller_class_type($iclass->{value}->{shape});
+        $self->process_template($self->map_str_to_obj_template, { c => $self, iclass => $iclass, inner_class => $inner_class, keys_shape => $keys_shape, values_shape => $values_shape, map_class => "HashRef[$type]" });
+      } else {
+        die "Unrecognized Map type in query API " . Dumper($iclass) . ' keys_shape ' . Dumper($keys_shape) . ' values_shape' . Dumper($values_shape);
+      }
+    } elsif ($iclass->{type} eq 'structure') {
+      $self->process_template($self->object_template, { c => $self, shape => $iclass, inner_class => $inner_class });
+    }
   }
 }
 

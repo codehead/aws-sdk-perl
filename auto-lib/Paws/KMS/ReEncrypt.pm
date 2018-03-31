@@ -1,10 +1,10 @@
 
-package Paws::KMS::ReEncrypt {
+package Paws::KMS::ReEncrypt;
   use Moose;
   has CiphertextBlob => (is => 'ro', isa => 'Str', required => 1);
   has DestinationEncryptionContext => (is => 'ro', isa => 'Paws::KMS::EncryptionContextType');
   has DestinationKeyId => (is => 'ro', isa => 'Str', required => 1);
-  has GrantTokens => (is => 'ro', isa => 'ArrayRef[Str]');
+  has GrantTokens => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
   has SourceEncryptionContext => (is => 'ro', isa => 'Paws::KMS::EncryptionContextType');
 
   use MooseX::ClassAttribute;
@@ -12,7 +12,6 @@ package Paws::KMS::ReEncrypt {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'ReEncrypt');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::KMS::ReEncryptResponse');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -27,7 +26,7 @@ This class represents the parameters used for calling the method ReEncrypt on th
 AWS Key Management Service service. Use the attributes of this class
 as arguments to method ReEncrypt.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to ReEncrypt.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to ReEncrypt.
 
 As an example:
 
@@ -37,97 +36,63 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
+
 =head2 B<REQUIRED> CiphertextBlob => Str
 
-  
-
-Ciphertext of the data to re-encrypt.
+Ciphertext of the data to reencrypt.
 
 
 
+=head2 DestinationEncryptionContext => L<Paws::KMS::EncryptionContextType>
 
-
-
-
-
-
-
-=head2 DestinationEncryptionContext => Paws::KMS::EncryptionContextType
-
-  
-
-Encryption context to be used when the data is re-encrypted.
-
-
-
-
-
-
-
+Encryption context to use when the data is reencrypted.
 
 
 
 =head2 B<REQUIRED> DestinationKeyId => Str
 
-  
-
-A unique identifier for the customer master key used to re-encrypt the
-data. This value can be a globally unique identifier, a fully specified
-ARN to either an alias or a key, or an alias name prefixed by "alias/".
+A unique identifier for the CMK to use to reencrypt the data. This
+value can be a globally unique identifier, a fully specified ARN to
+either an alias or a key, or an alias name prefixed by "alias/".
 
 =over
 
-=item * Key ARN Example -
+=item *
+
+Key ARN Example -
 arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
 
-=item * Alias ARN Example -
+=item *
+
+Alias ARN Example -
 arn:aws:kms:us-east-1:123456789012:alias/MyAliasName
 
-=item * Globally Unique Key ID Example -
-12345678-1234-1234-1234-123456789012
+=item *
 
-=item * Alias Name Example - alias/MyAliasName
+Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012
+
+=item *
+
+Alias Name Example - alias/MyAliasName
 
 =back
 
 
 
 
+=head2 GrantTokens => ArrayRef[Str|Undef]
+
+A list of grant tokens.
+
+For more information, see Grant Tokens in the I<AWS Key Management
+Service Developer Guide>.
 
 
 
-
-
-
-=head2 GrantTokens => ArrayRef[Str]
-
-  
-
-For more information, see Grant Tokens.
-
-
-
-
-
-
-
-
-
-
-=head2 SourceEncryptionContext => Paws::KMS::EncryptionContextType
-
-  
+=head2 SourceEncryptionContext => L<Paws::KMS::EncryptionContextType>
 
 Encryption context used to encrypt and decrypt the data specified in
 the C<CiphertextBlob> parameter.
-
-
-
-
-
-
-
-
 
 
 

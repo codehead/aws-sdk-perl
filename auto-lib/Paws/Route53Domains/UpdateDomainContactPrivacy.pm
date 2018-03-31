@@ -1,5 +1,5 @@
 
-package Paws::Route53Domains::UpdateDomainContactPrivacy {
+package Paws::Route53Domains::UpdateDomainContactPrivacy;
   use Moose;
   has AdminPrivacy => (is => 'ro', isa => 'Bool');
   has DomainName => (is => 'ro', isa => 'Str', required => 1);
@@ -11,7 +11,6 @@ package Paws::Route53Domains::UpdateDomainContactPrivacy {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'UpdateDomainContactPrivacy');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::Route53Domains::UpdateDomainContactPrivacyResponse');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -26,7 +25,7 @@ This class represents the parameters used for calling the method UpdateDomainCon
 Amazon Route 53 Domains service. Use the attributes of this class
 as arguments to method UpdateDomainContactPrivacy.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to UpdateDomainContactPrivacy.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to UpdateDomainContactPrivacy.
 
 As an example:
 
@@ -36,107 +35,37 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
+
 =head2 AdminPrivacy => Bool
 
-  
-
 Whether you want to conceal contact information from WHOIS queries. If
-you specify true, WHOIS ("who is") queries will return contact
+you specify C<true>, WHOIS ("who is") queries will return contact
 information for our registrar partner, Gandi, instead of the contact
 information that you enter.
-
-Type: Boolean
-
-Default: None
-
-Valid values: C<true> | C<false>
-
-Required: No
-
-
-
-
-
-
-
 
 
 
 =head2 B<REQUIRED> DomainName => Str
 
-  
-
-The name of a domain.
-
-Type: String
-
-Default: None
-
-Constraints: The domain name can contain only the letters a through z,
-the numbers 0 through 9, and hyphen (-). Internationalized Domain Names
-are not supported.
-
-Required: Yes
-
-
-
-
-
-
-
+The name of the domain that you want to update the privacy setting for.
 
 
 
 =head2 RegistrantPrivacy => Bool
 
-  
-
 Whether you want to conceal contact information from WHOIS queries. If
-you specify true, WHOIS ("who is") queries will return contact
+you specify C<true>, WHOIS ("who is") queries will return contact
 information for our registrar partner, Gandi, instead of the contact
 information that you enter.
-
-Type: Boolean
-
-Default: None
-
-Valid values: C<true> | C<false>
-
-Required: No
-
-
-
-
-
-
-
 
 
 
 =head2 TechPrivacy => Bool
 
-  
-
 Whether you want to conceal contact information from WHOIS queries. If
-you specify true, WHOIS ("who is") queries will return contact
+you specify C<true>, WHOIS ("who is") queries will return contact
 information for our registrar partner, Gandi, instead of the contact
 information that you enter.
-
-Type: Boolean
-
-Default: None
-
-Valid values: C<true> | C<false>
-
-Required: No
-
-
-
-
-
-
-
-
 
 
 

@@ -1,12 +1,11 @@
 
-package Paws::CognitoSync::ListDatasetsResponse {
+package Paws::CognitoSync::ListDatasetsResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has Count => (is => 'ro', isa => 'Int');
   has Datasets => (is => 'ro', isa => 'ArrayRef[Paws::CognitoSync::Dataset]');
   has NextToken => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -17,48 +16,23 @@ Paws::CognitoSync::ListDatasetsResponse
 
 =head1 ATTRIBUTES
 
-=head2 Count => Int
 
-  
+=head2 Count => Int
 
 Number of datasets returned.
 
 
-
-
-
-
-
-
-
-=head2 Datasets => ArrayRef[Paws::CognitoSync::Dataset]
-
-  
+=head2 Datasets => ArrayRef[L<Paws::CognitoSync::Dataset>]
 
 A set of datasets.
 
 
-
-
-
-
-
-
-
 =head2 NextToken => Str
-
-  
 
 A pagination token for obtaining the next page of results.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

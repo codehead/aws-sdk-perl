@@ -1,11 +1,10 @@
 
-package Paws::Glacier::InitiateMultipartUploadOutput {
+package Paws::Glacier::InitiateMultipartUploadOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has location => (is => 'ro', isa => 'Str');
-  has uploadId => (is => 'ro', isa => 'Str');
+  has Location => (is => 'ro', isa => 'Str', traits => ['ParamInHeader'], header_name => 'location');
+  has UploadId => (is => 'ro', isa => 'Str', traits => ['ParamInHeader'], header_name => 'uploadId');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -16,36 +15,20 @@ Paws::Glacier::InitiateMultipartUploadOutput
 
 =head1 ATTRIBUTES
 
-=head2 location => Str
 
-  
+=head2 Location => Str
 
 The relative URI path of the multipart upload ID Amazon Glacier
 created.
 
 
-
-
-
-
-
-
-
-=head2 uploadId => Str
-
-  
+=head2 UploadId => Str
 
 The ID of the multipart upload. This value is also included as part of
 the location.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

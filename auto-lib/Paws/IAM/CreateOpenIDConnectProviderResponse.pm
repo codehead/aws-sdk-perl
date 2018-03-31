@@ -1,10 +1,9 @@
 
-package Paws::IAM::CreateOpenIDConnectProviderResponse {
+package Paws::IAM::CreateOpenIDConnectProviderResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has OpenIDConnectProviderArn => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,21 +14,15 @@ Paws::IAM::CreateOpenIDConnectProviderResponse
 
 =head1 ATTRIBUTES
 
+
 =head2 OpenIDConnectProviderArn => Str
 
-  
-
-The Amazon Resource Name (ARN) of the IAM OpenID Connect provider that
-was created. For more information, see OpenIDConnectProviderListEntry.
-
+The Amazon Resource Name (ARN) of the new IAM OpenID Connect provider
+that is created. For more information, see
+OpenIDConnectProviderListEntry.
 
 
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

@@ -1,11 +1,10 @@
 
-package Paws::SimpleWorkflow::ActivityTypeDetail {
+package Paws::SimpleWorkflow::ActivityTypeDetail;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has configuration => (is => 'ro', isa => 'Paws::SimpleWorkflow::ActivityTypeConfiguration', required => 1);
-  has typeInfo => (is => 'ro', isa => 'Paws::SimpleWorkflow::ActivityTypeInfo', required => 1);
+  has Configuration => (is => 'ro', isa => 'Paws::SimpleWorkflow::ActivityTypeConfiguration', traits => ['NameInRequest'], request_name => 'configuration' , required => 1);
+  has TypeInfo => (is => 'ro', isa => 'Paws::SimpleWorkflow::ActivityTypeInfo', traits => ['NameInRequest'], request_name => 'typeInfo' , required => 1);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -15,23 +14,13 @@ Paws::SimpleWorkflow::ActivityTypeDetail
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> configuration => Paws::SimpleWorkflow::ActivityTypeConfiguration
 
-  
+=head2 B<REQUIRED> Configuration => L<Paws::SimpleWorkflow::ActivityTypeConfiguration>
 
 The configuration settings registered with the activity type.
 
 
-
-
-
-
-
-
-
-=head2 B<REQUIRED> typeInfo => Paws::SimpleWorkflow::ActivityTypeInfo
-
-  
+=head2 B<REQUIRED> TypeInfo => L<Paws::SimpleWorkflow::ActivityTypeInfo>
 
 General information about the activity type.
 
@@ -40,10 +29,14 @@ structure) can be one of the following.
 
 =over
 
-=item * B<REGISTERED>: The type is registered and available. Workers
+=item *
+
+C<REGISTERED> E<ndash> The type is registered and available. Workers
 supporting this type should be running.
 
-=item * B<DEPRECATED>: The type was deprecated using
+=item *
+
+C<DEPRECATED> E<ndash> The type was deprecated using
 DeprecateActivityType, but is still in use. You should keep workers
 supporting this type running. You cannot create new tasks of this type.
 
@@ -51,12 +44,7 @@ supporting this type running. You cannot create new tasks of this type.
 
 
 
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

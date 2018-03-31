@@ -1,5 +1,5 @@
 
-package Paws::RDS::ResetDBParameterGroup {
+package Paws::RDS::ResetDBParameterGroup;
   use Moose;
   has DBParameterGroupName => (is => 'ro', isa => 'Str', required => 1);
   has Parameters => (is => 'ro', isa => 'ArrayRef[Paws::RDS::Parameter]');
@@ -10,7 +10,6 @@ package Paws::RDS::ResetDBParameterGroup {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'ResetDBParameterGroup');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::RDS::DBParameterGroupNameMessage');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'ResetDBParameterGroupResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method ResetDBParamete
 Amazon Relational Database Service service. Use the attributes of this class
 as arguments to method ResetDBParameterGroup.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to ResetDBParameterGroup.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to ResetDBParameterGroup.
 
 As an example:
 
@@ -35,9 +34,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> DBParameterGroupName => Str
 
-  
+=head2 B<REQUIRED> DBParameterGroupName => Str
 
 The name of the DB parameter group.
 
@@ -45,33 +43,40 @@ Constraints:
 
 =over
 
-=item * Must be 1 to 255 alphanumeric characters
+=item *
 
-=item * First character must be a letter
+Must be 1 to 255 alphanumeric characters
 
-=item * Cannot end with a hyphen or contain two consecutive hyphens
+=item *
+
+First character must be a letter
+
+=item *
+
+Cannot end with a hyphen or contain two consecutive hyphens
 
 =back
 
 
 
 
+=head2 Parameters => ArrayRef[L<Paws::RDS::Parameter>]
 
-
-
-
-
-
-=head2 Parameters => ArrayRef[Paws::RDS::Parameter]
-
-  
-
-An array of parameter names, values, and the apply method for the
-parameter update. At least one parameter name, value, and apply method
-must be supplied; subsequent arguments are optional. A maximum of 20
-parameters may be modified in a single request.
+To reset the entire DB parameter group, specify the C<DBParameterGroup>
+name and C<ResetAllParameters> parameters. To reset specific
+parameters, provide a list of the following: C<ParameterName> and
+C<ApplyMethod>. A maximum of 20 parameters can be modified in a single
+request.
 
 B<MySQL>
+
+Valid Values (for Apply method): C<immediate> | C<pending-reboot>
+
+You can use the immediate value with dynamic parameters only. You can
+use the C<pending-reboot> value for both dynamic and static parameters,
+and changes are applied when DB instance reboots.
+
+B<MariaDB>
 
 Valid Values (for Apply method): C<immediate> | C<pending-reboot>
 
@@ -85,29 +90,12 @@ Valid Values (for Apply method): C<pending-reboot>
 
 
 
-
-
-
-
-
-
-
 =head2 ResetAllParameters => Bool
-
-  
 
 Specifies whether (C<true>) or not (C<false>) to reset all parameters
 in the DB parameter group to default values.
 
 Default: C<true>
-
-
-
-
-
-
-
-
 
 
 

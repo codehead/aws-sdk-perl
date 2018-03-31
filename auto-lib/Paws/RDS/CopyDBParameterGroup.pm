@@ -1,5 +1,5 @@
 
-package Paws::RDS::CopyDBParameterGroup {
+package Paws::RDS::CopyDBParameterGroup;
   use Moose;
   has SourceDBParameterGroupIdentifier => (is => 'ro', isa => 'Str', required => 1);
   has Tags => (is => 'ro', isa => 'ArrayRef[Paws::RDS::Tag]');
@@ -11,7 +11,6 @@ package Paws::RDS::CopyDBParameterGroup {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'CopyDBParameterGroup');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::RDS::CopyDBParameterGroupResult');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'CopyDBParameterGroupResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -26,7 +25,7 @@ This class represents the parameters used for calling the method CopyDBParameter
 Amazon Relational Database Service service. Use the attributes of this class
 as arguments to method CopyDBParameterGroup.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to CopyDBParameterGroup.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to CopyDBParameterGroup.
 
 As an example:
 
@@ -36,59 +35,44 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
+
 =head2 B<REQUIRED> SourceDBParameterGroupIdentifier => Str
 
-  
-
-The identifier or ARN for the source DB parameter group.
+The identifier or ARN for the source DB parameter group. For
+information about creating an ARN, see Constructing an RDS Amazon
+Resource Name (ARN).
 
 Constraints:
 
 =over
 
-=item * Must specify a valid DB parameter group.
+=item *
 
-=item * If the source DB parameter group is in the same region as the
-copy, specify a valid DB parameter group identifier, for example
+Must specify a valid DB parameter group.
+
+=item *
+
+Must specify a valid DB parameter group identifier, for example
 C<my-db-param-group>, or a valid ARN.
-
-=item * If the source DB parameter group is in a different region than
-the copy, specify a valid DB parameter group ARN, for example
-C<arn:aws:rds:us-west-2:123456789012:pg:special-parameters>.
 
 =back
 
 
 
 
+=head2 Tags => ArrayRef[L<Paws::RDS::Tag>]
 
 
 
 
-
-
-=head2 Tags => ArrayRef[Paws::RDS::Tag]
-
-  
 
 =head2 B<REQUIRED> TargetDBParameterGroupDescription => Str
-
-  
 
 A description for the copied DB parameter group.
 
 
 
-
-
-
-
-
-
-
 =head2 B<REQUIRED> TargetDBParameterGroupIdentifier => Str
-
-  
 
 The identifier for the copied DB parameter group.
 
@@ -96,25 +80,25 @@ Constraints:
 
 =over
 
-=item * Cannot be null, empty, or blank
+=item *
 
-=item * Must contain from 1 to 255 alphanumeric characters or hyphens
+Cannot be null, empty, or blank
 
-=item * First character must be a letter
+=item *
 
-=item * Cannot end with a hyphen or contain two consecutive hyphens
+Must contain from 1 to 255 alphanumeric characters or hyphens
+
+=item *
+
+First character must be a letter
+
+=item *
+
+Cannot end with a hyphen or contain two consecutive hyphens
 
 =back
 
 Example: C<my-db-parameter-group>
-
-
-
-
-
-
-
-
 
 
 

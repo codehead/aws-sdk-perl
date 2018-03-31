@@ -1,10 +1,9 @@
 
-package Paws::Support::AddCommunicationToCaseResponse {
+package Paws::Support::AddCommunicationToCaseResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has result => (is => 'ro', isa => 'Bool');
+  has Result => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'result' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::Support::AddCommunicationToCaseResponse
 
 =head1 ATTRIBUTES
 
-=head2 result => Bool
 
-  
+=head2 Result => Bool
 
 True if AddCommunicationToCase succeeds. Otherwise, returns an error.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

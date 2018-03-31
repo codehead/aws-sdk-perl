@@ -1,5 +1,5 @@
 
-package Paws::EC2::ModifyVolumeAttribute {
+package Paws::EC2::ModifyVolumeAttribute;
   use Moose;
   has AutoEnableIO => (is => 'ro', isa => 'Paws::EC2::AttributeBooleanValue');
   has DryRun => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'dryRun' );
@@ -8,9 +8,8 @@ package Paws::EC2::ModifyVolumeAttribute {
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'ModifyVolumeAttribute');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method ModifyVolumeAtt
 Amazon Elastic Compute Cloud service. Use the attributes of this class
 as arguments to method ModifyVolumeAttribute.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to ModifyVolumeAttribute.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to ModifyVolumeAttribute.
 
 As an example:
 
@@ -35,24 +34,14 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 AutoEnableIO => Paws::EC2::AttributeBooleanValue
 
-  
+=head2 AutoEnableIO => L<Paws::EC2::AttributeBooleanValue>
 
 Indicates whether the volume should be auto-enabled for I/O operations.
 
 
 
-
-
-
-
-
-
-
 =head2 DryRun => Bool
-
-  
 
 Checks whether you have the required permissions for the action,
 without actually making the request, and provides an error response. If
@@ -61,26 +50,9 @@ C<DryRunOperation>. Otherwise, it is C<UnauthorizedOperation>.
 
 
 
-
-
-
-
-
-
-
 =head2 B<REQUIRED> VolumeId => Str
 
-  
-
 The ID of the volume.
-
-
-
-
-
-
-
-
 
 
 

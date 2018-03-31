@@ -1,10 +1,9 @@
 
-package Paws::CloudWatchLogs::TestMetricFilterResponse {
+package Paws::CloudWatchLogs::TestMetricFilterResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has matches => (is => 'ro', isa => 'ArrayRef[Paws::CloudWatchLogs::MetricFilterMatchRecord]');
+  has Matches => (is => 'ro', isa => 'ArrayRef[Paws::CloudWatchLogs::MetricFilterMatchRecord]', traits => ['NameInRequest'], request_name => 'matches' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,9 +13,13 @@ Paws::CloudWatchLogs::TestMetricFilterResponse
 
 =head1 ATTRIBUTES
 
-=head2 matches => ArrayRef[Paws::CloudWatchLogs::MetricFilterMatchRecord]
 
-  
+=head2 Matches => ArrayRef[L<Paws::CloudWatchLogs::MetricFilterMatchRecord>]
+
+The matched events.
+
+
+=head2 _request_id => Str
 
 
 =cut

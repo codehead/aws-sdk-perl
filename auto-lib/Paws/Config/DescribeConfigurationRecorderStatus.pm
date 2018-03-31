@@ -1,14 +1,13 @@
 
-package Paws::Config::DescribeConfigurationRecorderStatus {
+package Paws::Config::DescribeConfigurationRecorderStatus;
   use Moose;
-  has ConfigurationRecorderNames => (is => 'ro', isa => 'ArrayRef[Str]');
+  has ConfigurationRecorderNames => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeConfigurationRecorderStatus');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::Config::DescribeConfigurationRecorderStatusResponse');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -23,7 +22,7 @@ This class represents the parameters used for calling the method DescribeConfigu
 AWS Config service. Use the attributes of this class
 as arguments to method DescribeConfigurationRecorderStatus.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeConfigurationRecorderStatus.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeConfigurationRecorderStatus.
 
 As an example:
 
@@ -33,21 +32,12 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 ConfigurationRecorderNames => ArrayRef[Str]
 
-  
+=head2 ConfigurationRecorderNames => ArrayRef[Str|Undef]
 
 The name(s) of the configuration recorder. If the name is not
 specified, the action returns the current status of all the
 configuration recorders associated with the account.
-
-
-
-
-
-
-
-
 
 
 

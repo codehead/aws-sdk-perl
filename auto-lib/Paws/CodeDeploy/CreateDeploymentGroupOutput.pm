@@ -1,10 +1,9 @@
 
-package Paws::CodeDeploy::CreateDeploymentGroupOutput {
+package Paws::CodeDeploy::CreateDeploymentGroupOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has deploymentGroupId => (is => 'ro', isa => 'Str');
+  has DeploymentGroupId => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'deploymentGroupId' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::CodeDeploy::CreateDeploymentGroupOutput
 
 =head1 ATTRIBUTES
 
-=head2 deploymentGroupId => Str
 
-  
+=head2 DeploymentGroupId => Str
 
 A unique deployment group ID.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

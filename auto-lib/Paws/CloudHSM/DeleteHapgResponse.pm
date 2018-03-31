@@ -1,10 +1,9 @@
 
-package Paws::CloudHSM::DeleteHapgResponse {
+package Paws::CloudHSM::DeleteHapgResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has Status => (is => 'ro', isa => 'Str', required => 1);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::CloudHSM::DeleteHapgResponse
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> Status => Str
 
-  
+=head2 B<REQUIRED> Status => Str
 
 The status of the action.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

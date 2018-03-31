@@ -1,8 +1,8 @@
 
-package Paws::Route53::ListReusableDelegationSets {
+package Paws::Route53::ListReusableDelegationSets;
   use Moose;
-  has Marker => (is => 'ro', isa => 'Str');
-  has MaxItems => (is => 'ro', isa => 'Str');
+  has Marker => (is => 'ro', isa => 'Str', query_name => 'marker', traits => ['ParamInQuery']);
+  has MaxItems => (is => 'ro', isa => 'Str', query_name => 'maxitems', traits => ['ParamInQuery']);
 
   use MooseX::ClassAttribute;
 
@@ -11,49 +11,66 @@ package Paws::Route53::ListReusableDelegationSets {
   class_has _api_method  => (isa => 'Str', is => 'ro', default => 'GET');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::Route53::ListReusableDelegationSetsResponse');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
+  
 1;
 
 ### main pod documentation begin ###
 
 =head1 NAME
 
-Paws::Route53::ListReusableDelegationSetsResponse
+Paws::Route53::ListReusableDelegationSets - Arguments for method ListReusableDelegationSets on Paws::Route53
+
+=head1 DESCRIPTION
+
+This class represents the parameters used for calling the method ListReusableDelegationSets on the 
+Amazon Route 53 service. Use the attributes of this class
+as arguments to method ListReusableDelegationSets.
+
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to ListReusableDelegationSets.
+
+As an example:
+
+  $service_obj->ListReusableDelegationSets(Att1 => $value1, Att2 => $value2, ...);
+
+Values for attributes that are native types (Int, String, Float, etc) can passed as-is (scalar values). Values for complex Types (objects) can be passed as a HashRef. The keys and values of the hashref will be used to instance the underlying object.
 
 =head1 ATTRIBUTES
 
+
 =head2 Marker => Str
 
-  
+If the value of C<IsTruncated> in the previous response was C<true>,
+you have more reusable delegation sets. To get another group, submit
+another C<ListReusableDelegationSets> request.
 
-If the request returned more than one page of results, submit another
-request and specify the value of C<NextMarker> from the last response
-in the C<marker> parameter to get the next page of results.
+For the value of C<marker>, specify the value of C<NextMarker> from the
+previous response, which is the ID of the first reusable delegation set
+that Amazon Route 53 will return if you submit another request.
 
-
-
-
-
-
+If the value of C<IsTruncated> in the previous response was C<false>,
+there are no more reusable delegation sets to get.
 
 
 
 =head2 MaxItems => Str
 
-  
-
-Specify the maximum number of reusable delegation sets to return per
-page of results.
-
-
+The number of reusable delegation sets that you want Amazon Route 53 to
+return in the response to this request. If you specify a value greater
+than 100, Amazon Route 53 returns only the first 100 reusable
+delegation sets.
 
 
 
 
+=head1 SEE ALSO
 
+This class forms part of L<Paws>, documenting arguments for method ListReusableDelegationSets in L<Paws::Route53>
 
+=head1 BUGS and CONTRIBUTIONS
 
+The source code is located here: https://github.com/pplu/aws-sdk-perl
 
+Please report bugs to: https://github.com/pplu/aws-sdk-perl/issues
 
 =cut
 

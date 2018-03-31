@@ -1,9 +1,8 @@
 
-package Paws::CloudTrail::DeleteTrailResponse {
+package Paws::CloudTrail::DeleteTrailResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -13,6 +12,8 @@ Paws::CloudTrail::DeleteTrailResponse
 
 =head1 ATTRIBUTES
 
+
+=head2 _request_id => Str
 
 
 =cut

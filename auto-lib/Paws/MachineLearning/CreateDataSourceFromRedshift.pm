@@ -1,5 +1,5 @@
 
-package Paws::MachineLearning::CreateDataSourceFromRedshift {
+package Paws::MachineLearning::CreateDataSourceFromRedshift;
   use Moose;
   has ComputeStatistics => (is => 'ro', isa => 'Bool');
   has DataSourceId => (is => 'ro', isa => 'Str', required => 1);
@@ -12,7 +12,6 @@ package Paws::MachineLearning::CreateDataSourceFromRedshift {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'CreateDataSourceFromRedshift');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::MachineLearning::CreateDataSourceFromRedshiftOutput');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -27,7 +26,7 @@ This class represents the parameters used for calling the method CreateDataSourc
 Amazon Machine Learning service. Use the attributes of this class
 as arguments to method CreateDataSourceFromRedshift.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to CreateDataSourceFromRedshift.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to CreateDataSourceFromRedshift.
 
 As an example:
 
@@ -37,58 +36,30 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 ComputeStatistics => Bool
 
-  
+=head2 ComputeStatistics => Bool
 
 The compute statistics for a C<DataSource>. The statistics are
 generated from the observation data referenced by a C<DataSource>.
 Amazon ML uses the statistics internally during C<MLModel> training.
-This parameter must be set to C<true> if the C<>DataSourceC<> needs to
-be used for C<MLModel> training
-
-
-
-
-
-
-
+This parameter must be set to C<true> if the C<DataSource> needs to be
+used for C<MLModel> training.
 
 
 
 =head2 B<REQUIRED> DataSourceId => Str
 
-  
-
 A user-supplied ID that uniquely identifies the C<DataSource>.
-
-
-
-
-
-
-
 
 
 
 =head2 DataSourceName => Str
 
-  
-
 A user-supplied name or description of the C<DataSource>.
 
 
 
-
-
-
-
-
-
-
-=head2 B<REQUIRED> DataSpec => Paws::MachineLearning::RedshiftDataSpec
-
-  
+=head2 B<REQUIRED> DataSpec => L<Paws::MachineLearning::RedshiftDataSpec>
 
 The data specification of an Amazon Redshift C<DataSource>:
 
@@ -100,33 +71,33 @@ DatabaseInformation -
 
 =over
 
-=item * C<DatabaseName > - Name of the Amazon Redshift database.
+=item * C<DatabaseName> - The name of the Amazon Redshift database.
 
-=item * C< ClusterIdentifier > - Unique ID for the Amazon Redshift
+=item * C< ClusterIdentifier> - The unique ID for the Amazon Redshift
 cluster.
 
 =back
 
 =item *
 
-DatabaseCredentials - AWS Identity abd Access Management (IAM)
+DatabaseCredentials - The AWS Identity and Access Management (IAM)
 credentials that are used to connect to the Amazon Redshift database.
 
 =item *
 
-SelectSqlQuery - Query that is used to retrieve the observation data
-for the C<Datasource>.
+SelectSqlQuery - The query that is used to retrieve the observation
+data for the C<Datasource>.
 
 =item *
 
-S3StagingLocation - Amazon Simple Storage Service (Amazon S3) location
-for staging Amazon Redshift data. The data retrieved from Amazon
-Relational Database Service (Amazon RDS) using C<SelectSqlQuery> is
-stored in this location.
+S3StagingLocation - The Amazon Simple Storage Service (Amazon S3)
+location for staging Amazon Redshift data. The data retrieved from
+Amazon Redshift using the C<SelectSqlQuery> query is stored in this
+location.
 
 =item *
 
-DataSchemaUri - Amazon S3 location of the C<DataSchema>.
+DataSchemaUri - The Amazon S3 location of the C<DataSchema>.
 
 =item *
 
@@ -135,26 +106,17 @@ required if C<DataSchemaUri> is specified.
 
 =item *
 
-DataRearrangement - A JSON string representing the splitting
-requirement of a C<Datasource>.
+DataRearrangement - A JSON string that represents the splitting and
+rearrangement requirements for the C<DataSource>.
 
-Sample - C< "{\"randomSeed\":\"some-random-seed\",
-\"splitting\":{\"percentBegin\":10,\"percentEnd\":60}}">
+Sample - C< "{\"splitting\":{\"percentBegin\":10,\"percentEnd\":60}}">
 
 =back
 
 
 
 
-
-
-
-
-
-
 =head2 B<REQUIRED> RoleARN => Str
-
-  
 
 A fully specified role Amazon Resource Name (ARN). Amazon ML assumes
 the role on behalf of the user to create the following:
@@ -172,13 +134,6 @@ An Amazon S3 bucket policy to grant Amazon ML read/write permissions on
 the C<S3StagingLocation>
 
 =back
-
-
-
-
-
-
-
 
 
 

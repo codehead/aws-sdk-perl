@@ -1,5 +1,5 @@
 
-package Paws::RDS::DownloadDBLogFilePortion {
+package Paws::RDS::DownloadDBLogFilePortion;
   use Moose;
   has DBInstanceIdentifier => (is => 'ro', isa => 'Str', required => 1);
   has LogFileName => (is => 'ro', isa => 'Str', required => 1);
@@ -11,7 +11,6 @@ package Paws::RDS::DownloadDBLogFilePortion {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DownloadDBLogFilePortion');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::RDS::DownloadDBLogFilePortionDetails');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'DownloadDBLogFilePortionResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -26,7 +25,7 @@ This class represents the parameters used for calling the method DownloadDBLogFi
 Amazon Relational Database Service service. Use the attributes of this class
 as arguments to method DownloadDBLogFilePortion.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DownloadDBLogFilePortion.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DownloadDBLogFilePortion.
 
 As an example:
 
@@ -36,9 +35,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> DBInstanceIdentifier => Str
 
-  
+=head2 B<REQUIRED> DBInstanceIdentifier => Str
 
 The customer-assigned name of the DB instance that contains the log
 files you want to list.
@@ -47,41 +45,30 @@ Constraints:
 
 =over
 
-=item * Must contain from 1 to 63 alphanumeric characters or hyphens
+=item *
 
-=item * First character must be a letter
+Must contain from 1 to 63 alphanumeric characters or hyphens
 
-=item * Cannot end with a hyphen or contain two consecutive hyphens
+=item *
+
+First character must be a letter
+
+=item *
+
+Cannot end with a hyphen or contain two consecutive hyphens
 
 =back
 
 
 
 
-
-
-
-
-
-
 =head2 B<REQUIRED> LogFileName => Str
-
-  
 
 The name of the log file to be downloaded.
 
 
 
-
-
-
-
-
-
-
 =head2 Marker => Str
-
-  
 
 The pagination token provided in the previous request or "0". If the
 Marker parameter is specified the response includes only records beyond
@@ -89,18 +76,11 @@ the marker until the end of the file or up to NumberOfLines.
 
 
 
-
-
-
-
-
-
-
 =head2 NumberOfLines => Int
 
-  
-
-The number of lines to download.
+The number of lines to download. If the number of lines specified
+results in a file over 1 MB in size, the file will be truncated at 1 MB
+in size.
 
 If the NumberOfLines parameter is specified, then the block of lines
 returned can be from the beginning or the end of the log file,
@@ -111,7 +91,8 @@ depending on the value of the Marker parameter.
 =item *
 
 If neither Marker or NumberOfLines are specified, the entire log file
-is returned.
+is returned up to a maximum of 10000 lines, starting with the most
+recent log entries first.
 
 =item *
 
@@ -133,13 +114,6 @@ next request, continuing until the AdditionalDataPending response
 element returns false.
 
 =back
-
-
-
-
-
-
-
 
 
 

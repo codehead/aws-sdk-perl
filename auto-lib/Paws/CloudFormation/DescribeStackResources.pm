@@ -1,5 +1,5 @@
 
-package Paws::CloudFormation::DescribeStackResources {
+package Paws::CloudFormation::DescribeStackResources;
   use Moose;
   has LogicalResourceId => (is => 'ro', isa => 'Str');
   has PhysicalResourceId => (is => 'ro', isa => 'Str');
@@ -10,7 +10,6 @@ package Paws::CloudFormation::DescribeStackResources {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeStackResources');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::CloudFormation::DescribeStackResourcesOutput');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'DescribeStackResourcesResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method DescribeStackRe
 AWS CloudFormation service. Use the attributes of this class
 as arguments to method DescribeStackResources.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeStackResources.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeStackResources.
 
 As an example:
 
@@ -35,9 +34,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 LogicalResourceId => Str
 
-  
+=head2 LogicalResourceId => Str
 
 The logical name of the resource as specified in the template.
 
@@ -45,16 +43,7 @@ Default: There is no default value.
 
 
 
-
-
-
-
-
-
-
 =head2 PhysicalResourceId => Str
-
-  
 
 The name or unique identifier that corresponds to a physical instance
 ID of a resource supported by AWS CloudFormation.
@@ -71,26 +60,21 @@ Default: There is no default value.
 
 
 
-
-
-
-
-
-
-
 =head2 StackName => Str
-
-  
 
 The name or the unique stack ID that is associated with the stack,
 which are not always interchangeable:
 
 =over
 
-=item * Running stacks: You can specify either the stack's name or its
-unique stack ID.
+=item *
 
-=item * Deleted stacks: You must specify the unique stack ID.
+Running stacks: You can specify either the stack's name or its unique
+stack ID.
+
+=item *
+
+Deleted stacks: You must specify the unique stack ID.
 
 =back
 
@@ -98,14 +82,6 @@ Default: There is no default value.
 
 Required: Conditional. If you do not specify C<StackName>, you must
 specify C<PhysicalResourceId>.
-
-
-
-
-
-
-
-
 
 
 

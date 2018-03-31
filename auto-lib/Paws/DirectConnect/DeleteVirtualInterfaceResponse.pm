@@ -1,10 +1,9 @@
 
-package Paws::DirectConnect::DeleteVirtualInterfaceResponse {
+package Paws::DirectConnect::DeleteVirtualInterfaceResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has virtualInterfaceState => (is => 'ro', isa => 'Str');
+  has VirtualInterfaceState => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'virtualInterfaceState' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,9 +13,13 @@ Paws::DirectConnect::DeleteVirtualInterfaceResponse
 
 =head1 ATTRIBUTES
 
-=head2 virtualInterfaceState => Str
 
-  
+=head2 VirtualInterfaceState => Str
+
+
+
+Valid values are: C<"confirming">, C<"verifying">, C<"pending">, C<"available">, C<"down">, C<"deleting">, C<"deleted">, C<"rejected">
+=head2 _request_id => Str
 
 
 =cut

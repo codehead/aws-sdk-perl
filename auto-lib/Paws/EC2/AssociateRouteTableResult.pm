@@ -1,10 +1,9 @@
 
-package Paws::EC2::AssociateRouteTableResult {
+package Paws::EC2::AssociateRouteTableResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has AssociationId => (is => 'ro', isa => 'Str', xmlname => 'associationId', traits => ['Unwrapped',]);
+  has AssociationId => (is => 'ro', isa => 'Str', request_name => 'associationId', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,21 +14,14 @@ Paws::EC2::AssociateRouteTableResult
 
 =head1 ATTRIBUTES
 
-=head2 AssociationId => Str
 
-  
+=head2 AssociationId => Str
 
 The route table association ID (needed to disassociate the route
 table).
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

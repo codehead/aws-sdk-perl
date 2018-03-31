@@ -1,20 +1,19 @@
 
-package Paws::EC2::ModifySnapshotAttribute {
+package Paws::EC2::ModifySnapshotAttribute;
   use Moose;
   has Attribute => (is => 'ro', isa => 'Str');
   has CreateVolumePermission => (is => 'ro', isa => 'Paws::EC2::CreateVolumePermissionModifications');
   has DryRun => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'dryRun' );
-  has GroupNames => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'UserGroup' );
+  has GroupNames => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'UserGroup' );
   has OperationType => (is => 'ro', isa => 'Str');
   has SnapshotId => (is => 'ro', isa => 'Str', required => 1);
-  has UserIds => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'UserId' );
+  has UserIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'UserId' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'ModifySnapshotAttribute');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -29,7 +28,7 @@ This class represents the parameters used for calling the method ModifySnapshotA
 Amazon Elastic Compute Cloud service. Use the attributes of this class
 as arguments to method ModifySnapshotAttribute.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to ModifySnapshotAttribute.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to ModifySnapshotAttribute.
 
 As an example:
 
@@ -39,39 +38,22 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 Attribute => Str
 
-  
+=head2 Attribute => Str
 
 The snapshot attribute to modify.
 
+Only volume creation permissions may be modified at the customer level.
 
+Valid values are: C<"productCodes">, C<"createVolumePermission">
 
-
-
-
-
-
-
-
-=head2 CreateVolumePermission => Paws::EC2::CreateVolumePermissionModifications
-
-  
+=head2 CreateVolumePermission => L<Paws::EC2::CreateVolumePermissionModifications>
 
 A JSON representation of the snapshot attribute modification.
 
 
 
-
-
-
-
-
-
-
 =head2 DryRun => Bool
-
-  
 
 Checks whether you have the required permissions for the action,
 without actually making the request, and provides an error response. If
@@ -80,71 +62,27 @@ C<DryRunOperation>. Otherwise, it is C<UnauthorizedOperation>.
 
 
 
-
-
-
-
-
-
-
-=head2 GroupNames => ArrayRef[Str]
-
-  
+=head2 GroupNames => ArrayRef[Str|Undef]
 
 The group to modify for the snapshot.
 
 
 
-
-
-
-
-
-
-
 =head2 OperationType => Str
-
-  
 
 The type of operation to perform to the attribute.
 
-
-
-
-
-
-
-
-
+Valid values are: C<"add">, C<"remove">
 
 =head2 B<REQUIRED> SnapshotId => Str
-
-  
 
 The ID of the snapshot.
 
 
 
-
-
-
-
-
-
-
-=head2 UserIds => ArrayRef[Str]
-
-  
+=head2 UserIds => ArrayRef[Str|Undef]
 
 The account ID to modify for the snapshot.
-
-
-
-
-
-
-
-
 
 
 

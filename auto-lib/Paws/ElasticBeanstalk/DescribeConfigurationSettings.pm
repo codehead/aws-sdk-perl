@@ -1,5 +1,5 @@
 
-package Paws::ElasticBeanstalk::DescribeConfigurationSettings {
+package Paws::ElasticBeanstalk::DescribeConfigurationSettings;
   use Moose;
   has ApplicationName => (is => 'ro', isa => 'Str', required => 1);
   has EnvironmentName => (is => 'ro', isa => 'Str');
@@ -10,7 +10,6 @@ package Paws::ElasticBeanstalk::DescribeConfigurationSettings {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeConfigurationSettings');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::ElasticBeanstalk::ConfigurationSettingsDescriptions');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'DescribeConfigurationSettingsResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method DescribeConfigu
 AWS Elastic Beanstalk service. Use the attributes of this class
 as arguments to method DescribeConfigurationSettings.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeConfigurationSettings.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeConfigurationSettings.
 
 As an example:
 
@@ -35,24 +34,14 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> ApplicationName => Str
 
-  
+=head2 B<REQUIRED> ApplicationName => Str
 
 The application for the environment or configuration template.
 
 
 
-
-
-
-
-
-
-
 =head2 EnvironmentName => Str
-
-  
 
 The name of the environment to describe.
 
@@ -63,16 +52,7 @@ Elastic Beanstalk returns C<MissingRequiredParameter> error.
 
 
 
-
-
-
-
-
-
-
 =head2 TemplateName => Str
-
-  
 
 The name of the configuration template to describe.
 
@@ -81,14 +61,6 @@ EnvironmentName, but not both. If you specify both, AWS Elastic
 Beanstalk returns an C<InvalidParameterCombination> error. If you do
 not specify either, AWS Elastic Beanstalk returns a
 C<MissingRequiredParameter> error.
-
-
-
-
-
-
-
-
 
 
 

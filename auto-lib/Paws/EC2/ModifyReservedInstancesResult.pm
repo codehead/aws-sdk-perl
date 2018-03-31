@@ -1,10 +1,9 @@
 
-package Paws::EC2::ModifyReservedInstancesResult {
+package Paws::EC2::ModifyReservedInstancesResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has ReservedInstancesModificationId => (is => 'ro', isa => 'Str', xmlname => 'reservedInstancesModificationId', traits => ['Unwrapped',]);
+  has ReservedInstancesModificationId => (is => 'ro', isa => 'Str', request_name => 'reservedInstancesModificationId', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::EC2::ModifyReservedInstancesResult
 
 =head1 ATTRIBUTES
 
-=head2 ReservedInstancesModificationId => Str
 
-  
+=head2 ReservedInstancesModificationId => Str
 
 The ID for the modification.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

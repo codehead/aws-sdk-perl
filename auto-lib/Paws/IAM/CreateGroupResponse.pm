@@ -1,10 +1,9 @@
 
-package Paws::IAM::CreateGroupResponse {
+package Paws::IAM::CreateGroupResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has Group => (is => 'ro', isa => 'Paws::IAM::Group', required => 1);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::IAM::CreateGroupResponse
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> Group => Paws::IAM::Group
 
-  
+=head2 B<REQUIRED> Group => L<Paws::IAM::Group>
 
-Information about the group.
-
+A structure containing details about the new group.
 
 
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

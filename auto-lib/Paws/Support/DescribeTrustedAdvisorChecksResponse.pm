@@ -1,10 +1,9 @@
 
-package Paws::Support::DescribeTrustedAdvisorChecksResponse {
+package Paws::Support::DescribeTrustedAdvisorChecksResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has checks => (is => 'ro', isa => 'ArrayRef[Paws::Support::TrustedAdvisorCheckDescription]', required => 1);
+  has Checks => (is => 'ro', isa => 'ArrayRef[Paws::Support::TrustedAdvisorCheckDescription]', traits => ['NameInRequest'], request_name => 'checks' , required => 1);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::Support::DescribeTrustedAdvisorChecksResponse
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> checks => ArrayRef[Paws::Support::TrustedAdvisorCheckDescription]
 
-  
+=head2 B<REQUIRED> Checks => ArrayRef[L<Paws::Support::TrustedAdvisorCheckDescription>]
 
 Information about all available Trusted Advisor checks.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

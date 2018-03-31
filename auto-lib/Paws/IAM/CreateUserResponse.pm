@@ -1,10 +1,9 @@
 
-package Paws::IAM::CreateUserResponse {
+package Paws::IAM::CreateUserResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has User => (is => 'ro', isa => 'Paws::IAM::User');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::IAM::CreateUserResponse
 
 =head1 ATTRIBUTES
 
-=head2 User => Paws::IAM::User
 
-  
+=head2 User => L<Paws::IAM::User>
 
-Information about the user.
-
+A structure with details about the new IAM user.
 
 
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

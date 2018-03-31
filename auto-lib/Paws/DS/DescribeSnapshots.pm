@@ -1,17 +1,16 @@
 
-package Paws::DS::DescribeSnapshots {
+package Paws::DS::DescribeSnapshots;
   use Moose;
   has DirectoryId => (is => 'ro', isa => 'Str');
   has Limit => (is => 'ro', isa => 'Int');
   has NextToken => (is => 'ro', isa => 'Str');
-  has SnapshotIds => (is => 'ro', isa => 'ArrayRef[Str]');
+  has SnapshotIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeSnapshots');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::DS::DescribeSnapshotsResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -26,7 +25,7 @@ This class represents the parameters used for calling the method DescribeSnapsho
 AWS Directory Service service. Use the attributes of this class
 as arguments to method DescribeSnapshots.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeSnapshots.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeSnapshots.
 
 As an example:
 
@@ -36,67 +35,32 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
+
 =head2 DirectoryId => Str
 
-  
-
-The identifier of the directory to retrieve snapshot information for.
-
-
-
-
-
-
-
+The identifier of the directory for which to retrieve snapshot
+information.
 
 
 
 =head2 Limit => Int
 
-  
-
 The maximum number of objects to return.
 
 
 
-
-
-
-
-
-
-
 =head2 NextToken => Str
-
-  
 
 The I<DescribeSnapshotsResult.NextToken> value from a previous call to
 DescribeSnapshots. Pass null if this is the first call.
 
 
 
-
-
-
-
-
-
-
-=head2 SnapshotIds => ArrayRef[Str]
-
-  
+=head2 SnapshotIds => ArrayRef[Str|Undef]
 
 A list of identifiers of the snapshots to obtain the information for.
 If this member is null or empty, all snapshots are returned using the
 I<Limit> and I<NextToken> members.
-
-
-
-
-
-
-
-
 
 
 

@@ -1,10 +1,9 @@
 
-package Paws::CloudFormation::GetStackPolicyOutput {
+package Paws::CloudFormation::GetStackPolicyOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
   has StackPolicyBody => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,22 +14,15 @@ Paws::CloudFormation::GetStackPolicyOutput
 
 =head1 ATTRIBUTES
 
-=head2 StackPolicyBody => Str
 
-  
+=head2 StackPolicyBody => Str
 
 Structure containing the stack policy body. (For more information, go
 to Prevent Updates to Stack Resources in the AWS CloudFormation User
 Guide.)
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

@@ -1,10 +1,9 @@
 
-package Paws::Config::DescribeDeliveryChannelsResponse {
+package Paws::Config::DescribeDeliveryChannelsResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has DeliveryChannels => (is => 'ro', isa => 'ArrayRef[Paws::Config::DeliveryChannel]');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,21 +13,14 @@ Paws::Config::DescribeDeliveryChannelsResponse
 
 =head1 ATTRIBUTES
 
-=head2 DeliveryChannels => ArrayRef[Paws::Config::DeliveryChannel]
 
-  
+=head2 DeliveryChannels => ArrayRef[L<Paws::Config::DeliveryChannel>]
 
 A list that contains the descriptions of the specified delivery
 channel.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

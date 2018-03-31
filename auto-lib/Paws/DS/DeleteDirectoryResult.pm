@@ -1,10 +1,9 @@
 
-package Paws::DS::DeleteDirectoryResult {
+package Paws::DS::DeleteDirectoryResult;
   use Moose;
-  with 'Paws::API::ResultParser';
   has DirectoryId => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::DS::DeleteDirectoryResult
 
 =head1 ATTRIBUTES
 
-=head2 DirectoryId => Str
 
-  
+=head2 DirectoryId => Str
 
 The directory identifier.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

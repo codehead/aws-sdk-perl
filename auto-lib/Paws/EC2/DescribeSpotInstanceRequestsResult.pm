@@ -1,10 +1,9 @@
 
-package Paws::EC2::DescribeSpotInstanceRequestsResult {
+package Paws::EC2::DescribeSpotInstanceRequestsResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has SpotInstanceRequests => (is => 'ro', isa => 'ArrayRef[Paws::EC2::SpotInstanceRequest]', xmlname => 'spotInstanceRequestSet', traits => ['Unwrapped',]);
+  has SpotInstanceRequests => (is => 'ro', isa => 'ArrayRef[Paws::EC2::SpotInstanceRequest]', request_name => 'spotInstanceRequestSet', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::EC2::DescribeSpotInstanceRequestsResult
 
 =head1 ATTRIBUTES
 
-=head2 SpotInstanceRequests => ArrayRef[Paws::EC2::SpotInstanceRequest]
 
-  
+=head2 SpotInstanceRequests => ArrayRef[L<Paws::EC2::SpotInstanceRequest>]
 
-One or more Spot Instance requests.
-
+One or more Spot instance requests.
 
 
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

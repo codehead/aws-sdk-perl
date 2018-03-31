@@ -1,10 +1,9 @@
 
-package Paws::SSM::DescribeDocumentResult {
+package Paws::SSM::DescribeDocumentResult;
   use Moose;
-  with 'Paws::API::ResultParser';
   has Document => (is => 'ro', isa => 'Paws::SSM::DocumentDescription');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::SSM::DescribeDocumentResult
 
 =head1 ATTRIBUTES
 
-=head2 Document => Paws::SSM::DocumentDescription
 
-  
+=head2 Document => L<Paws::SSM::DocumentDescription>
 
-Information about the configuration document.
-
+Information about the Systems Manager document.
 
 
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

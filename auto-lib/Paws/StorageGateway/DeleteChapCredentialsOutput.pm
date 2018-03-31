@@ -1,11 +1,10 @@
 
-package Paws::StorageGateway::DeleteChapCredentialsOutput {
+package Paws::StorageGateway::DeleteChapCredentialsOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
   has InitiatorName => (is => 'ro', isa => 'Str');
   has TargetARN => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -15,34 +14,18 @@ Paws::StorageGateway::DeleteChapCredentialsOutput
 
 =head1 ATTRIBUTES
 
-=head2 InitiatorName => Str
 
-  
+=head2 InitiatorName => Str
 
 The iSCSI initiator that connects to the target.
 
 
-
-
-
-
-
-
-
 =head2 TargetARN => Str
-
-  
 
 The Amazon Resource Name (ARN) of the target.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

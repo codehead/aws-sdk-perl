@@ -1,10 +1,9 @@
 
-package Paws::EC2::DeleteVpcEndpointsResult {
+package Paws::EC2::DeleteVpcEndpointsResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has Unsuccessful => (is => 'ro', isa => 'ArrayRef[Paws::EC2::UnsuccessfulItem]', xmlname => 'unsuccessful', traits => ['Unwrapped',]);
+  has Unsuccessful => (is => 'ro', isa => 'ArrayRef[Paws::EC2::UnsuccessfulItem]', request_name => 'unsuccessful', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::EC2::DeleteVpcEndpointsResult
 
 =head1 ATTRIBUTES
 
-=head2 Unsuccessful => ArrayRef[Paws::EC2::UnsuccessfulItem]
 
-  
+=head2 Unsuccessful => ArrayRef[L<Paws::EC2::UnsuccessfulItem>]
 
 Information about the endpoints that were not successfully deleted.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

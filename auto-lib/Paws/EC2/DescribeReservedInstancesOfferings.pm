@@ -1,5 +1,5 @@
 
-package Paws::EC2::DescribeReservedInstancesOfferings {
+package Paws::EC2::DescribeReservedInstancesOfferings;
   use Moose;
   has AvailabilityZone => (is => 'ro', isa => 'Str');
   has DryRun => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'dryRun' );
@@ -7,21 +7,21 @@ package Paws::EC2::DescribeReservedInstancesOfferings {
   has IncludeMarketplace => (is => 'ro', isa => 'Bool');
   has InstanceTenancy => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'instanceTenancy' );
   has InstanceType => (is => 'ro', isa => 'Str');
-  has MaxDuration => (is => 'ro', isa => 'Num');
+  has MaxDuration => (is => 'ro', isa => 'Int');
   has MaxInstanceCount => (is => 'ro', isa => 'Int');
   has MaxResults => (is => 'ro', isa => 'Int', traits => ['NameInRequest'], request_name => 'maxResults' );
-  has MinDuration => (is => 'ro', isa => 'Num');
+  has MinDuration => (is => 'ro', isa => 'Int');
   has NextToken => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'nextToken' );
+  has OfferingClass => (is => 'ro', isa => 'Str');
   has OfferingType => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'offeringType' );
   has ProductDescription => (is => 'ro', isa => 'Str');
-  has ReservedInstancesOfferingIds => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'ReservedInstancesOfferingId' );
+  has ReservedInstancesOfferingIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'ReservedInstancesOfferingId' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeReservedInstancesOfferings');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::EC2::DescribeReservedInstancesOfferingsResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -36,7 +36,7 @@ This class represents the parameters used for calling the method DescribeReserve
 Amazon Elastic Compute Cloud service. Use the attributes of this class
 as arguments to method DescribeReservedInstancesOfferings.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeReservedInstancesOfferings.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeReservedInstancesOfferings.
 
 As an example:
 
@@ -46,24 +46,14 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 AvailabilityZone => Str
 
-  
+=head2 AvailabilityZone => Str
 
 The Availability Zone in which the Reserved Instance can be used.
 
 
 
-
-
-
-
-
-
-
 =head2 DryRun => Bool
-
-  
 
 Checks whether you have the required permissions for the action,
 without actually making the request, and provides an error response. If
@@ -72,16 +62,7 @@ C<DryRunOperation>. Otherwise, it is C<UnauthorizedOperation>.
 
 
 
-
-
-
-
-
-
-
-=head2 Filters => ArrayRef[Paws::EC2::Filter]
-
-  
+=head2 Filters => ArrayRef[L<Paws::EC2::Filter>]
 
 One or more filters.
 
@@ -104,25 +85,38 @@ example, 9800.0).
 
 =item *
 
-C<instance-type> - The instance type on which the Reserved Instance can
-be used.
+C<instance-type> - The instance type that is covered by the
+reservation.
 
 =item *
 
 C<marketplace> - Set to C<true> to show only Reserved Instance
 Marketplace offerings. When this filter is not used, which is the
-default behavior, all offerings from AWS and Reserved Instance
+default behavior, all offerings from both AWS and the Reserved Instance
 Marketplace are listed.
 
 =item *
 
-C<product-description> - The description of the Reserved Instance
-(C<Linux/UNIX> | C<Linux/UNIX (Amazon VPC)> | C<Windows> | C<Windows
-(Amazon VPC)>).
+C<product-description> - The Reserved Instance product platform
+description. Instances that include C<(Amazon VPC)> in the product
+platform description will only be displayed to EC2-Classic account
+holders and are for use with Amazon VPC. (C<Linux/UNIX> | C<Linux/UNIX
+(Amazon VPC)> | C<SUSE Linux> | C<SUSE Linux (Amazon VPC)> | C<Red Hat
+Enterprise Linux> | C<Red Hat Enterprise Linux (Amazon VPC)> |
+C<Windows> | C<Windows (Amazon VPC)> | C<Windows with SQL Server
+Standard> | C<Windows with SQL Server Standard (Amazon VPC)> |
+C<Windows with SQL Server Web> | C< Windows with SQL Server Web (Amazon
+VPC)> | C<Windows with SQL Server Enterprise> | C<Windows with SQL
+Server Enterprise (Amazon VPC)>)
 
 =item *
 
 C<reserved-instances-offering-id> - The Reserved Instances offering ID.
+
+=item *
+
+C<scope> - The scope of the Reserved Instance (C<Availability Zone> or
+C<Region>).
 
 =item *
 
@@ -134,66 +128,34 @@ C<usage-price> - The usage price of the Reserved Instance, per hour
 
 
 
-
-
-
-
-
-
 =head2 IncludeMarketplace => Bool
 
-  
-
-Include Marketplace offerings in the response.
-
-
-
-
-
-
-
+Include Reserved Instance Marketplace offerings in the response.
 
 
 
 =head2 InstanceTenancy => Str
 
-  
+The tenancy of the instances covered by the reservation. A Reserved
+Instance with a tenancy of C<dedicated> is applied to instances that
+run in a VPC on single-tenant hardware (i.e., Dedicated Instances).
 
-The tenancy of the Reserved Instance offering. A Reserved Instance with
-C<dedicated> tenancy runs on single-tenant hardware and can only be
-launched within a VPC.
+B<Important:> The C<host> value cannot be used with this parameter. Use
+the C<default> or C<dedicated> values only.
 
 Default: C<default>
 
-
-
-
-
-
-
-
-
+Valid values are: C<"default">, C<"dedicated">, C<"host">
 
 =head2 InstanceType => Str
 
-  
+The instance type that the reservation will cover (for example,
+C<m1.small>). For more information, see Instance Types in the I<Amazon
+Elastic Compute Cloud User Guide>.
 
-The instance type on which the Reserved Instance can be used. For more
-information, see Instance Types in the I<Amazon Elastic Compute Cloud
-User Guide>.
+Valid values are: C<"t1.micro">, C<"t2.nano">, C<"t2.micro">, C<"t2.small">, C<"t2.medium">, C<"t2.large">, C<"t2.xlarge">, C<"t2.2xlarge">, C<"m1.small">, C<"m1.medium">, C<"m1.large">, C<"m1.xlarge">, C<"m3.medium">, C<"m3.large">, C<"m3.xlarge">, C<"m3.2xlarge">, C<"m4.large">, C<"m4.xlarge">, C<"m4.2xlarge">, C<"m4.4xlarge">, C<"m4.10xlarge">, C<"m4.16xlarge">, C<"m2.xlarge">, C<"m2.2xlarge">, C<"m2.4xlarge">, C<"cr1.8xlarge">, C<"r3.large">, C<"r3.xlarge">, C<"r3.2xlarge">, C<"r3.4xlarge">, C<"r3.8xlarge">, C<"r4.large">, C<"r4.xlarge">, C<"r4.2xlarge">, C<"r4.4xlarge">, C<"r4.8xlarge">, C<"r4.16xlarge">, C<"x1.16xlarge">, C<"x1.32xlarge">, C<"x1e.32xlarge">, C<"i2.xlarge">, C<"i2.2xlarge">, C<"i2.4xlarge">, C<"i2.8xlarge">, C<"i3.large">, C<"i3.xlarge">, C<"i3.2xlarge">, C<"i3.4xlarge">, C<"i3.8xlarge">, C<"i3.16xlarge">, C<"hi1.4xlarge">, C<"hs1.8xlarge">, C<"c1.medium">, C<"c1.xlarge">, C<"c3.large">, C<"c3.xlarge">, C<"c3.2xlarge">, C<"c3.4xlarge">, C<"c3.8xlarge">, C<"c4.large">, C<"c4.xlarge">, C<"c4.2xlarge">, C<"c4.4xlarge">, C<"c4.8xlarge">, C<"cc1.4xlarge">, C<"cc2.8xlarge">, C<"g2.2xlarge">, C<"g2.8xlarge">, C<"g3.4xlarge">, C<"g3.8xlarge">, C<"g3.16xlarge">, C<"cg1.4xlarge">, C<"p2.xlarge">, C<"p2.8xlarge">, C<"p2.16xlarge">, C<"d2.xlarge">, C<"d2.2xlarge">, C<"d2.4xlarge">, C<"d2.8xlarge">, C<"f1.2xlarge">, C<"f1.16xlarge">
 
-
-
-
-
-
-
-
-
-
-=head2 MaxDuration => Num
-
-  
+=head2 MaxDuration => Int
 
 The maximum duration (in seconds) to filter when searching for
 offerings.
@@ -202,16 +164,7 @@ Default: 94608000 (3 years)
 
 
 
-
-
-
-
-
-
-
 =head2 MaxInstanceCount => Int
-
-  
 
 The maximum number of instances to filter when searching for offerings.
 
@@ -219,16 +172,7 @@ Default: 20
 
 
 
-
-
-
-
-
-
-
 =head2 MaxResults => Int
-
-  
 
 The maximum number of results to return for the request in a single
 page. The remaining results of the initial request can be seen by
@@ -239,16 +183,7 @@ Default: 100
 
 
 
-
-
-
-
-
-
-
-=head2 MinDuration => Num
-
-  
+=head2 MinDuration => Int
 
 The minimum duration (in seconds) to filter when searching for
 offerings.
@@ -257,74 +192,37 @@ Default: 2592000 (1 month)
 
 
 
-
-
-
-
-
-
-
 =head2 NextToken => Str
-
-  
 
 The token to retrieve the next page of results.
 
 
 
+=head2 OfferingClass => Str
 
+The offering class of the Reserved Instance. Can be C<standard> or
+C<convertible>.
 
-
-
-
-
+Valid values are: C<"standard">, C<"convertible">
 
 =head2 OfferingType => Str
-
-  
 
 The Reserved Instance offering type. If you are using tools that
 predate the 2011-11-01 API version, you only have access to the
 C<Medium Utilization> Reserved Instance offering type.
 
-
-
-
-
-
-
-
-
+Valid values are: C<"Heavy Utilization">, C<"Medium Utilization">, C<"Light Utilization">, C<"No Upfront">, C<"Partial Upfront">, C<"All Upfront">
 
 =head2 ProductDescription => Str
 
-  
+The Reserved Instance product platform description. Instances that
+include C<(Amazon VPC)> in the description are for use with Amazon VPC.
 
-The Reserved Instance description. Instances that include C<(Amazon
-VPC)> in the description are for use with Amazon VPC.
+Valid values are: C<"Linux/UNIX">, C<"Linux/UNIX (Amazon VPC)">, C<"Windows">, C<"Windows (Amazon VPC)">
 
-
-
-
-
-
-
-
-
-
-=head2 ReservedInstancesOfferingIds => ArrayRef[Str]
-
-  
+=head2 ReservedInstancesOfferingIds => ArrayRef[Str|Undef]
 
 One or more Reserved Instances offering IDs.
-
-
-
-
-
-
-
-
 
 
 

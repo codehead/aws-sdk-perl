@@ -1,15 +1,14 @@
 
-package Paws::CodeDeploy::CreateDeploymentConfig {
+package Paws::CodeDeploy::CreateDeploymentConfig;
   use Moose;
-  has deploymentConfigName => (is => 'ro', isa => 'Str', required => 1);
-  has minimumHealthyHosts => (is => 'ro', isa => 'Paws::CodeDeploy::MinimumHealthyHosts');
+  has DeploymentConfigName => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'deploymentConfigName' , required => 1);
+  has MinimumHealthyHosts => (is => 'ro', isa => 'Paws::CodeDeploy::MinimumHealthyHosts', traits => ['NameInRequest'], request_name => 'minimumHealthyHosts' , required => 1);
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'CreateDeploymentConfig');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::CodeDeploy::CreateDeploymentConfigOutput');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -24,7 +23,7 @@ This class represents the parameters used for calling the method CreateDeploymen
 AWS CodeDeploy service. Use the attributes of this class
 as arguments to method CreateDeploymentConfig.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to CreateDeploymentConfig.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to CreateDeploymentConfig.
 
 As an example:
 
@@ -34,24 +33,14 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> deploymentConfigName => Str
 
-  
+=head2 B<REQUIRED> DeploymentConfigName => Str
 
 The name of the deployment configuration to create.
 
 
 
-
-
-
-
-
-
-
-=head2 minimumHealthyHosts => Paws::CodeDeploy::MinimumHealthyHosts
-
-  
+=head2 B<REQUIRED> MinimumHealthyHosts => L<Paws::CodeDeploy::MinimumHealthyHosts>
 
 The minimum number of healthy instances that should be available at any
 time during the deployment. There are two parameters expected in the
@@ -61,29 +50,25 @@ The type parameter takes either of the following values:
 
 =over
 
-=item * HOST_COUNT: The value parameter represents the minimum number
-of healthy instances, as an absolute value.
+=item *
 
-=item * FLEET_PERCENT: The value parameter represents the minimum
-number of healthy instances, as a percentage of the total number of
-instances in the deployment. If you specify FLEET_PERCENT, then at the
-start of the deployment AWS CodeDeploy converts the percentage to the
-equivalent number of instances and rounds fractional instances up.
+HOST_COUNT: The value parameter represents the minimum number of
+healthy instances as an absolute value.
+
+=item *
+
+FLEET_PERCENT: The value parameter represents the minimum number of
+healthy instances as a percentage of the total number of instances in
+the deployment. If you specify FLEET_PERCENT, at the start of the
+deployment, AWS CodeDeploy converts the percentage to the equivalent
+number of instance and rounds up fractional instances.
 
 =back
 
 The value parameter takes an integer.
 
-For example, to set a minimum of 95% healthy instances, specify a type
+For example, to set a minimum of 95% healthy instance, specify a type
 of FLEET_PERCENT and a value of 95.
-
-
-
-
-
-
-
-
 
 
 

@@ -1,16 +1,17 @@
 
-package Paws::ECS::ListContainerInstances {
+package Paws::ECS::ListContainerInstances;
   use Moose;
-  has cluster => (is => 'ro', isa => 'Str');
-  has maxResults => (is => 'ro', isa => 'Int');
-  has nextToken => (is => 'ro', isa => 'Str');
+  has Cluster => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'cluster' );
+  has Filter => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'filter' );
+  has MaxResults => (is => 'ro', isa => 'Int', traits => ['NameInRequest'], request_name => 'maxResults' );
+  has NextToken => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'nextToken' );
+  has Status => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'status' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'ListContainerInstances');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::ECS::ListContainerInstancesResponse');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +26,7 @@ This class represents the parameters used for calling the method ListContainerIn
 Amazon EC2 Container Service service. Use the attributes of this class
 as arguments to method ListContainerInstances.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to ListContainerInstances.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to ListContainerInstances.
 
 As an example:
 
@@ -35,26 +36,25 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 cluster => Str
 
-  
+=head2 Cluster => Str
 
 The short name or full Amazon Resource Name (ARN) of the cluster that
-hosts the container instances you want to list. If you do not specify a
-cluster, the default cluster is assumed..
+hosts the container instances to list. If you do not specify a cluster,
+the default cluster is assumed.
 
 
 
+=head2 Filter => Str
+
+You can filter the results of a C<ListContainerInstances> operation
+with cluster query language statements. For more information, see
+Cluster Query Language in the I<Amazon EC2 Container Service Developer
+Guide>.
 
 
 
-
-
-
-
-=head2 maxResults => Int
-
-  
+=head2 MaxResults => Int
 
 The maximum number of container instance results returned by
 C<ListContainerInstances> in paginated output. When this parameter is
@@ -68,16 +68,7 @@ C<nextToken> value if applicable.
 
 
 
-
-
-
-
-
-
-
-=head2 nextToken => Str
-
-  
+=head2 NextToken => Str
 
 The C<nextToken> value returned from a previous paginated
 C<ListContainerInstances> request where C<maxResults> was used and the
@@ -85,15 +76,21 @@ results exceeded the value of that parameter. Pagination continues from
 the end of the previous results that returned the C<nextToken> value.
 This value is C<null> when there are no more results to return.
 
+This token should be treated as an opaque identifier that is only used
+to retrieve the next items in a list and not for other programmatic
+purposes.
 
 
 
+=head2 Status => Str
 
+Filters the container instances by status. For example, if you specify
+the C<DRAINING> status, the results include only container instances
+that have been set to C<DRAINING> using UpdateContainerInstancesState.
+If you do not specify this parameter, the default is to include
+container instances set to C<ACTIVE> and C<DRAINING>.
 
-
-
-
-
+Valid values are: C<"ACTIVE">, C<"DRAINING">
 
 
 =head1 SEE ALSO

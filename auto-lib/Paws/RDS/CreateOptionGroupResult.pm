@@ -1,10 +1,9 @@
 
-package Paws::RDS::CreateOptionGroupResult {
+package Paws::RDS::CreateOptionGroupResult;
   use Moose;
-  with 'Paws::API::ResultParser';
   has OptionGroup => (is => 'ro', isa => 'Paws::RDS::OptionGroup');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,9 +14,13 @@ Paws::RDS::CreateOptionGroupResult
 
 =head1 ATTRIBUTES
 
-=head2 OptionGroup => Paws::RDS::OptionGroup
 
-  
+=head2 OptionGroup => L<Paws::RDS::OptionGroup>
+
+
+
+
+=head2 _request_id => Str
 
 
 =cut

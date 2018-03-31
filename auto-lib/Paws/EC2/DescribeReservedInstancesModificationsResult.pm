@@ -1,11 +1,10 @@
 
-package Paws::EC2::DescribeReservedInstancesModificationsResult {
+package Paws::EC2::DescribeReservedInstancesModificationsResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has NextToken => (is => 'ro', isa => 'Str', xmlname => 'nextToken', traits => ['Unwrapped',]);
-  has ReservedInstancesModifications => (is => 'ro', isa => 'ArrayRef[Paws::EC2::ReservedInstancesModification]', xmlname => 'reservedInstancesModificationsSet', traits => ['Unwrapped',]);
+  has NextToken => (is => 'ro', isa => 'Str', request_name => 'nextToken', traits => ['NameInRequest',]);
+  has ReservedInstancesModifications => (is => 'ro', isa => 'ArrayRef[Paws::EC2::ReservedInstancesModification]', request_name => 'reservedInstancesModificationsSet', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -16,35 +15,19 @@ Paws::EC2::DescribeReservedInstancesModificationsResult
 
 =head1 ATTRIBUTES
 
-=head2 NextToken => Str
 
-  
+=head2 NextToken => Str
 
 The token to use to retrieve the next page of results. This value is
 C<null> when there are no more results to return.
 
 
-
-
-
-
-
-
-
-=head2 ReservedInstancesModifications => ArrayRef[Paws::EC2::ReservedInstancesModification]
-
-  
+=head2 ReservedInstancesModifications => ArrayRef[L<Paws::EC2::ReservedInstancesModification>]
 
 The Reserved Instance modification information.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

@@ -1,11 +1,10 @@
 
-package Paws::Support::DescribeCasesResponse {
+package Paws::Support::DescribeCasesResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has cases => (is => 'ro', isa => 'ArrayRef[Paws::Support::CaseDetails]');
-  has nextToken => (is => 'ro', isa => 'Str');
+  has Cases => (is => 'ro', isa => 'ArrayRef[Paws::Support::CaseDetails]', traits => ['NameInRequest'], request_name => 'cases' );
+  has NextToken => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'nextToken' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -15,34 +14,18 @@ Paws::Support::DescribeCasesResponse
 
 =head1 ATTRIBUTES
 
-=head2 cases => ArrayRef[Paws::Support::CaseDetails]
 
-  
+=head2 Cases => ArrayRef[L<Paws::Support::CaseDetails>]
 
 The details for the cases that match the request.
 
 
-
-
-
-
-
-
-
-=head2 nextToken => Str
-
-  
+=head2 NextToken => Str
 
 A resumption point for pagination.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

@@ -1,5 +1,5 @@
 
-package Paws::MachineLearning::CreateMLModel {
+package Paws::MachineLearning::CreateMLModel;
   use Moose;
   has MLModelId => (is => 'ro', isa => 'Str', required => 1);
   has MLModelName => (is => 'ro', isa => 'Str');
@@ -14,7 +14,6 @@ package Paws::MachineLearning::CreateMLModel {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'CreateMLModel');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::MachineLearning::CreateMLModelOutput');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -29,7 +28,7 @@ This class represents the parameters used for calling the method CreateMLModel o
 Amazon Machine Learning service. Use the attributes of this class
 as arguments to method CreateMLModel.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to CreateMLModel.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to CreateMLModel.
 
 As an example:
 
@@ -39,39 +38,20 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> MLModelId => Str
 
-  
+=head2 B<REQUIRED> MLModelId => Str
 
 A user-supplied ID that uniquely identifies the C<MLModel>.
 
 
 
-
-
-
-
-
-
-
 =head2 MLModelName => Str
-
-  
 
 A user-supplied name or description of the C<MLModel>.
 
 
 
-
-
-
-
-
-
-
 =head2 B<REQUIRED> MLModelType => Str
-
-  
 
 The category of supervised learning that this C<MLModel> will address.
 Choose from the following types:
@@ -91,21 +71,12 @@ number of values.
 
 For more information, see the Amazon Machine Learning Developer Guide.
 
+Valid values are: C<"REGRESSION">, C<"BINARY">, C<"MULTICLASS">
 
-
-
-
-
-
-
-
-
-=head2 Parameters => Paws::MachineLearning::TrainingParameters
-
-  
+=head2 Parameters => L<Paws::MachineLearning::TrainingParameters>
 
 A list of the training parameters in the C<MLModel>. The list is
-implemented as a map of key/value pairs.
+implemented as a map of key-value pairs.
 
 The following is the current set of training parameters:
 
@@ -113,101 +84,75 @@ The following is the current set of training parameters:
 
 =item *
 
-C<sgd.l1RegularizationAmount> - Coefficient regularization L1 norm. It
-controls overfitting the data by penalizing large coefficients. This
-tends to drive coefficients to zero, resulting in sparse feature set.
-If you use this parameter, start by specifying a small value such as
-1.0E-08.
-
-The value is a double that ranges from 0 to MAX_DOUBLE. The default is
-not to use L1 normalization. The parameter cannot be used when C<L2> is
-specified. Use this parameter sparingly.
-
-=item *
-
-C<sgd.l2RegularizationAmount> - Coefficient regularization L2 norm. It
-controls overfitting the data by penalizing large coefficients. This
-tends to drive coefficients to small, nonzero values. If you use this
-parameter, start by specifying a small value such as 1.0E-08.
-
-The valuseis a double that ranges from 0 to MAX_DOUBLE. The default is
-not to use L2 normalization. This cannot be used when C<L1> is
-specified. Use this parameter sparingly.
-
-=item *
-
-C<sgd.maxPasses> - Number of times that the training process traverses
-the observations to build the C<MLModel>. The value is an integer that
-ranges from 1 to 10000. The default value is 10.
-
-=item *
-
-C<sgd.maxMLModelSizeInBytes> - Maximum allowed size of the model.
+C<sgd.maxMLModelSizeInBytes> - The maximum allowed size of the model.
 Depending on the input data, the size of the model might affect its
 performance.
 
-The value is an integer that ranges from 100000 to 2147483648. The
-default value is 33554432.
+The value is an integer that ranges from C<100000> to C<2147483648>.
+The default value is C<33554432>.
+
+=item *
+
+C<sgd.maxPasses> - The number of times that the training process
+traverses the observations to build the C<MLModel>. The value is an
+integer that ranges from C<1> to C<10000>. The default value is C<10>.
+
+=item *
+
+C<sgd.shuffleType> - Whether Amazon ML shuffles the training data.
+Shuffling the data improves a model's ability to find the optimal
+solution for a variety of data types. The valid values are C<auto> and
+C<none>. The default value is C<none>. We strongly recommend that you
+shuffle your data.
+
+=item *
+
+C<sgd.l1RegularizationAmount> - The coefficient regularization L1 norm.
+It controls overfitting the data by penalizing large coefficients. This
+tends to drive coefficients to zero, resulting in a sparse feature set.
+If you use this parameter, start by specifying a small value, such as
+C<1.0E-08>.
+
+The value is a double that ranges from C<0> to C<MAX_DOUBLE>. The
+default is to not use L1 normalization. This parameter can't be used
+when C<L2> is specified. Use this parameter sparingly.
+
+=item *
+
+C<sgd.l2RegularizationAmount> - The coefficient regularization L2 norm.
+It controls overfitting the data by penalizing large coefficients. This
+tends to drive coefficients to small, nonzero values. If you use this
+parameter, start by specifying a small value, such as C<1.0E-08>.
+
+The value is a double that ranges from C<0> to C<MAX_DOUBLE>. The
+default is to not use L2 normalization. This parameter can't be used
+when C<L1> is specified. Use this parameter sparingly.
 
 =back
 
 
 
 
-
-
-
-
-
-
 =head2 Recipe => Str
 
-  
-
-The data recipe for creating C<MLModel>. You must specify either the
-recipe or its URI. If you donE<acirc>E<128>E<153>t specify a recipe or
-its URI, Amazon ML creates a default.
-
-
-
-
-
-
-
+The data recipe for creating the C<MLModel>. You must specify either
+the recipe or its URI. If you don't specify a recipe or its URI, Amazon
+ML creates a default.
 
 
 
 =head2 RecipeUri => Str
 
-  
-
 The Amazon Simple Storage Service (Amazon S3) location and file name
 that contains the C<MLModel> recipe. You must specify either the recipe
-or its URI. If you donE<acirc>E<128>E<153>t specify a recipe or its
-URI, Amazon ML creates a default.
-
-
-
-
-
-
-
+or its URI. If you don't specify a recipe or its URI, Amazon ML creates
+a default.
 
 
 
 =head2 B<REQUIRED> TrainingDataSourceId => Str
 
-  
-
 The C<DataSource> that points to the training data.
-
-
-
-
-
-
-
-
 
 
 

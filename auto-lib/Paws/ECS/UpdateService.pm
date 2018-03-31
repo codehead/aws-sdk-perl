@@ -1,17 +1,17 @@
 
-package Paws::ECS::UpdateService {
+package Paws::ECS::UpdateService;
   use Moose;
-  has cluster => (is => 'ro', isa => 'Str');
-  has desiredCount => (is => 'ro', isa => 'Int');
-  has service => (is => 'ro', isa => 'Str', required => 1);
-  has taskDefinition => (is => 'ro', isa => 'Str');
+  has Cluster => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'cluster' );
+  has DeploymentConfiguration => (is => 'ro', isa => 'Paws::ECS::DeploymentConfiguration', traits => ['NameInRequest'], request_name => 'deploymentConfiguration' );
+  has DesiredCount => (is => 'ro', isa => 'Int', traits => ['NameInRequest'], request_name => 'desiredCount' );
+  has Service => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'service' , required => 1);
+  has TaskDefinition => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'taskDefinition' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'UpdateService');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::ECS::UpdateServiceResponse');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -26,7 +26,7 @@ This class represents the parameters used for calling the method UpdateService o
 Amazon EC2 Container Service service. Use the attributes of this class
 as arguments to method UpdateService.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to UpdateService.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to UpdateService.
 
 As an example:
 
@@ -36,9 +36,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 cluster => Str
 
-  
+=head2 Cluster => Str
 
 The short name or full Amazon Resource Name (ARN) of the cluster that
 your service is running on. If you do not specify a cluster, the
@@ -46,61 +45,34 @@ default cluster is assumed.
 
 
 
+=head2 DeploymentConfiguration => L<Paws::ECS::DeploymentConfiguration>
+
+Optional deployment parameters that control how many tasks run during
+the deployment and the ordering of stopping and starting tasks.
 
 
 
+=head2 DesiredCount => Int
+
+The number of instantiations of the task to place and keep running in
+your service.
 
 
 
+=head2 B<REQUIRED> Service => Str
 
-=head2 desiredCount => Int
-
-  
-
-The number of instantiations of the task that you would like to place
-and keep running in your service.
+The name of the service to update.
 
 
 
-
-
-
-
-
-
-
-=head2 B<REQUIRED> service => Str
-
-  
-
-The name of the service that you want to update.
-
-
-
-
-
-
-
-
-
-
-=head2 taskDefinition => Str
-
-  
+=head2 TaskDefinition => Str
 
 The C<family> and C<revision> (C<family:revision>) or full Amazon
-Resource Name (ARN) of the task definition that you want to run in your
-service. If you modify the task definition with C<UpdateService>,
-Amazon ECS spawns a task with the new version of the task definition
-and then stops an old task after the new version is running.
-
-
-
-
-
-
-
-
+Resource Name (ARN) of the task definition to run in your service. If a
+C<revision> is not specified, the latest C<ACTIVE> revision is used. If
+you modify the task definition with C<UpdateService>, Amazon ECS spawns
+a task with the new version of the task definition and then stops an
+old task after the new version is running.
 
 
 

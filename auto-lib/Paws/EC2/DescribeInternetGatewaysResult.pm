@@ -1,10 +1,9 @@
 
-package Paws::EC2::DescribeInternetGatewaysResult {
+package Paws::EC2::DescribeInternetGatewaysResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has InternetGateways => (is => 'ro', isa => 'ArrayRef[Paws::EC2::InternetGateway]', xmlname => 'internetGatewaySet', traits => ['Unwrapped',]);
+  has InternetGateways => (is => 'ro', isa => 'ArrayRef[Paws::EC2::InternetGateway]', request_name => 'internetGatewaySet', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::EC2::DescribeInternetGatewaysResult
 
 =head1 ATTRIBUTES
 
-=head2 InternetGateways => ArrayRef[Paws::EC2::InternetGateway]
 
-  
+=head2 InternetGateways => ArrayRef[L<Paws::EC2::InternetGateway>]
 
 Information about one or more Internet gateways.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

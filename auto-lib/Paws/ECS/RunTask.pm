@@ -1,18 +1,20 @@
 
-package Paws::ECS::RunTask {
+package Paws::ECS::RunTask;
   use Moose;
-  has cluster => (is => 'ro', isa => 'Str');
-  has count => (is => 'ro', isa => 'Int');
-  has overrides => (is => 'ro', isa => 'Paws::ECS::TaskOverride');
-  has startedBy => (is => 'ro', isa => 'Str');
-  has taskDefinition => (is => 'ro', isa => 'Str', required => 1);
+  has Cluster => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'cluster' );
+  has Count => (is => 'ro', isa => 'Int', traits => ['NameInRequest'], request_name => 'count' );
+  has Group => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'group' );
+  has Overrides => (is => 'ro', isa => 'Paws::ECS::TaskOverride', traits => ['NameInRequest'], request_name => 'overrides' );
+  has PlacementConstraints => (is => 'ro', isa => 'ArrayRef[Paws::ECS::PlacementConstraint]', traits => ['NameInRequest'], request_name => 'placementConstraints' );
+  has PlacementStrategy => (is => 'ro', isa => 'ArrayRef[Paws::ECS::PlacementStrategy]', traits => ['NameInRequest'], request_name => 'placementStrategy' );
+  has StartedBy => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'startedBy' );
+  has TaskDefinition => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'taskDefinition' , required => 1);
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'RunTask');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::ECS::RunTaskResponse');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -27,7 +29,7 @@ This class represents the parameters used for calling the method RunTask on the
 Amazon EC2 Container Service service. Use the attributes of this class
 as arguments to method RunTask.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to RunTask.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to RunTask.
 
 As an example:
 
@@ -37,97 +39,80 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 cluster => Str
 
-  
+=head2 Cluster => Str
 
-The short name or full Amazon Resource Name (ARN) of the cluster that
-you want to run your task on. If you do not specify a cluster, the
-default cluster is assumed..
-
+The short name or full Amazon Resource Name (ARN) of the cluster on
+which to run your task. If you do not specify a cluster, the default
+cluster is assumed.
 
 
 
+=head2 Count => Int
+
+The number of instantiations of the specified task to place on your
+cluster. You can specify up to 10 tasks per call.
 
 
 
+=head2 Group => Str
+
+The name of the task group to associate with the task. The default
+value is the family name of the task definition (for example,
+family:my-family-name).
 
 
 
-=head2 count => Int
-
-  
-
-The number of instantiations of the specified task that you would like
-to place on your cluster.
-
-The C<count> parameter is limited to 10 tasks per call.
-
-
-
-
-
-
-
-
-
-
-=head2 overrides => Paws::ECS::TaskOverride
-
-  
+=head2 Overrides => L<Paws::ECS::TaskOverride>
 
 A list of container overrides in JSON format that specify the name of a
-container in the specified task definition and the command it should
-run instead of its default. A total of 8192 characters are allowed for
-overrides. This limit includes the JSON formatting characters of the
-override structure.
+container in the specified task definition and the overrides it should
+receive. You can override the default command for a container (that is
+specified in the task definition or Docker image) with a C<command>
+override. You can also override existing environment variables (that
+are specified in the task definition or Docker image) on a container or
+add new environment variables to it with an C<environment> override.
+
+A total of 8192 characters are allowed for overrides. This limit
+includes the JSON formatting characters of the override structure.
 
 
 
+=head2 PlacementConstraints => ArrayRef[L<Paws::ECS::PlacementConstraint>]
+
+An array of placement constraint objects to use for the task. You can
+specify up to 10 constraints per task (including constraints in the
+task definition and those specified at run time).
 
 
 
+=head2 PlacementStrategy => ArrayRef[L<Paws::ECS::PlacementStrategy>]
+
+The placement strategy objects to use for the task. You can specify a
+maximum of 5 strategy rules per task.
 
 
 
-
-=head2 startedBy => Str
-
-  
+=head2 StartedBy => Str
 
 An optional tag specified when a task is started. For example if you
 automatically trigger a task to run a batch process job, you could
 apply a unique identifier for that job to your task with the
 C<startedBy> parameter. You can then identify which tasks belong to
 that job by filtering the results of a ListTasks call with the
-C<startedBy> value.
+C<startedBy> value. Up to 36 letters (uppercase and lowercase),
+numbers, hyphens, and underscores are allowed.
 
 If a task is started by an Amazon ECS service, then the C<startedBy>
 parameter contains the deployment ID of the service that starts it.
 
 
 
-
-
-
-
-
-
-
-=head2 B<REQUIRED> taskDefinition => Str
-
-  
+=head2 B<REQUIRED> TaskDefinition => Str
 
 The C<family> and C<revision> (C<family:revision>) or full Amazon
-Resource Name (ARN) of the task definition that you want to run.
-
-
-
-
-
-
-
-
+Resource Name (ARN) of the task definition to run. If a C<revision> is
+not specified, the latest C<ACTIVE> revision is used.
 
 
 

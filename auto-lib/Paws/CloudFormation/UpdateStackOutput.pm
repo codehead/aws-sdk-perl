@@ -1,10 +1,9 @@
 
-package Paws::CloudFormation::UpdateStackOutput {
+package Paws::CloudFormation::UpdateStackOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
   has StackId => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::CloudFormation::UpdateStackOutput
 
 =head1 ATTRIBUTES
 
-=head2 StackId => Str
 
-  
+=head2 StackId => Str
 
 Unique identifier of the stack.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

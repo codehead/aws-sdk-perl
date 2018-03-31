@@ -1,17 +1,18 @@
 
-package Paws::CloudWatchLogs::DescribeMetricFilters {
+package Paws::CloudWatchLogs::DescribeMetricFilters;
   use Moose;
-  has filterNamePrefix => (is => 'ro', isa => 'Str');
-  has limit => (is => 'ro', isa => 'Int');
-  has logGroupName => (is => 'ro', isa => 'Str', required => 1);
-  has nextToken => (is => 'ro', isa => 'Str');
+  has FilterNamePrefix => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'filterNamePrefix' );
+  has Limit => (is => 'ro', isa => 'Int', traits => ['NameInRequest'], request_name => 'limit' );
+  has LogGroupName => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'logGroupName' );
+  has MetricName => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'metricName' );
+  has MetricNamespace => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'metricNamespace' );
+  has NextToken => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'nextToken' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeMetricFilters');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::CloudWatchLogs::DescribeMetricFiltersResponse');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -26,7 +27,7 @@ This class represents the parameters used for calling the method DescribeMetricF
 Amazon CloudWatch Logs service. Use the attributes of this class
 as arguments to method DescribeMetricFilters.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeMetricFilters.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeMetricFilters.
 
 As an example:
 
@@ -36,45 +37,42 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 filterNamePrefix => Str
 
-  
+=head2 FilterNamePrefix => Str
 
-=head2 limit => Int
-
-  
-
-The maximum number of items returned in the response. If you don't
-specify a value, the request would return up to 50 items.
+The prefix to match.
 
 
 
+=head2 Limit => Int
+
+The maximum number of items returned. If you don't specify a value, the
+default is up to 50 items.
 
 
 
+=head2 LogGroupName => Str
+
+The name of the log group.
 
 
 
-
-=head2 B<REQUIRED> logGroupName => Str
-
-  
-
-=head2 nextToken => Str
-
-  
-
-A string token used for pagination that points to the next page of
-results. It must be a value obtained from the response of the previous
-C<DescribeMetricFilters> request.
+=head2 MetricName => Str
 
 
 
 
 
+=head2 MetricNamespace => Str
+
+The namespace of the CloudWatch metric.
 
 
 
+=head2 NextToken => Str
+
+The token for the next set of items to return. (You received this token
+from a previous call.)
 
 
 

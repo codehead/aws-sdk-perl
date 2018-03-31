@@ -1,10 +1,9 @@
 
-package Paws::Config::DescribeConfigurationRecordersResponse {
+package Paws::Config::DescribeConfigurationRecordersResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has ConfigurationRecorders => (is => 'ro', isa => 'ArrayRef[Paws::Config::ConfigurationRecorder]');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,21 +13,14 @@ Paws::Config::DescribeConfigurationRecordersResponse
 
 =head1 ATTRIBUTES
 
-=head2 ConfigurationRecorders => ArrayRef[Paws::Config::ConfigurationRecorder]
 
-  
+=head2 ConfigurationRecorders => ArrayRef[L<Paws::Config::ConfigurationRecorder>]
 
 A list that contains the descriptions of the specified configuration
 recorders.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

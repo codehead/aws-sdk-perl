@@ -1,10 +1,9 @@
 
-package Paws::StorageGateway::DeleteTapeArchiveOutput {
+package Paws::StorageGateway::DeleteTapeArchiveOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
   has TapeARN => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,21 +13,14 @@ Paws::StorageGateway::DeleteTapeArchiveOutput
 
 =head1 ATTRIBUTES
 
-=head2 TapeARN => Str
 
-  
+=head2 TapeARN => Str
 
 The Amazon Resource Name (ARN) of the virtual tape that was deleted
 from the virtual tape shelf (VTS).
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

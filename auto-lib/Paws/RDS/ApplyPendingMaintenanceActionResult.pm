@@ -1,10 +1,9 @@
 
-package Paws::RDS::ApplyPendingMaintenanceActionResult {
+package Paws::RDS::ApplyPendingMaintenanceActionResult;
   use Moose;
-  with 'Paws::API::ResultParser';
   has ResourcePendingMaintenanceActions => (is => 'ro', isa => 'Paws::RDS::ResourcePendingMaintenanceActions');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,9 +14,13 @@ Paws::RDS::ApplyPendingMaintenanceActionResult
 
 =head1 ATTRIBUTES
 
-=head2 ResourcePendingMaintenanceActions => Paws::RDS::ResourcePendingMaintenanceActions
 
-  
+=head2 ResourcePendingMaintenanceActions => L<Paws::RDS::ResourcePendingMaintenanceActions>
+
+
+
+
+=head2 _request_id => Str
 
 
 =cut

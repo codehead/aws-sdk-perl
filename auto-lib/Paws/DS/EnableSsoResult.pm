@@ -1,9 +1,8 @@
 
-package Paws::DS::EnableSsoResult {
+package Paws::DS::EnableSsoResult;
   use Moose;
-  with 'Paws::API::ResultParser';
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -13,6 +12,8 @@ Paws::DS::EnableSsoResult
 
 =head1 ATTRIBUTES
 
+
+=head2 _request_id => Str
 
 
 =cut

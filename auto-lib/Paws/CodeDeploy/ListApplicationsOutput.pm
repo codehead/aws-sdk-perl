@@ -1,11 +1,10 @@
 
-package Paws::CodeDeploy::ListApplicationsOutput {
+package Paws::CodeDeploy::ListApplicationsOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has applications => (is => 'ro', isa => 'ArrayRef[Str]');
-  has nextToken => (is => 'ro', isa => 'Str');
+  has Applications => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'applications' );
+  has NextToken => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'nextToken' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -15,37 +14,21 @@ Paws::CodeDeploy::ListApplicationsOutput
 
 =head1 ATTRIBUTES
 
-=head2 applications => ArrayRef[Str]
 
-  
+=head2 Applications => ArrayRef[Str|Undef]
 
 A list of application names.
 
 
+=head2 NextToken => Str
 
-
-
-
-
-
-
-=head2 nextToken => Str
-
-  
-
-If the amount of information that is returned is significantly large,
-an identifier will also be returned, which can be used in a subsequent
-list applications call to return the next set of applications in the
+If a large amount of information is returned, an identifier is also
+returned. It can be used in a subsequent list applications call to
+return the next set of applications, will also be returned. in the
 list.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

@@ -1,10 +1,9 @@
 
-package Paws::DataPipeline::ReportTaskRunnerHeartbeatOutput {
+package Paws::DataPipeline::ReportTaskRunnerHeartbeatOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has terminate => (is => 'ro', isa => 'Bool', required => 1);
+  has Terminate => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'terminate' , required => 1);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::DataPipeline::ReportTaskRunnerHeartbeatOutput
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> terminate => Bool
 
-  
+=head2 B<REQUIRED> Terminate => Bool
 
 Indicates whether the calling task runner should terminate.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

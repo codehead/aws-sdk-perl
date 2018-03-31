@@ -1,6 +1,7 @@
 
-package Paws::OpsWorks::UpdateStack {
+package Paws::OpsWorks::UpdateStack;
   use Moose;
+  has AgentVersion => (is => 'ro', isa => 'Str');
   has Attributes => (is => 'ro', isa => 'Paws::OpsWorks::StackAttributes');
   has ChefConfiguration => (is => 'ro', isa => 'Paws::OpsWorks::ChefConfiguration');
   has ConfigurationManager => (is => 'ro', isa => 'Paws::OpsWorks::StackConfigurationManager');
@@ -22,9 +23,8 @@ package Paws::OpsWorks::UpdateStack {
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'UpdateStack');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -39,7 +39,7 @@ This class represents the parameters used for calling the method UpdateStack on 
 AWS OpsWorks service. Use the attributes of this class
 as arguments to method UpdateStack.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to UpdateStack.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to UpdateStack.
 
 As an example:
 
@@ -49,25 +49,47 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 Attributes => Paws::OpsWorks::StackAttributes
 
-  
+=head2 AgentVersion => Str
 
-One or more user-defined key/value pairs to be added to the stack
+The default AWS OpsWorks Stacks agent version. You have the following
+options:
+
+=over
+
+=item *
+
+Auto-update - Set this parameter to C<LATEST>. AWS OpsWorks Stacks
+automatically installs new agent versions on the stack's instances as
+soon as they are available.
+
+=item *
+
+Fixed version - Set this parameter to your preferred agent version. To
+update the agent version, you must edit the stack configuration and
+specify a new version. AWS OpsWorks Stacks then automatically installs
+that version on the stack's instances.
+
+=back
+
+The default setting is C<LATEST>. To specify an agent version, you must
+use the complete version number, not the abbreviated number shown on
+the console. For a list of available agent version numbers, call
+DescribeAgentVersions. AgentVersion cannot be set to Chef 12.2.
+
+You can also specify an agent version when you create or update an
+instance, which overrides the stack's default setting.
+
+
+
+=head2 Attributes => L<Paws::OpsWorks::StackAttributes>
+
+One or more user-defined key-value pairs to be added to the stack
 attributes.
 
 
 
-
-
-
-
-
-
-
-=head2 ChefConfiguration => Paws::OpsWorks::ChefConfiguration
-
-  
+=head2 ChefConfiguration => L<Paws::OpsWorks::ChefConfiguration>
 
 A C<ChefConfiguration> object that specifies whether to enable
 Berkshelf and the Berkshelf version on Chef 11.10 stacks. For more
@@ -75,42 +97,26 @@ information, see Create a New Stack.
 
 
 
+=head2 ConfigurationManager => L<Paws::OpsWorks::StackConfigurationManager>
+
+The configuration manager. When you update a stack, we recommend that
+you use the configuration manager to specify the Chef version: 12,
+11.10, or 11.4 for Linux stacks, or 12.2 for Windows stacks. The
+default value for Linux stacks is currently 11.4.
+
+
+
+=head2 CustomCookbooksSource => L<Paws::OpsWorks::Source>
 
 
 
 
-
-
-
-=head2 ConfigurationManager => Paws::OpsWorks::StackConfigurationManager
-
-  
-
-The configuration manager. When you clone a stack we recommend that you
-use the configuration manager to specify the Chef version, 0.9, 11.4,
-or 11.10. The default value is currently 11.4.
-
-
-
-
-
-
-
-
-
-
-=head2 CustomCookbooksSource => Paws::OpsWorks::Source
-
-  
 
 =head2 CustomJson => Str
 
-  
-
 A string that contains user-defined, custom JSON. It can be used to
 override the corresponding default stack configuration JSON values or
-to pass data to recipes. The string should be in the following format
-and must escape characters such as '"'.:
+to pass data to recipes. The string should be in the following format:
 
 C<"{\"key1\": \"value1\", \"key2\": \"value2\",...}">
 
@@ -119,34 +125,16 @@ Stack Configuration Attributes.
 
 
 
-
-
-
-
-
-
-
 =head2 DefaultAvailabilityZone => Str
 
-  
-
-The stack's default Availability Zone, which must be in the specified
+The stack's default Availability Zone, which must be in the stack's
 region. For more information, see Regions and Endpoints. If you also
 specify a value for C<DefaultSubnetId>, the subnet must be in the same
 zone. For more information, see CreateStack.
 
 
 
-
-
-
-
-
-
-
 =head2 DefaultInstanceProfileArn => Str
-
-  
 
 The ARN of an IAM profile that is the default profile for all of the
 stack's EC2 instances. For more information about IAM ARNs, see Using
@@ -154,85 +142,74 @@ Identifiers.
 
 
 
-
-
-
-
-
-
-
 =head2 DefaultOs => Str
 
-  
-
 The stack's operating system, which must be set to one of the
-following.
+following:
 
 =over
 
-=item * Standard Linux operating systems: an Amazon Linux version such
-as C<Amazon Linux 2014.09>, C<Ubuntu 12.04 LTS>, or C<Ubuntu 14.04
-LTS>.
+=item *
 
-=item * Custom Linux AMIs: C<Custom>. You specify the custom AMI you
-want to use when you create instances.
+A supported Linux operating system: An Amazon Linux version, such as
+C<Amazon Linux 2017.03>, C<Amazon Linux 2016.09>, C<Amazon Linux
+2016.03>, C<Amazon Linux 2015.09>, or C<Amazon Linux 2015.03>.
 
-=item * Microsoft Windows Server 2012 R2.
+=item *
+
+A supported Ubuntu operating system, such as C<Ubuntu 16.04 LTS>,
+C<Ubuntu 14.04 LTS>, or C<Ubuntu 12.04 LTS>.
+
+=item *
+
+C<CentOS Linux 7>
+
+=item *
+
+C<Red Hat Enterprise Linux 7>
+
+=item *
+
+A supported Windows operating system, such as C<Microsoft Windows
+Server 2012 R2 Base>, C<Microsoft Windows Server 2012 R2 with SQL
+Server Express>, C<Microsoft Windows Server 2012 R2 with SQL Server
+Standard>, or C<Microsoft Windows Server 2012 R2 with SQL Server Web>.
+
+=item *
+
+A custom AMI: C<Custom>. You specify the custom AMI you want to use
+when you create instances. For more information on how to use custom
+AMIs with OpsWorks, see Using Custom AMIs.
 
 =back
 
-The default option is the current Amazon Linux version.
-
-
-
-
-
-
-
+The default option is the stack's current operating system. For more
+information on the supported operating systems, see AWS OpsWorks Stacks
+Operating Systems.
 
 
 
 =head2 DefaultRootDeviceType => Str
 
-  
-
 The default root device type. This value is used by default for all
 instances in the stack, but you can override it when you create an
 instance. For more information, see Storage for the Root Device.
 
-
-
-
-
-
-
-
-
+Valid values are: C<"ebs">, C<"instance-store">
 
 =head2 DefaultSshKeyName => Str
 
-  
-
-A default Amazon EC2 key pair name. The default value is none. If you
-specify a key pair name, AWS OpsWorks installs the public key on the
-instance and you can use the private key with an SSH client to log in
-to the instance. For more information, see Using SSH to Communicate
-with an Instance and Managing SSH Access. You can override this setting
-by specifying a different key pair, or no key pair, when you create an
-instance.
-
-
-
-
-
-
-
+A default Amazon EC2 key-pair name. The default value is C<none>. If
+you specify a key-pair name, AWS OpsWorks Stacks installs the public
+key on the instance and you can use the private key with an SSH client
+to log in to the instance. For more information, see Using SSH to
+Communicate with an Instance and Managing SSH Access. You can override
+this setting by specifying a different key pair, or no key pair, when
+you create an instance.
 
 
 
 =head2 DefaultSubnetId => Str
-
-  
 
 The stack's default VPC subnet ID. This parameter is required if you
 specify a value for the C<VpcId> parameter. All instances are launched
@@ -244,46 +221,59 @@ description.
 
 
 
-
-
-
-
-
-
-
 =head2 HostnameTheme => Str
 
-  
-
-The stack's new host name theme, with spaces are replaced by
-underscores. The theme is used to generate host names for the stack's
-instances. By default, C<HostnameTheme> is set to C<Layer_Dependent>,
-which creates host names by appending integers to the layer's short
-name. The other themes are:
+The stack's new host name theme, with spaces replaced by underscores.
+The theme is used to generate host names for the stack's instances. By
+default, C<HostnameTheme> is set to C<Layer_Dependent>, which creates
+host names by appending integers to the layer's short name. The other
+themes are:
 
 =over
 
-=item * C<Baked_Goods>
+=item *
 
-=item * C<Clouds>
+C<Baked_Goods>
 
-=item * C<Europe_Cities>
+=item *
 
-=item * C<Fruits>
+C<Clouds>
 
-=item * C<Greek_Deities>
+=item *
 
-=item * C<Legendary_creatures_from_Japan>
+C<Europe_Cities>
 
-=item * C<Planets_and_Moons>
+=item *
 
-=item * C<Roman_Deities>
+C<Fruits>
 
-=item * C<Scottish_Islands>
+=item *
 
-=item * C<US_Cities>
+C<Greek_Deities>
 
-=item * C<Wild_Cats>
+=item *
+
+C<Legendary_creatures_from_Japan>
+
+=item *
+
+C<Planets_and_Moons>
+
+=item *
+
+C<Roman_Deities>
+
+=item *
+
+C<Scottish_Islands>
+
+=item *
+
+C<US_Cities>
+
+=item *
+
+C<Wild_Cats>
 
 =back
 
@@ -292,118 +282,62 @@ returns a host name based on the current theme.
 
 
 
-
-
-
-
-
-
-
 =head2 Name => Str
-
-  
 
 The stack's new name.
 
 
 
-
-
-
-
-
-
-
 =head2 ServiceRoleArn => Str
 
-  
-
-The stack AWS Identity and Access Management (IAM) role, which allows
-AWS OpsWorks to work with AWS resources on your behalf. You must set
-this parameter to the Amazon Resource Name (ARN) for an existing IAM
-role. For more information about IAM ARNs, see Using Identifiers.
-
-You must set this parameter to a valid service role ARN or the action
-will fail; there is no default value. You can specify the stack's
-current service role ARN, if you prefer, but you must do so explicitly.
-
-
-
-
-
-
-
+Do not use this parameter. You cannot update a stack's service role.
 
 
 
 =head2 B<REQUIRED> StackId => Str
 
-  
-
 The stack ID.
-
-
-
-
-
-
-
 
 
 
 =head2 UseCustomCookbooks => Bool
 
-  
-
 Whether the stack uses custom cookbooks.
-
-
-
-
-
-
-
 
 
 
 =head2 UseOpsworksSecurityGroups => Bool
 
-  
+Whether to associate the AWS OpsWorks Stacks built-in security groups
+with the stack's layers.
 
-Whether to associate the AWS OpsWorks built-in security groups with the
-stack's layers.
-
-AWS OpsWorks provides a standard set of built-in security groups, one
-for each layer, which are associated with layers by default.
-C<UseOpsworksSecurityGroups> allows you to instead provide your own
-custom security groups. C<UseOpsworksSecurityGroups> has the following
-settings:
+AWS OpsWorks Stacks provides a standard set of built-in security
+groups, one for each layer, which are associated with layers by
+default. C<UseOpsworksSecurityGroups> allows you to provide your own
+custom security groups instead of using the built-in groups.
+C<UseOpsworksSecurityGroups> has the following settings:
 
 =over
 
-=item * True - AWS OpsWorks automatically associates the appropriate
+=item *
+
+True - AWS OpsWorks Stacks automatically associates the appropriate
 built-in security group with each layer (default setting). You can
-associate additional security groups with a layer after you create it
+associate additional security groups with a layer after you create it,
 but you cannot delete the built-in security group.
 
-=item * False - AWS OpsWorks does not associate built-in security
-groups with layers. You must create appropriate EC2 security groups and
+=item *
+
+False - AWS OpsWorks Stacks does not associate built-in security groups
+with layers. You must create appropriate EC2 security groups and
 associate a security group with each layer that you create. However,
 you can still manually associate a built-in security group with a layer
-on creation; custom security groups are required only for those layers
-that need custom settings.
+on. Custom security groups are required only for those layers that need
+custom settings.
 
 =back
 
 For more information, see Create a New Stack.
-
-
-
-
-
-
-
-
 
 
 

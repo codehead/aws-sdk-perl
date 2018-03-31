@@ -1,5 +1,5 @@
 
-package Paws::ElasticBeanstalk::SwapEnvironmentCNAMEs {
+package Paws::ElasticBeanstalk::SwapEnvironmentCNAMEs;
   use Moose;
   has DestinationEnvironmentId => (is => 'ro', isa => 'Str');
   has DestinationEnvironmentName => (is => 'ro', isa => 'Str');
@@ -9,9 +9,8 @@ package Paws::ElasticBeanstalk::SwapEnvironmentCNAMEs {
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'SwapEnvironmentCNAMEs');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -26,7 +25,7 @@ This class represents the parameters used for calling the method SwapEnvironment
 AWS Elastic Beanstalk service. Use the attributes of this class
 as arguments to method SwapEnvironmentCNAMEs.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to SwapEnvironmentCNAMEs.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to SwapEnvironmentCNAMEs.
 
 As an example:
 
@@ -36,9 +35,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 DestinationEnvironmentId => Str
 
-  
+=head2 DestinationEnvironmentId => Str
 
 The ID of the destination environment.
 
@@ -49,16 +47,7 @@ C<DestinationEnvironmentId>.
 
 
 
-
-
-
-
-
-
-
 =head2 DestinationEnvironmentName => Str
-
-  
 
 The name of the destination environment.
 
@@ -69,16 +58,7 @@ C<DestinationEnvironmentName>.
 
 
 
-
-
-
-
-
-
-
 =head2 SourceEnvironmentId => Str
-
-  
 
 The ID of the source environment.
 
@@ -89,16 +69,7 @@ C<DestinationEnvironmentId>.
 
 
 
-
-
-
-
-
-
-
 =head2 SourceEnvironmentName => Str
-
-  
 
 The name of the source environment.
 
@@ -106,14 +77,6 @@ Condition: You must specify at least the C<SourceEnvironmentID> or the
 C<SourceEnvironmentName>. You may also specify both. If you specify the
 C<SourceEnvironmentName>, you must specify the
 C<DestinationEnvironmentName>.
-
-
-
-
-
-
-
-
 
 
 

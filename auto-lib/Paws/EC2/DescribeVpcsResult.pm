@@ -1,10 +1,9 @@
 
-package Paws::EC2::DescribeVpcsResult {
+package Paws::EC2::DescribeVpcsResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has Vpcs => (is => 'ro', isa => 'ArrayRef[Paws::EC2::Vpc]', xmlname => 'vpcSet', traits => ['Unwrapped',]);
+  has Vpcs => (is => 'ro', isa => 'ArrayRef[Paws::EC2::Vpc]', request_name => 'vpcSet', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::EC2::DescribeVpcsResult
 
 =head1 ATTRIBUTES
 
-=head2 Vpcs => ArrayRef[Paws::EC2::Vpc]
 
-  
+=head2 Vpcs => ArrayRef[L<Paws::EC2::Vpc>]
 
 Information about one or more VPCs.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

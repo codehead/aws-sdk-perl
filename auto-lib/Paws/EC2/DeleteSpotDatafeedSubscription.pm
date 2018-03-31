@@ -1,14 +1,13 @@
 
-package Paws::EC2::DeleteSpotDatafeedSubscription {
+package Paws::EC2::DeleteSpotDatafeedSubscription;
   use Moose;
   has DryRun => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'dryRun' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DeleteSpotDatafeedSubscription');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -23,7 +22,7 @@ This class represents the parameters used for calling the method DeleteSpotDataf
 Amazon Elastic Compute Cloud service. Use the attributes of this class
 as arguments to method DeleteSpotDatafeedSubscription.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DeleteSpotDatafeedSubscription.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DeleteSpotDatafeedSubscription.
 
 As an example:
 
@@ -33,22 +32,13 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 DryRun => Bool
 
-  
+=head2 DryRun => Bool
 
 Checks whether you have the required permissions for the action,
 without actually making the request, and provides an error response. If
 you have the required permissions, the error response is
 C<DryRunOperation>. Otherwise, it is C<UnauthorizedOperation>.
-
-
-
-
-
-
-
-
 
 
 

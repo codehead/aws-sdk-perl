@@ -1,13 +1,14 @@
-package Paws::Credential::ProviderChain {
+package Paws::Credential::ProviderChain;
   use Moose;
-
-  use Module::Runtime qw//;
 
   has providers => (
     is => 'ro', 
     isa => 'ArrayRef[Str]', 
     default => sub {
-      [ 'Paws::Credential::Environment', 'Paws::Credential::File', 'Paws::Credential::InstanceProfile' ]
+      [ 'Paws::Credential::Environment', 
+        'Paws::Credential::File', 
+        'Paws::Credential::ECSContainerProfile',
+        'Paws::Credential::InstanceProfile' ]
     },
   );
 
@@ -20,7 +21,7 @@ package Paws::Credential::ProviderChain {
   sub BUILD {
     my ($self) = @_;
     foreach my $prov (@{ $self->providers }) {
-      Module::Runtime::require_module($prov);
+      Paws->load_class($prov);
       my $creds = $prov->new;
       if ($creds->are_set) {
         $self->selected_provider($creds);
@@ -32,6 +33,35 @@ package Paws::Credential::ProviderChain {
   }
 
   with 'Paws::Credential';
-}
-
 1;
+### main pod documentation begin ###
+
+=encoding UTF-8
+
+=head1 NAME
+
+Paws::Credential::ProviderChain
+
+=head1 SYNOPSIS
+
+  use Paws::Credential::ProviderChain;
+
+  my $paws = Paws->new(config => {
+    credentials => Paws::Credential::ProviderChain->new(
+      providers => [ 'Paws::Credential::Environment', 'Paws::Credential::InstanceProfile' ],
+    )
+  });
+
+=head1 DESCRIPTION
+
+The ProviderChain is used to call different credential providers, one by one, in order, until one of them returns credentials.
+
+If none return credentials: an exception is raised.
+
+It is the default provider for Paws
+
+=head2 providers: ArrayRef[Str]
+
+Defaults to C<[ 'Paws::Credential::Environment', 'Paws::Credential::File', 'Paws::Credential::InstanceProfile' ]>
+
+=cut

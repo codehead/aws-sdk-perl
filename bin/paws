@@ -6,7 +6,7 @@ use 5.010;
 use strict;
 use warnings;
 
-use Data::Printer;
+use Data::Dumper;
 use Paws;
 use Moose::Util;
 use ARGV::Struct;
@@ -34,6 +34,8 @@ my $opts = {};
 my @opts = (
   'caller=s',
   'region=s',
+  'endpoint=s',
+  'debug',
   'help'
 );
 #if ($service->meta->find_attribute_by_name('region')) {
@@ -41,6 +43,11 @@ my @opts = (
 GetOptionsFromArray(\@args, $opts, @opts);
 
 my $method_name = shift @args;
+
+if (exists $opts->{caller}) {
+  Paws->load_class($opts->{ caller });
+  $opts->{ caller } = $opts->{ caller }->new;
+}
 
 $service = $aws->service($service_name, %$opts);
 
@@ -55,13 +62,8 @@ if (not defined $method_name or not $call = $service->meta->find_method_by_name(
   
   print "Maybe you ment:\n";
 
-  map  { say $_ }
-    sort 
-    map  { $_->name } 
-    grep { $_->package_name =~ m/^Paws\:\:/ and 
-           $_->name =~ m/^[A-Z]/ 
-         } 
-    $service->meta->get_all_methods;
+  say $_ for ($service->operations);
+  
   exit 1;
 }
 
@@ -73,16 +75,33 @@ die "HELP!!!" if ($help_with_method_call);
 
 my %args = %{ ARGV::Struct->new(argv => [ '{', @args, '}' ])->parse };
 
+if ($opts->{ debug }) {
+  print "Arguments to the call:\n";
+  print Dumper(\%args);
+} 
+
 # $call is a Meta Method Object. It can be called via execute
 my $result = eval {$call->execute($service, %args) };
 if ($@) {
-  if ($@->isa('Moose::Exception::AttributeIsRequired')) {
-    print "Call to $method_name requires argument " . $@->attribute_name . "\n";
+  print $@ if ($opts->{debug});
+  if (ref($@)){
+    if ($@->isa('Moose::Exception::AttributeIsRequired')) {
+      print "Call to $method_name requires argument " . $@->attribute_name . "\n";
+      my $call_class = Moose::Util::find_meta($@->class_name);
+      my @atts = sort map { $_->name } $call_class->get_all_attributes;
+      foreach my $att_name (@atts) {
+        my $attribute = $call_class->find_attribute_by_name($att_name);
+        say sprintf "%s: %s %s", $attribute->name, $attribute->type_constraint->name, ($attribute->is_required ? 'REQUIRED' : '');
+      }
+    } elsif ($@->isa('Paws::Exception')) {
+      say "The API retured an error: " . $@->message . "(" . $@->code . ")";
+      exit 1;
+    } else {
+      die $@
+    }
   } else {
     die $@;
   }
-
-  exit 1;
 }
 
 if (ref($result)) {

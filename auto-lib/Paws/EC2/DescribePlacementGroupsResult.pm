@@ -1,10 +1,9 @@
 
-package Paws::EC2::DescribePlacementGroupsResult {
+package Paws::EC2::DescribePlacementGroupsResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has PlacementGroups => (is => 'ro', isa => 'ArrayRef[Paws::EC2::PlacementGroup]', xmlname => 'placementGroupSet', traits => ['Unwrapped',]);
+  has PlacementGroups => (is => 'ro', isa => 'ArrayRef[Paws::EC2::PlacementGroup]', request_name => 'placementGroupSet', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::EC2::DescribePlacementGroupsResult
 
 =head1 ATTRIBUTES
 
-=head2 PlacementGroups => ArrayRef[Paws::EC2::PlacementGroup]
 
-  
+=head2 PlacementGroups => ArrayRef[L<Paws::EC2::PlacementGroup>]
 
 One or more placement groups.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

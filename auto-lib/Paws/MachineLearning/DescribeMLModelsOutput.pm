@@ -1,11 +1,10 @@
 
-package Paws::MachineLearning::DescribeMLModelsOutput {
+package Paws::MachineLearning::DescribeMLModelsOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
   has NextToken => (is => 'ro', isa => 'Str');
   has Results => (is => 'ro', isa => 'ArrayRef[Paws::MachineLearning::MLModel]');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -15,35 +14,19 @@ Paws::MachineLearning::DescribeMLModelsOutput
 
 =head1 ATTRIBUTES
 
-=head2 NextToken => Str
 
-  
+=head2 NextToken => Str
 
 The ID of the next page in the paginated results that indicates at
 least one more page follows.
 
 
+=head2 Results => ArrayRef[L<Paws::MachineLearning::MLModel>]
+
+A list of C<MLModel> that meet the search criteria.
 
 
-
-
-
-
-
-=head2 Results => ArrayRef[Paws::MachineLearning::MLModel]
-
-  
-
-A list of MLModel that meet the search criteria.
-
-
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

@@ -1,10 +1,9 @@
 
-package Paws::EC2::DescribeAvailabilityZonesResult {
+package Paws::EC2::DescribeAvailabilityZonesResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has AvailabilityZones => (is => 'ro', isa => 'ArrayRef[Paws::EC2::AvailabilityZone]', xmlname => 'availabilityZoneInfo', traits => ['Unwrapped',]);
+  has AvailabilityZones => (is => 'ro', isa => 'ArrayRef[Paws::EC2::AvailabilityZone]', request_name => 'availabilityZoneInfo', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::EC2::DescribeAvailabilityZonesResult
 
 =head1 ATTRIBUTES
 
-=head2 AvailabilityZones => ArrayRef[Paws::EC2::AvailabilityZone]
 
-  
+=head2 AvailabilityZones => ArrayRef[L<Paws::EC2::AvailabilityZone>]
 
 Information about one or more Availability Zones.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

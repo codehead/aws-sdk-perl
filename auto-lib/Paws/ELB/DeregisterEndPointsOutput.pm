@@ -1,10 +1,9 @@
 
-package Paws::ELB::DeregisterEndPointsOutput {
+package Paws::ELB::DeregisterEndPointsOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
   has Instances => (is => 'ro', isa => 'ArrayRef[Paws::ELB::Instance]');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::ELB::DeregisterEndPointsOutput
 
 =head1 ATTRIBUTES
 
-=head2 Instances => ArrayRef[Paws::ELB::Instance]
 
-  
+=head2 Instances => ArrayRef[L<Paws::ELB::Instance>]
 
 The remaining instances registered with the load balancer.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

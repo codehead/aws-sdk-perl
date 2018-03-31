@@ -1,10 +1,9 @@
 
-package Paws::EC2::ImportVolumeResult {
+package Paws::EC2::ImportVolumeResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has ConversionTask => (is => 'ro', isa => 'Paws::EC2::ConversionTask', xmlname => 'conversionTask', traits => ['Unwrapped',]);
+  has ConversionTask => (is => 'ro', isa => 'Paws::EC2::ConversionTask', request_name => 'conversionTask', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::EC2::ImportVolumeResult
 
 =head1 ATTRIBUTES
 
-=head2 ConversionTask => Paws::EC2::ConversionTask
 
-  
+=head2 ConversionTask => L<Paws::EC2::ConversionTask>
 
 Information about the conversion task.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

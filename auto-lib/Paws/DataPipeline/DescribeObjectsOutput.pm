@@ -1,12 +1,11 @@
 
-package Paws::DataPipeline::DescribeObjectsOutput {
+package Paws::DataPipeline::DescribeObjectsOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has hasMoreResults => (is => 'ro', isa => 'Bool');
-  has marker => (is => 'ro', isa => 'Str');
-  has pipelineObjects => (is => 'ro', isa => 'ArrayRef[Paws::DataPipeline::PipelineObject]', required => 1);
+  has HasMoreResults => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'hasMoreResults' );
+  has Marker => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'marker' );
+  has PipelineObjects => (is => 'ro', isa => 'ArrayRef[Paws::DataPipeline::PipelineObject]', traits => ['NameInRequest'], request_name => 'pipelineObjects' , required => 1);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -16,50 +15,25 @@ Paws::DataPipeline::DescribeObjectsOutput
 
 =head1 ATTRIBUTES
 
-=head2 hasMoreResults => Bool
 
-  
+=head2 HasMoreResults => Bool
 
 Indicates whether there are more results to return.
 
 
-
-
-
-
-
-
-
-=head2 marker => Str
-
-  
+=head2 Marker => Str
 
 The starting point for the next page of results. To view the next page
 of results, call C<DescribeObjects> again with this marker value. If
 the value is null, there are no more results.
 
 
-
-
-
-
-
-
-
-=head2 B<REQUIRED> pipelineObjects => ArrayRef[Paws::DataPipeline::PipelineObject]
-
-  
+=head2 B<REQUIRED> PipelineObjects => ArrayRef[L<Paws::DataPipeline::PipelineObject>]
 
 An array of object definitions.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

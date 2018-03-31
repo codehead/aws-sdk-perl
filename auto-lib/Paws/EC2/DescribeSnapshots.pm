@@ -1,20 +1,19 @@
 
-package Paws::EC2::DescribeSnapshots {
+package Paws::EC2::DescribeSnapshots;
   use Moose;
   has DryRun => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'dryRun' );
   has Filters => (is => 'ro', isa => 'ArrayRef[Paws::EC2::Filter]', traits => ['NameInRequest'], request_name => 'Filter' );
   has MaxResults => (is => 'ro', isa => 'Int');
   has NextToken => (is => 'ro', isa => 'Str');
-  has OwnerIds => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'Owner' );
-  has RestorableByUserIds => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'RestorableBy' );
-  has SnapshotIds => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'SnapshotId' );
+  has OwnerIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'Owner' );
+  has RestorableByUserIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'RestorableBy' );
+  has SnapshotIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'SnapshotId' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeSnapshots');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::EC2::DescribeSnapshotsResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -29,7 +28,7 @@ This class represents the parameters used for calling the method DescribeSnapsho
 Amazon Elastic Compute Cloud service. Use the attributes of this class
 as arguments to method DescribeSnapshots.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeSnapshots.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeSnapshots.
 
 As an example:
 
@@ -39,9 +38,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 DryRun => Bool
 
-  
+=head2 DryRun => Bool
 
 Checks whether you have the required permissions for the action,
 without actually making the request, and provides an error response. If
@@ -50,16 +48,7 @@ C<DryRunOperation>. Otherwise, it is C<UnauthorizedOperation>.
 
 
 
-
-
-
-
-
-
-
-=head2 Filters => ArrayRef[Paws::EC2::Filter]
-
-  
+=head2 Filters => ArrayRef[L<Paws::EC2::Filter>]
 
 One or more filters.
 
@@ -71,8 +60,10 @@ C<description> - A description of the snapshot.
 
 =item *
 
-C<owner-alias> - The AWS account alias (for example, C<amazon>) that
-owns the snapshot.
+C<owner-alias> - Value from an Amazon-maintained list (C<amazon> |
+C<aws-marketplace> | C<microsoft>) of snapshot owners. Not to be
+confused with the user-configured AWS account alias, which is set from
+the IAM console.
 
 =item *
 
@@ -99,7 +90,10 @@ C<error>).
 =item *
 
 C<tag>:I<key>=I<value> - The key/value combination of a tag assigned to
-the resource.
+the resource. Specify the key of the tag in the filter name and the
+value of the tag in the filter value. For example, for the tag
+Purpose=X, specify C<tag:Purpose> for the filter name and C<X> for the
+filter value.
 
 =item *
 
@@ -129,15 +123,7 @@ C<volume-size> - The size of the volume, in GiB.
 
 
 
-
-
-
-
-
-
 =head2 MaxResults => Int
-
-  
 
 The maximum number of snapshot results returned by C<DescribeSnapshots>
 in paginated output. When this parameter is used, C<DescribeSnapshots>
@@ -152,16 +138,7 @@ parameter and the snapshot IDs parameter in the same request.
 
 
 
-
-
-
-
-
-
-
 =head2 NextToken => Str
-
-  
 
 The C<NextToken> value returned from a previous paginated
 C<DescribeSnapshots> request where C<MaxResults> was used and the
@@ -171,59 +148,24 @@ This value is C<null> when there are no more results to return.
 
 
 
-
-
-
-
-
-
-
-=head2 OwnerIds => ArrayRef[Str]
-
-  
+=head2 OwnerIds => ArrayRef[Str|Undef]
 
 Returns the snapshots owned by the specified owner. Multiple owners can
 be specified.
 
 
 
-
-
-
-
-
-
-
-=head2 RestorableByUserIds => ArrayRef[Str]
-
-  
+=head2 RestorableByUserIds => ArrayRef[Str|Undef]
 
 One or more AWS accounts IDs that can create volumes from the snapshot.
 
 
 
-
-
-
-
-
-
-
-=head2 SnapshotIds => ArrayRef[Str]
-
-  
+=head2 SnapshotIds => ArrayRef[Str|Undef]
 
 One or more snapshot IDs.
 
 Default: Describes snapshots for which you have launch permissions.
-
-
-
-
-
-
-
-
 
 
 

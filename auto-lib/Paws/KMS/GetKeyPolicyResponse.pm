@@ -1,10 +1,9 @@
 
-package Paws::KMS::GetKeyPolicyResponse {
+package Paws::KMS::GetKeyPolicyResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has Policy => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::KMS::GetKeyPolicyResponse
 
 =head1 ATTRIBUTES
 
-=head2 Policy => Str
 
-  
+=head2 Policy => Str
 
 A policy document in JSON format.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

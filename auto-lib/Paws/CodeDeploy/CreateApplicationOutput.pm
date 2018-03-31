@@ -1,10 +1,9 @@
 
-package Paws::CodeDeploy::CreateApplicationOutput {
+package Paws::CodeDeploy::CreateApplicationOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has applicationId => (is => 'ro', isa => 'Str');
+  has ApplicationId => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'applicationId' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::CodeDeploy::CreateApplicationOutput
 
 =head1 ATTRIBUTES
 
-=head2 applicationId => Str
 
-  
+=head2 ApplicationId => Str
 
 A unique application ID.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

@@ -1,10 +1,9 @@
 
-package Paws::SNS::CreatePlatformApplicationResponse {
+package Paws::SNS::CreatePlatformApplicationResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has PlatformApplicationArn => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::SNS::CreatePlatformApplicationResponse
 
 =head1 ATTRIBUTES
 
-=head2 PlatformApplicationArn => Str
 
-  
+=head2 PlatformApplicationArn => Str
 
 PlatformApplicationArn is returned.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

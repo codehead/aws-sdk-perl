@@ -1,11 +1,10 @@
 
-package Paws::RedShift::HsmClientCertificateMessage {
+package Paws::RedShift::HsmClientCertificateMessage;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has HsmClientCertificates => (is => 'ro', isa => 'ArrayRef[Paws::RedShift::HsmClientCertificate]', xmlname => 'HsmClientCertificate', traits => ['Unwrapped',]);
+  has HsmClientCertificates => (is => 'ro', isa => 'ArrayRef[Paws::RedShift::HsmClientCertificate]', request_name => 'HsmClientCertificate', traits => ['NameInRequest',]);
   has Marker => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -16,25 +15,15 @@ Paws::RedShift::HsmClientCertificateMessage
 
 =head1 ATTRIBUTES
 
-=head2 HsmClientCertificates => ArrayRef[Paws::RedShift::HsmClientCertificate]
 
-  
+=head2 HsmClientCertificates => ArrayRef[L<Paws::RedShift::HsmClientCertificate>]
 
 A list of the identifiers for one or more HSM client certificates used
 by Amazon Redshift clusters to store and retrieve database encryption
 keys in an HSM.
 
 
-
-
-
-
-
-
-
 =head2 Marker => Str
-
-  
 
 A value that indicates the starting point for the next set of response
 records in a subsequent request. If a value is returned in a response,
@@ -44,13 +33,7 @@ the C<Marker> field is empty, all response records have been retrieved
 for the request.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

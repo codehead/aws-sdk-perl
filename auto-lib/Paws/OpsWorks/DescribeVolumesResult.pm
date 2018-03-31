@@ -1,10 +1,9 @@
 
-package Paws::OpsWorks::DescribeVolumesResult {
+package Paws::OpsWorks::DescribeVolumesResult;
   use Moose;
-  with 'Paws::API::ResultParser';
   has Volumes => (is => 'ro', isa => 'ArrayRef[Paws::OpsWorks::Volume]');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::OpsWorks::DescribeVolumesResult
 
 =head1 ATTRIBUTES
 
-=head2 Volumes => ArrayRef[Paws::OpsWorks::Volume]
 
-  
+=head2 Volumes => ArrayRef[L<Paws::OpsWorks::Volume>]
 
 An array of volume IDs.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

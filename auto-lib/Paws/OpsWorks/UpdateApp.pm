@@ -1,12 +1,12 @@
 
-package Paws::OpsWorks::UpdateApp {
+package Paws::OpsWorks::UpdateApp;
   use Moose;
   has AppId => (is => 'ro', isa => 'Str', required => 1);
   has AppSource => (is => 'ro', isa => 'Paws::OpsWorks::Source');
   has Attributes => (is => 'ro', isa => 'Paws::OpsWorks::AppAttributes');
   has DataSources => (is => 'ro', isa => 'ArrayRef[Paws::OpsWorks::DataSource]');
   has Description => (is => 'ro', isa => 'Str');
-  has Domains => (is => 'ro', isa => 'ArrayRef[Str]');
+  has Domains => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
   has EnableSsl => (is => 'ro', isa => 'Bool');
   has Environment => (is => 'ro', isa => 'ArrayRef[Paws::OpsWorks::EnvironmentVariable]');
   has Name => (is => 'ro', isa => 'Str');
@@ -16,9 +16,8 @@ package Paws::OpsWorks::UpdateApp {
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'UpdateApp');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -33,7 +32,7 @@ This class represents the parameters used for calling the method UpdateApp on th
 AWS OpsWorks service. Use the attributes of this class
 as arguments to method UpdateApp.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to UpdateApp.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to UpdateApp.
 
 As an example:
 
@@ -43,116 +42,52 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> AppId => Str
 
-  
+=head2 B<REQUIRED> AppId => Str
 
 The app ID.
 
 
 
-
-
-
-
-
-
-
-=head2 AppSource => Paws::OpsWorks::Source
-
-  
+=head2 AppSource => L<Paws::OpsWorks::Source>
 
 A C<Source> object that specifies the app repository.
 
 
 
-
-
-
-
-
-
-
-=head2 Attributes => Paws::OpsWorks::AppAttributes
-
-  
+=head2 Attributes => L<Paws::OpsWorks::AppAttributes>
 
 One or more user-defined key/value pairs to be added to the stack
 attributes.
 
 
 
-
-
-
-
-
-
-
-=head2 DataSources => ArrayRef[Paws::OpsWorks::DataSource]
-
-  
+=head2 DataSources => ArrayRef[L<Paws::OpsWorks::DataSource>]
 
 The app's data sources.
 
 
 
-
-
-
-
-
-
-
 =head2 Description => Str
-
-  
 
 A description of the app.
 
 
 
-
-
-
-
-
-
-
-=head2 Domains => ArrayRef[Str]
-
-  
+=head2 Domains => ArrayRef[Str|Undef]
 
 The app's virtual host settings, with multiple domains separated by
 commas. For example: C<'www.example.com, example.com'>
 
 
 
-
-
-
-
-
-
-
 =head2 EnableSsl => Bool
-
-  
 
 Whether SSL is enabled for the app.
 
 
 
-
-
-
-
-
-
-
-=head2 Environment => ArrayRef[Paws::OpsWorks::EnvironmentVariable]
-
-  
+=head2 Environment => ArrayRef[L<Paws::OpsWorks::EnvironmentVariable>]
 
 An array of C<EnvironmentVariable> objects that specify environment
 variables to be associated with the app. After you deploy the app,
@@ -172,58 +107,23 @@ stack's Chef version.
 
 
 
-
-
-
-
-
-
-
 =head2 Name => Str
-
-  
 
 The app name.
 
 
 
-
-
-
-
-
-
-
-=head2 SslConfiguration => Paws::OpsWorks::SslConfiguration
-
-  
+=head2 SslConfiguration => L<Paws::OpsWorks::SslConfiguration>
 
 An C<SslConfiguration> object with the SSL configuration.
 
 
 
-
-
-
-
-
-
-
 =head2 Type => Str
-
-  
 
 The app type.
 
-
-
-
-
-
-
-
-
-
+Valid values are: C<"aws-flow-ruby">, C<"java">, C<"rails">, C<"php">, C<"nodejs">, C<"static">, C<"other">
 
 
 =head1 SEE ALSO

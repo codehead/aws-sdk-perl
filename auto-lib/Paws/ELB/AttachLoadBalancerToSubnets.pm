@@ -1,15 +1,14 @@
 
-package Paws::ELB::AttachLoadBalancerToSubnets {
+package Paws::ELB::AttachLoadBalancerToSubnets;
   use Moose;
   has LoadBalancerName => (is => 'ro', isa => 'Str', required => 1);
-  has Subnets => (is => 'ro', isa => 'ArrayRef[Str]', required => 1);
+  has Subnets => (is => 'ro', isa => 'ArrayRef[Str|Undef]', required => 1);
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'AttachLoadBalancerToSubnets');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::ELB::AttachLoadBalancerToSubnetsOutput');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'AttachLoadBalancerToSubnetsResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -24,7 +23,7 @@ This class represents the parameters used for calling the method AttachLoadBalan
 Elastic Load Balancing service. Use the attributes of this class
 as arguments to method AttachLoadBalancerToSubnets.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to AttachLoadBalancerToSubnets.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to AttachLoadBalancerToSubnets.
 
 As an example:
 
@@ -34,35 +33,17 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> LoadBalancerName => Str
 
-  
+=head2 B<REQUIRED> LoadBalancerName => Str
 
 The name of the load balancer.
 
 
 
+=head2 B<REQUIRED> Subnets => ArrayRef[Str|Undef]
 
-
-
-
-
-
-
-=head2 B<REQUIRED> Subnets => ArrayRef[Str]
-
-  
-
-The IDs of the subnets to add for the load balancer. You can add only
-one subnet per Availability Zone.
-
-
-
-
-
-
-
-
+The IDs of the subnets to add. You can add only one subnet per
+Availability Zone.
 
 
 

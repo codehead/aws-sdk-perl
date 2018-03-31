@@ -1,17 +1,16 @@
 
-package Paws::EC2::DescribeSecurityGroups {
+package Paws::EC2::DescribeSecurityGroups;
   use Moose;
   has DryRun => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'dryRun' );
   has Filters => (is => 'ro', isa => 'ArrayRef[Paws::EC2::Filter]', traits => ['NameInRequest'], request_name => 'Filter' );
-  has GroupIds => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'GroupId' );
-  has GroupNames => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'GroupName' );
+  has GroupIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'GroupId' );
+  has GroupNames => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'GroupName' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeSecurityGroups');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::EC2::DescribeSecurityGroupsResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -26,7 +25,7 @@ This class represents the parameters used for calling the method DescribeSecurit
 Amazon Elastic Compute Cloud service. Use the attributes of this class
 as arguments to method DescribeSecurityGroups.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeSecurityGroups.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeSecurityGroups.
 
 As an example:
 
@@ -36,9 +35,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 DryRun => Bool
 
-  
+=head2 DryRun => Bool
 
 Checks whether you have the required permissions for the action,
 without actually making the request, and provides an error response. If
@@ -47,18 +45,11 @@ C<DryRunOperation>. Otherwise, it is C<UnauthorizedOperation>.
 
 
 
+=head2 Filters => ArrayRef[L<Paws::EC2::Filter>]
 
-
-
-
-
-
-
-=head2 Filters => ArrayRef[Paws::EC2::Filter]
-
-  
-
-One or more filters.
+One or more filters. If using multiple filters for rules, the results
+include security groups for which any combination of rules - not
+necessarily a single rule - match all filters.
 
 =over
 
@@ -81,7 +72,8 @@ C<group-name> - The name of the security group.
 
 =item *
 
-C<ip-permission.cidr> - A CIDR range that has been granted permission.
+C<ip-permission.cidr> - An IPv4 CIDR range that has been granted
+permission in a security group rule.
 
 =item *
 
@@ -97,6 +89,11 @@ granted permission.
 
 C<ip-permission.group-name> - The name of a security group that has
 been granted permission.
+
+=item *
+
+C<ip-permission.ipv6-cidr> - An IPv6 CIDR range that has been granted
+permission in a security group rule.
 
 =item *
 
@@ -135,15 +132,7 @@ created.
 
 
 
-
-
-
-
-
-
-=head2 GroupIds => ArrayRef[Str]
-
-  
+=head2 GroupIds => ArrayRef[Str|Undef]
 
 One or more security group IDs. Required for security groups in a
 nondefault VPC.
@@ -152,16 +141,7 @@ Default: Describes all your security groups.
 
 
 
-
-
-
-
-
-
-
-=head2 GroupNames => ArrayRef[Str]
-
-  
+=head2 GroupNames => ArrayRef[Str|Undef]
 
 [EC2-Classic and default VPC only] One or more security group names.
 You can specify either the security group name or the security group
@@ -169,14 +149,6 @@ ID. For security groups in a nondefault VPC, use the C<group-name>
 filter to describe security groups by name.
 
 Default: Describes all your security groups.
-
-
-
-
-
-
-
-
 
 
 

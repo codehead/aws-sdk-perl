@@ -1,10 +1,9 @@
 
-package Paws::EMR::DescribeClusterOutput {
+package Paws::EMR::DescribeClusterOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
   has Cluster => (is => 'ro', isa => 'Paws::EMR::Cluster');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::EMR::DescribeClusterOutput
 
 =head1 ATTRIBUTES
 
-=head2 Cluster => Paws::EMR::Cluster
 
-  
+=head2 Cluster => L<Paws::EMR::Cluster>
 
 This output contains the details for the requested cluster.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

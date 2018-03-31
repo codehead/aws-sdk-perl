@@ -1,16 +1,15 @@
 
-package Paws::EC2::DescribeAvailabilityZones {
+package Paws::EC2::DescribeAvailabilityZones;
   use Moose;
   has DryRun => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'dryRun' );
   has Filters => (is => 'ro', isa => 'ArrayRef[Paws::EC2::Filter]', traits => ['NameInRequest'], request_name => 'Filter' );
-  has ZoneNames => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'ZoneName' );
+  has ZoneNames => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'ZoneName' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeAvailabilityZones');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::EC2::DescribeAvailabilityZonesResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method DescribeAvailab
 Amazon Elastic Compute Cloud service. Use the attributes of this class
 as arguments to method DescribeAvailabilityZones.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeAvailabilityZones.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeAvailabilityZones.
 
 As an example:
 
@@ -35,9 +34,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 DryRun => Bool
 
-  
+=head2 DryRun => Bool
 
 Checks whether you have the required permissions for the action,
 without actually making the request, and provides an error response. If
@@ -46,16 +44,7 @@ C<DryRunOperation>. Otherwise, it is C<UnauthorizedOperation>.
 
 
 
-
-
-
-
-
-
-
-=head2 Filters => ArrayRef[Paws::EC2::Filter]
-
-  
+=head2 Filters => ArrayRef[L<Paws::EC2::Filter>]
 
 One or more filters.
 
@@ -73,7 +62,7 @@ example, C<us-east-1>).
 =item *
 
 C<state> - The state of the Availability Zone (C<available> |
-C<impaired> | C<unavailable>).
+C<information> | C<impaired> | C<unavailable>).
 
 =item *
 
@@ -85,25 +74,9 @@ C<us-east-1a>).
 
 
 
-
-
-
-
-
-
-=head2 ZoneNames => ArrayRef[Str]
-
-  
+=head2 ZoneNames => ArrayRef[Str|Undef]
 
 The names of one or more Availability Zones.
-
-
-
-
-
-
-
-
 
 
 

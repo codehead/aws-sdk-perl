@@ -1,11 +1,10 @@
 
-package Paws::ECS::ListContainerInstancesResponse {
+package Paws::ECS::ListContainerInstancesResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has containerInstanceArns => (is => 'ro', isa => 'ArrayRef[Str]');
-  has nextToken => (is => 'ro', isa => 'Str');
+  has ContainerInstanceArns => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'containerInstanceArns' );
+  has NextToken => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'nextToken' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -15,24 +14,15 @@ Paws::ECS::ListContainerInstancesResponse
 
 =head1 ATTRIBUTES
 
-=head2 containerInstanceArns => ArrayRef[Str]
 
-  
+=head2 ContainerInstanceArns => ArrayRef[Str|Undef]
 
-The list of container instance full Amazon Resource Name (ARN) entries
-for each container instance associated with the specified cluster.
-
-
+The list of container instances with full Amazon Resource Name (ARN)
+entries for each container instance associated with the specified
+cluster.
 
 
-
-
-
-
-
-=head2 nextToken => Str
-
-  
+=head2 NextToken => Str
 
 The C<nextToken> value to include in a future C<ListContainerInstances>
 request. When the results of a C<ListContainerInstances> request exceed
@@ -41,13 +31,7 @@ results. This value is C<null> when there are no more results to
 return.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

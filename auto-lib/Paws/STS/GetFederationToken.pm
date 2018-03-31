@@ -1,5 +1,5 @@
 
-package Paws::STS::GetFederationToken {
+package Paws::STS::GetFederationToken;
   use Moose;
   has DurationSeconds => (is => 'ro', isa => 'Int');
   has Name => (is => 'ro', isa => 'Str', required => 1);
@@ -10,7 +10,6 @@ package Paws::STS::GetFederationToken {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'GetFederationToken');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::STS::GetFederationTokenResponse');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'GetFederationTokenResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method GetFederationTo
 AWS Security Token Service service. Use the attributes of this class
 as arguments to method GetFederationToken.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to GetFederationToken.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to GetFederationToken.
 
 As an example:
 
@@ -35,9 +34,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 DurationSeconds => Int
 
-  
+=head2 DurationSeconds => Int
 
 The duration, in seconds, that the session should last. Acceptable
 durations for federation sessions range from 900 seconds (15 minutes)
@@ -49,34 +47,21 @@ account (root) credentials defaults to one hour.
 
 
 
-
-
-
-
-
-
-
 =head2 B<REQUIRED> Name => Str
-
-  
 
 The name of the federated user. The name is used as an identifier for
 the temporary security credentials (such as C<Bob>). For example, you
 can reference the federated user name in a resource-based policy, such
 as in an Amazon S3 bucket policy.
 
-
-
-
-
-
-
+The regex used to validate this parameter is a string of characters
+consisting of upper- and lower-case alphanumeric characters with no
+spaces. You can also include underscores or any of the following
+characters: =,.@-
 
 
 
 =head2 Policy => Str
-
-  
 
 An IAM policy in JSON format that is passed with the
 C<GetFederationToken> call and evaluated along with the policy or
@@ -95,16 +80,20 @@ the temporary security credentials are used to access a resource that
 has a resource-based policy that specifically allows the federated user
 to access the resource.
 
+The format for this parameter, as described by its regex pattern, is a
+string of characters up to 2048 characters in length. The characters
+can be any ASCII character from the space character to the end of the
+valid character list (\u0020-\u00FF). It can also include the tab
+(\u0009), linefeed (\u000A), and carriage return (\u000D) characters.
+
+The policy plain text must be 2048 bytes or shorter. However, an
+internal conversion compresses it into a packed binary format with a
+separate limit. The PackedPolicySize response element indicates by
+percentage how close to the upper size limit the policy is, with 100%
+equaling the maximum allowed size.
+
 For more information about how permissions work, see Permissions for
-GetFederationToken in I<Using Temporary Security Credentials>.
-
-
-
-
-
-
-
-
+GetFederationToken.
 
 
 

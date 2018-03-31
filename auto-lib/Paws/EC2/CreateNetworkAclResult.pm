@@ -1,10 +1,9 @@
 
-package Paws::EC2::CreateNetworkAclResult {
+package Paws::EC2::CreateNetworkAclResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has NetworkAcl => (is => 'ro', isa => 'Paws::EC2::NetworkAcl', xmlname => 'networkAcl', traits => ['Unwrapped',]);
+  has NetworkAcl => (is => 'ro', isa => 'Paws::EC2::NetworkAcl', request_name => 'networkAcl', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::EC2::CreateNetworkAclResult
 
 =head1 ATTRIBUTES
 
-=head2 NetworkAcl => Paws::EC2::NetworkAcl
 
-  
+=head2 NetworkAcl => L<Paws::EC2::NetworkAcl>
 
 Information about the network ACL.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

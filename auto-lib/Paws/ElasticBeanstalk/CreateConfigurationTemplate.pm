@@ -1,10 +1,11 @@
 
-package Paws::ElasticBeanstalk::CreateConfigurationTemplate {
+package Paws::ElasticBeanstalk::CreateConfigurationTemplate;
   use Moose;
   has ApplicationName => (is => 'ro', isa => 'Str', required => 1);
   has Description => (is => 'ro', isa => 'Str');
   has EnvironmentId => (is => 'ro', isa => 'Str');
   has OptionSettings => (is => 'ro', isa => 'ArrayRef[Paws::ElasticBeanstalk::ConfigurationOptionSetting]');
+  has PlatformArn => (is => 'ro', isa => 'Str');
   has SolutionStackName => (is => 'ro', isa => 'Str');
   has SourceConfiguration => (is => 'ro', isa => 'Paws::ElasticBeanstalk::SourceConfiguration');
   has TemplateName => (is => 'ro', isa => 'Str', required => 1);
@@ -14,7 +15,6 @@ package Paws::ElasticBeanstalk::CreateConfigurationTemplate {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'CreateConfigurationTemplate');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::ElasticBeanstalk::ConfigurationSettingsDescription');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'CreateConfigurationTemplateResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -29,7 +29,7 @@ This class represents the parameters used for calling the method CreateConfigura
 AWS Elastic Beanstalk service. Use the attributes of this class
 as arguments to method CreateConfigurationTemplate.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to CreateConfigurationTemplate.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to CreateConfigurationTemplate.
 
 As an example:
 
@@ -39,9 +39,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> ApplicationName => Str
 
-  
+=head2 B<REQUIRED> ApplicationName => Str
 
 The name of the application to associate with this configuration
 template. If no application is found with this name, AWS Elastic
@@ -49,46 +48,19 @@ Beanstalk returns an C<InvalidParameterValue> error.
 
 
 
-
-
-
-
-
-
-
 =head2 Description => Str
-
-  
 
 Describes this configuration.
 
 
 
-
-
-
-
-
-
-
 =head2 EnvironmentId => Str
-
-  
 
 The ID of the environment used with this configuration template.
 
 
 
-
-
-
-
-
-
-
-=head2 OptionSettings => ArrayRef[Paws::ElasticBeanstalk::ConfigurationOptionSetting]
-
-  
+=head2 OptionSettings => ArrayRef[L<Paws::ElasticBeanstalk::ConfigurationOptionSetting>]
 
 If specified, AWS Elastic Beanstalk sets the specified configuration
 option to the requested value. The new value overrides the value
@@ -96,16 +68,13 @@ obtained from the solution stack or the source configuration template.
 
 
 
+=head2 PlatformArn => Str
 
-
-
-
+The ARN of the custome platform.
 
 
 
 =head2 SolutionStackName => Str
-
-  
 
 The name of the solution stack used by this configuration. The solution
 stack specifies the operating system, architecture, and application
@@ -125,16 +94,7 @@ stack as the source configuration template.
 
 
 
-
-
-
-
-
-
-
-=head2 SourceConfiguration => Paws::ElasticBeanstalk::SourceConfiguration
-
-  
+=head2 SourceConfiguration => L<Paws::ElasticBeanstalk::SourceConfiguration>
 
 If specified, AWS Elastic Beanstalk uses the configuration values from
 the specified configuration template to create a new configuration.
@@ -153,16 +113,7 @@ C<InvalidParameterCombination> error.
 
 
 
-
-
-
-
-
-
-
 =head2 B<REQUIRED> TemplateName => Str
-
-  
 
 The name of the configuration template.
 
@@ -170,14 +121,6 @@ Constraint: This name must be unique per application.
 
 Default: If a configuration template already exists with this name, AWS
 Elastic Beanstalk returns an C<InvalidParameterValue> error.
-
-
-
-
-
-
-
-
 
 
 

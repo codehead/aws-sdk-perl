@@ -1,15 +1,14 @@
 
-package Paws::ElastiCache::RemoveTagsFromResource {
+package Paws::ElastiCache::RemoveTagsFromResource;
   use Moose;
   has ResourceName => (is => 'ro', isa => 'Str', required => 1);
-  has TagKeys => (is => 'ro', isa => 'ArrayRef[Str]', required => 1);
+  has TagKeys => (is => 'ro', isa => 'ArrayRef[Str|Undef]', required => 1);
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'RemoveTagsFromResource');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::ElastiCache::TagListMessage');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'RemoveTagsFromResourceResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -24,7 +23,7 @@ This class represents the parameters used for calling the method RemoveTagsFromR
 Amazon ElastiCache service. Use the attributes of this class
 as arguments to method RemoveTagsFromResource.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to RemoveTagsFromResource.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to RemoveTagsFromResource.
 
 As an example:
 
@@ -34,39 +33,23 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
+
 =head2 B<REQUIRED> ResourceName => Str
 
-  
-
-The name of the ElastiCache resource from which you want the listed
+The Amazon Resource Name (ARN) of the resource from which you want the
 tags removed, for example
-C<arn:aws:elasticache:us-west-2:0123456789:cluster:myCluster>.
+C<arn:aws:elasticache:us-west-2:0123456789:cluster:myCluster> or
+C<arn:aws:elasticache:us-west-2:0123456789:snapshot:mySnapshot>.
+
+For more information about ARNs, see Amazon Resource Names (ARNs) and
+AWS Service Namespaces.
 
 
 
-
-
-
-
-
-
-
-=head2 B<REQUIRED> TagKeys => ArrayRef[Str]
-
-  
+=head2 B<REQUIRED> TagKeys => ArrayRef[Str|Undef]
 
 A list of C<TagKeys> identifying the tags you want removed from the
-named resource. For example, C<TagKeys.member.1=Region> removes the
-cost allocation tag with the key name C<Region> from the resource named
-by the I<ResourceName> parameter.
-
-
-
-
-
-
-
-
+named resource.
 
 
 

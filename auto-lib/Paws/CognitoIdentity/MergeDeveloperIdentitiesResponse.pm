@@ -1,10 +1,9 @@
 
-package Paws::CognitoIdentity::MergeDeveloperIdentitiesResponse {
+package Paws::CognitoIdentity::MergeDeveloperIdentitiesResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has IdentityId => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::CognitoIdentity::MergeDeveloperIdentitiesResponse
 
 =head1 ATTRIBUTES
 
-=head2 IdentityId => Str
 
-  
+=head2 IdentityId => Str
 
 A unique identifier in the format REGION:GUID.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

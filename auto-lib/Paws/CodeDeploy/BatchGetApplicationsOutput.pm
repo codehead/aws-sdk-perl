@@ -1,10 +1,9 @@
 
-package Paws::CodeDeploy::BatchGetApplicationsOutput {
+package Paws::CodeDeploy::BatchGetApplicationsOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has applicationsInfo => (is => 'ro', isa => 'ArrayRef[Paws::CodeDeploy::ApplicationInfo]');
+  has ApplicationsInfo => (is => 'ro', isa => 'ArrayRef[Paws::CodeDeploy::ApplicationInfo]', traits => ['NameInRequest'], request_name => 'applicationsInfo' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::CodeDeploy::BatchGetApplicationsOutput
 
 =head1 ATTRIBUTES
 
-=head2 applicationsInfo => ArrayRef[Paws::CodeDeploy::ApplicationInfo]
 
-  
+=head2 ApplicationsInfo => ArrayRef[L<Paws::CodeDeploy::ApplicationInfo>]
 
 Information about the applications.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

@@ -1,10 +1,9 @@
 
-package Paws::EC2::CreateInternetGatewayResult {
+package Paws::EC2::CreateInternetGatewayResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has InternetGateway => (is => 'ro', isa => 'Paws::EC2::InternetGateway', xmlname => 'internetGateway', traits => ['Unwrapped',]);
+  has InternetGateway => (is => 'ro', isa => 'Paws::EC2::InternetGateway', request_name => 'internetGateway', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::EC2::CreateInternetGatewayResult
 
 =head1 ATTRIBUTES
 
-=head2 InternetGateway => Paws::EC2::InternetGateway
 
-  
+=head2 InternetGateway => L<Paws::EC2::InternetGateway>
 
 Information about the Internet gateway.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

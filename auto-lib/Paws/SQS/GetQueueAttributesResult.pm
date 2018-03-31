@@ -1,10 +1,9 @@
 
-package Paws::SQS::GetQueueAttributesResult {
+package Paws::SQS::GetQueueAttributesResult;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has Attributes => (is => 'ro', isa => 'Paws::SQS::QueueAttributeMap', xmlname => 'Attribute', traits => ['Unwrapped',]);
+  has Attributes => (is => 'ro', isa => 'Paws::SQS::QueueAttributeMap', request_name => 'Attribute', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::SQS::GetQueueAttributesResult
 
 =head1 ATTRIBUTES
 
-=head2 Attributes => Paws::SQS::QueueAttributeMap
 
-  
+=head2 Attributes => L<Paws::SQS::QueueAttributeMap>
 
-A map of attributes to the respective values.
-
+A map of attributes to their respective values.
 
 
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

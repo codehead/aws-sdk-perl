@@ -1,8 +1,8 @@
 
-package Paws::ElasticTranscoder::ListPipelines {
+package Paws::ElasticTranscoder::ListPipelines;
   use Moose;
-  has Ascending => (is => 'ro', isa => 'Str', traits => ['ParamInQuery'], query_name => 'Ascending' );
-  has PageToken => (is => 'ro', isa => 'Str', traits => ['ParamInQuery'], query_name => 'PageToken' );
+  has Ascending => (is => 'ro', isa => 'Str', traits => ['ParamInQuery'], query_name => 'Ascending');
+  has PageToken => (is => 'ro', isa => 'Str', traits => ['ParamInQuery'], query_name => 'PageToken');
 
   use MooseX::ClassAttribute;
 
@@ -10,8 +10,7 @@ package Paws::ElasticTranscoder::ListPipelines {
   class_has _api_uri  => (isa => 'Str', is => 'ro', default => '/2012-09-25/pipelines');
   class_has _api_method  => (isa => 'Str', is => 'ro', default => 'GET');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::ElasticTranscoder::ListPipelinesResponse');
-  class_has _result_key => (isa => 'Str', is => 'ro', default => 'ListPipelinesResult');
-}
+  class_has _result_key => (isa => 'Str', is => 'ro');
 1;
 
 ### main pod documentation begin ###
@@ -26,7 +25,7 @@ This class represents the parameters used for calling the method ListPipelines o
 Amazon Elastic Transcoder service. Use the attributes of this class
 as arguments to method ListPipelines.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to ListPipelines.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to ListPipelines.
 
 As an example:
 
@@ -36,9 +35,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 Ascending => Str
 
-  
+=head2 Ascending => Str
 
 To list pipelines in chronological order by the date and time that they
 were created, enter C<true>. To list pipelines in reverse chronological
@@ -46,28 +44,11 @@ order, enter C<false>.
 
 
 
-
-
-
-
-
-
-
 =head2 PageToken => Str
-
-  
 
 When Elastic Transcoder returns more than one page of results, use
 C<pageToken> in subsequent C<GET> requests to get each successive page
 of results.
-
-
-
-
-
-
-
-
 
 
 

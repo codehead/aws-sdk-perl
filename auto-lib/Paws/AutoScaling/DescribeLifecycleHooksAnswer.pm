@@ -1,10 +1,9 @@
 
-package Paws::AutoScaling::DescribeLifecycleHooksAnswer {
+package Paws::AutoScaling::DescribeLifecycleHooksAnswer;
   use Moose;
-  with 'Paws::API::ResultParser';
   has LifecycleHooks => (is => 'ro', isa => 'ArrayRef[Paws::AutoScaling::LifecycleHook]');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::AutoScaling::DescribeLifecycleHooksAnswer
 
 =head1 ATTRIBUTES
 
-=head2 LifecycleHooks => ArrayRef[Paws::AutoScaling::LifecycleHook]
 
-  
+=head2 LifecycleHooks => ArrayRef[L<Paws::AutoScaling::LifecycleHook>]
 
 The lifecycle hooks for the specified group.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

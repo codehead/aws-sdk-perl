@@ -1,18 +1,17 @@
 
-package Paws::EC2::DescribePrefixLists {
+package Paws::EC2::DescribePrefixLists;
   use Moose;
   has DryRun => (is => 'ro', isa => 'Bool');
   has Filters => (is => 'ro', isa => 'ArrayRef[Paws::EC2::Filter]', traits => ['NameInRequest'], request_name => 'Filter' );
   has MaxResults => (is => 'ro', isa => 'Int');
   has NextToken => (is => 'ro', isa => 'Str');
-  has PrefixListIds => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'PrefixListId' );
+  has PrefixListIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'PrefixListId' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribePrefixLists');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::EC2::DescribePrefixListsResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -27,7 +26,7 @@ This class represents the parameters used for calling the method DescribePrefixL
 Amazon Elastic Compute Cloud service. Use the attributes of this class
 as arguments to method DescribePrefixLists.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribePrefixLists.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribePrefixLists.
 
 As an example:
 
@@ -37,9 +36,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 DryRun => Bool
 
-  
+=head2 DryRun => Bool
 
 Checks whether you have the required permissions for the action,
 without actually making the request, and provides an error response. If
@@ -48,16 +46,7 @@ C<DryRunOperation>. Otherwise, it is C<UnauthorizedOperation>.
 
 
 
-
-
-
-
-
-
-
-=head2 Filters => ArrayRef[Paws::EC2::Filter]
-
-  
+=head2 Filters => ArrayRef[L<Paws::EC2::Filter>]
 
 One or more filters.
 
@@ -76,15 +65,7 @@ C<prefix-list-name>: The name of a prefix list.
 
 
 
-
-
-
-
-
-
 =head2 MaxResults => Int
-
-  
 
 The maximum number of items to return for this request. The request
 returns a token that you can specify in a subsequent call to get the
@@ -95,42 +76,16 @@ Constraint: If the value specified is greater than 1000, we return only
 
 
 
-
-
-
-
-
-
-
 =head2 NextToken => Str
-
-  
 
 The token for the next set of items to return. (You received this token
 from a prior call.)
 
 
 
-
-
-
-
-
-
-
-=head2 PrefixListIds => ArrayRef[Str]
-
-  
+=head2 PrefixListIds => ArrayRef[Str|Undef]
 
 One or more prefix list IDs.
-
-
-
-
-
-
-
-
 
 
 

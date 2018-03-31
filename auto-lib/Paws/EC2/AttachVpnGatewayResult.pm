@@ -1,10 +1,9 @@
 
-package Paws::EC2::AttachVpnGatewayResult {
+package Paws::EC2::AttachVpnGatewayResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has VpcAttachment => (is => 'ro', isa => 'Paws::EC2::VpcAttachment', xmlname => 'attachment', traits => ['Unwrapped',]);
+  has VpcAttachment => (is => 'ro', isa => 'Paws::EC2::VpcAttachment', request_name => 'attachment', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::EC2::AttachVpnGatewayResult
 
 =head1 ATTRIBUTES
 
-=head2 VpcAttachment => Paws::EC2::VpcAttachment
 
-  
+=head2 VpcAttachment => L<Paws::EC2::VpcAttachment>
 
 Information about the attachment.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

@@ -1,10 +1,9 @@
 
-package Paws::RedShift::EventCategoriesMessage {
+package Paws::RedShift::EventCategoriesMessage;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has EventCategoriesMapList => (is => 'ro', isa => 'ArrayRef[Paws::RedShift::EventCategoriesMap]', xmlname => 'EventCategoriesMap', traits => ['Unwrapped',]);
+  has EventCategoriesMapList => (is => 'ro', isa => 'ArrayRef[Paws::RedShift::EventCategoriesMap]', request_name => 'EventCategoriesMap', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::RedShift::EventCategoriesMessage
 
 =head1 ATTRIBUTES
 
-=head2 EventCategoriesMapList => ArrayRef[Paws::RedShift::EventCategoriesMap]
 
-  
+=head2 EventCategoriesMapList => ArrayRef[L<Paws::RedShift::EventCategoriesMap>]
 
 A list of event categories descriptions.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

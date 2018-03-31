@@ -1,13 +1,24 @@
-package Paws::MachineLearning {
+package Paws::MachineLearning;
   use Moose;
   sub service { 'machinelearning' }
   sub version { '2014-12-12' }
   sub target_prefix { 'AmazonML_20141212' }
   sub json_version { "1.1" }
+  has max_attempts => (is => 'ro', isa => 'Int', default => 5);
+  has retry => (is => 'ro', isa => 'HashRef', default => sub {
+    { base => 'rand', type => 'exponential', growth_factor => 2 }
+  });
+  has retriables => (is => 'ro', isa => 'ArrayRef', default => sub { [
+  ] });
 
-  with 'Paws::API::Caller', 'Paws::API::RegionalEndpointCaller', 'Paws::Net::V4Signature', 'Paws::Net::JsonCaller', 'Paws::Net::JsonResponse';
+  with 'Paws::API::Caller', 'Paws::API::EndpointResolver', 'Paws::Net::V4Signature', 'Paws::Net::JsonCaller', 'Paws::Net::JsonResponse';
 
   
+  sub AddTags {
+    my $self = shift;
+    my $call_object = $self->new_with_coercions('Paws::MachineLearning::AddTags', @_);
+    return $self->caller->do_call($self, $call_object);
+  }
   sub CreateBatchPrediction {
     my $self = shift;
     my $call_object = $self->new_with_coercions('Paws::MachineLearning::CreateBatchPrediction', @_);
@@ -68,6 +79,11 @@ package Paws::MachineLearning {
     my $call_object = $self->new_with_coercions('Paws::MachineLearning::DeleteRealtimeEndpoint', @_);
     return $self->caller->do_call($self, $call_object);
   }
+  sub DeleteTags {
+    my $self = shift;
+    my $call_object = $self->new_with_coercions('Paws::MachineLearning::DeleteTags', @_);
+    return $self->caller->do_call($self, $call_object);
+  }
   sub DescribeBatchPredictions {
     my $self = shift;
     my $call_object = $self->new_with_coercions('Paws::MachineLearning::DescribeBatchPredictions', @_);
@@ -86,6 +102,11 @@ package Paws::MachineLearning {
   sub DescribeMLModels {
     my $self = shift;
     my $call_object = $self->new_with_coercions('Paws::MachineLearning::DescribeMLModels', @_);
+    return $self->caller->do_call($self, $call_object);
+  }
+  sub DescribeTags {
+    my $self = shift;
+    my $call_object = $self->new_with_coercions('Paws::MachineLearning::DescribeTags', @_);
     return $self->caller->do_call($self, $call_object);
   }
   sub GetBatchPrediction {
@@ -133,7 +154,103 @@ package Paws::MachineLearning {
     my $call_object = $self->new_with_coercions('Paws::MachineLearning::UpdateMLModel', @_);
     return $self->caller->do_call($self, $call_object);
   }
-}
+  
+  sub DescribeAllBatchPredictions {
+    my $self = shift;
+
+    my $callback = shift @_ if (ref($_[0]) eq 'CODE');
+    my $result = $self->DescribeBatchPredictions(@_);
+    my $next_result = $result;
+
+    if (not defined $callback) {
+      while ($next_result->NextToken) {
+        $next_result = $self->DescribeBatchPredictions(@_, NextToken => $next_result->NextToken);
+        push @{ $result->Results }, @{ $next_result->Results };
+      }
+      return $result;
+    } else {
+      while ($result->NextToken) {
+        $callback->($_ => 'Results') foreach (@{ $result->Results });
+        $result = $self->DescribeBatchPredictions(@_, NextToken => $result->NextToken);
+      }
+      $callback->($_ => 'Results') foreach (@{ $result->Results });
+    }
+
+    return undef
+  }
+  sub DescribeAllDataSources {
+    my $self = shift;
+
+    my $callback = shift @_ if (ref($_[0]) eq 'CODE');
+    my $result = $self->DescribeDataSources(@_);
+    my $next_result = $result;
+
+    if (not defined $callback) {
+      while ($next_result->NextToken) {
+        $next_result = $self->DescribeDataSources(@_, NextToken => $next_result->NextToken);
+        push @{ $result->Results }, @{ $next_result->Results };
+      }
+      return $result;
+    } else {
+      while ($result->NextToken) {
+        $callback->($_ => 'Results') foreach (@{ $result->Results });
+        $result = $self->DescribeDataSources(@_, NextToken => $result->NextToken);
+      }
+      $callback->($_ => 'Results') foreach (@{ $result->Results });
+    }
+
+    return undef
+  }
+  sub DescribeAllEvaluations {
+    my $self = shift;
+
+    my $callback = shift @_ if (ref($_[0]) eq 'CODE');
+    my $result = $self->DescribeEvaluations(@_);
+    my $next_result = $result;
+
+    if (not defined $callback) {
+      while ($next_result->NextToken) {
+        $next_result = $self->DescribeEvaluations(@_, NextToken => $next_result->NextToken);
+        push @{ $result->Results }, @{ $next_result->Results };
+      }
+      return $result;
+    } else {
+      while ($result->NextToken) {
+        $callback->($_ => 'Results') foreach (@{ $result->Results });
+        $result = $self->DescribeEvaluations(@_, NextToken => $result->NextToken);
+      }
+      $callback->($_ => 'Results') foreach (@{ $result->Results });
+    }
+
+    return undef
+  }
+  sub DescribeAllMLModels {
+    my $self = shift;
+
+    my $callback = shift @_ if (ref($_[0]) eq 'CODE');
+    my $result = $self->DescribeMLModels(@_);
+    my $next_result = $result;
+
+    if (not defined $callback) {
+      while ($next_result->NextToken) {
+        $next_result = $self->DescribeMLModels(@_, NextToken => $next_result->NextToken);
+        push @{ $result->Results }, @{ $next_result->Results };
+      }
+      return $result;
+    } else {
+      while ($result->NextToken) {
+        $callback->($_ => 'Results') foreach (@{ $result->Results });
+        $result = $self->DescribeMLModels(@_, NextToken => $result->NextToken);
+      }
+      $callback->($_ => 'Results') foreach (@{ $result->Results });
+    }
+
+    return undef
+  }
+
+
+  sub operations { qw/AddTags CreateBatchPrediction CreateDataSourceFromRDS CreateDataSourceFromRedshift CreateDataSourceFromS3 CreateEvaluation CreateMLModel CreateRealtimeEndpoint DeleteBatchPrediction DeleteDataSource DeleteEvaluation DeleteMLModel DeleteRealtimeEndpoint DeleteTags DescribeBatchPredictions DescribeDataSources DescribeEvaluations DescribeMLModels DescribeTags GetBatchPrediction GetDataSource GetEvaluation GetMLModel Predict UpdateBatchPrediction UpdateDataSource UpdateEvaluation UpdateMLModel / }
+
 1;
 
 ### main pod documentation begin ###
@@ -146,7 +263,7 @@ Paws::MachineLearning - Perl Interface to AWS Amazon Machine Learning
 
   use Paws;
 
-  my $obj = Paws->service('MachineLearning')->new;
+  my $obj = Paws->service('MachineLearning');
   my $res = $obj->Method(
     Arg1 => $val1,
     Arg2 => [ 'V1', 'V2' ],
@@ -160,20 +277,21 @@ Paws::MachineLearning - Perl Interface to AWS Amazon Machine Learning
 
 =head1 DESCRIPTION
 
-
-
 Definition of the public APIs exposed by Amazon Machine Learning
 
-
-
-
-
-
-
-
-
-
 =head1 METHODS
+
+=head2 AddTags(ResourceId => Str, ResourceType => Str, Tags => ArrayRef[L<Paws::MachineLearning::Tag>])
+
+Each argument is described in detail in: L<Paws::MachineLearning::AddTags>
+
+Returns: a L<Paws::MachineLearning::AddTagsOutput> instance
+
+  Adds one or more tags to an object, up to a limit of 10. Each tag
+consists of a key and an optional value. If you add a tag using a key
+that is already associated with the ML object, C<AddTags> updates the
+tag's value.
+
 
 =head2 CreateBatchPrediction(BatchPredictionDataSourceId => Str, BatchPredictionId => Str, MLModelId => Str, OutputUri => Str, [BatchPredictionName => Str])
 
@@ -181,9 +299,7 @@ Each argument is described in detail in: L<Paws::MachineLearning::CreateBatchPre
 
 Returns: a L<Paws::MachineLearning::CreateBatchPredictionOutput> instance
 
-  
-
-Generates predictions for a group of observations. The observations to
+  Generates predictions for a group of observations. The observations to
 process exist in one or more data files referenced by a C<DataSource>.
 This operation creates a new C<BatchPrediction>, and uses an C<MLModel>
 and the data files referenced by the C<DataSource> as information
@@ -201,151 +317,117 @@ C<COMPLETED> status appears, the results are available in the location
 specified by the C<OutputUri> parameter.
 
 
-
-
-
-
-
-
-
-
-
-=head2 CreateDataSourceFromRDS(DataSourceId => Str, RDSData => Paws::MachineLearning::RDSDataSpec, RoleARN => Str, [ComputeStatistics => Bool, DataSourceName => Str])
+=head2 CreateDataSourceFromRDS(DataSourceId => Str, RDSData => L<Paws::MachineLearning::RDSDataSpec>, RoleARN => Str, [ComputeStatistics => Bool, DataSourceName => Str])
 
 Each argument is described in detail in: L<Paws::MachineLearning::CreateDataSourceFromRDS>
 
 Returns: a L<Paws::MachineLearning::CreateDataSourceFromRDSOutput> instance
 
-  
-
-Creates a C<DataSource> object from an Amazon Relational Database
+  Creates a C<DataSource> object from an Amazon Relational Database
 Service (Amazon RDS). A C<DataSource> references data that can be used
-to perform CreateMLModel, CreateEvaluation, or CreateBatchPrediction
-operations.
+to perform C<CreateMLModel>, C<CreateEvaluation>, or
+C<CreateBatchPrediction> operations.
 
 C<CreateDataSourceFromRDS> is an asynchronous operation. In response to
 C<CreateDataSourceFromRDS>, Amazon Machine Learning (Amazon ML)
 immediately returns and sets the C<DataSource> status to C<PENDING>.
 After the C<DataSource> is created and ready for use, Amazon ML sets
-the C<Status> parameter to C<COMPLETED>. C<DataSource> in C<COMPLETED>
-or C<PENDING> status can only be used to perform CreateMLModel,
-CreateEvaluation, or CreateBatchPrediction operations.
+the C<Status> parameter to C<COMPLETED>. C<DataSource> in the
+C<COMPLETED> or C<PENDING> state can be used only to perform
+C<E<gt>CreateMLModel>E<gt>, C<CreateEvaluation>, or
+C<CreateBatchPrediction> operations.
 
 If Amazon ML cannot accept the input source, it sets the C<Status>
 parameter to C<FAILED> and includes an error message in the C<Message>
-attribute of the GetDataSource operation response.
+attribute of the C<GetDataSource> operation response.
 
 
-
-
-
-
-
-
-
-
-
-=head2 CreateDataSourceFromRedshift(DataSourceId => Str, DataSpec => Paws::MachineLearning::RedshiftDataSpec, RoleARN => Str, [ComputeStatistics => Bool, DataSourceName => Str])
+=head2 CreateDataSourceFromRedshift(DataSourceId => Str, DataSpec => L<Paws::MachineLearning::RedshiftDataSpec>, RoleARN => Str, [ComputeStatistics => Bool, DataSourceName => Str])
 
 Each argument is described in detail in: L<Paws::MachineLearning::CreateDataSourceFromRedshift>
 
 Returns: a L<Paws::MachineLearning::CreateDataSourceFromRedshiftOutput> instance
 
-  
-
-Creates a C<DataSource> from Amazon Redshift. A C<DataSource>
-references data that can be used to perform either CreateMLModel,
-CreateEvaluation or CreateBatchPrediction operations.
+  Creates a C<DataSource> from a database hosted on an Amazon Redshift
+cluster. A C<DataSource> references data that can be used to perform
+either C<CreateMLModel>, C<CreateEvaluation>, or
+C<CreateBatchPrediction> operations.
 
 C<CreateDataSourceFromRedshift> is an asynchronous operation. In
 response to C<CreateDataSourceFromRedshift>, Amazon Machine Learning
 (Amazon ML) immediately returns and sets the C<DataSource> status to
 C<PENDING>. After the C<DataSource> is created and ready for use,
 Amazon ML sets the C<Status> parameter to C<COMPLETED>. C<DataSource>
-in C<COMPLETED> or C<PENDING> status can only be used to perform
-CreateMLModel, CreateEvaluation, or CreateBatchPrediction operations.
+in C<COMPLETED> or C<PENDING> states can be used to perform only
+C<CreateMLModel>, C<CreateEvaluation>, or C<CreateBatchPrediction>
+operations.
 
-If Amazon ML cannot accept the input source, it sets the C<Status>
+If Amazon ML can't accept the input source, it sets the C<Status>
 parameter to C<FAILED> and includes an error message in the C<Message>
-attribute of the GetDataSource operation response.
+attribute of the C<GetDataSource> operation response.
 
-The observations should exist in the database hosted on an Amazon
-Redshift cluster and should be specified by a C<SelectSqlQuery>. Amazon
-ML executes Unload command in Amazon Redshift to transfer the result
-set of C<SelectSqlQuery> to C<S3StagingLocation.>
+The observations should be contained in the database hosted on an
+Amazon Redshift cluster and should be specified by a C<SelectSqlQuery>
+query. Amazon ML executes an C<Unload> command in Amazon Redshift to
+transfer the result set of the C<SelectSqlQuery> query to
+C<S3StagingLocation>.
 
-After the C<DataSource> is created, it's ready for use in evaluations
-and batch predictions. If you plan to use the C<DataSource> to train an
-C<MLModel>, the C<DataSource> requires another item -- a recipe. A
-recipe describes the observation variables that participate in training
-an C<MLModel>. A recipe describes how each input variable will be used
-in training. Will the variable be included or excluded from training?
-Will the variable be manipulated, for example, combined with another
-variable or split apart into word combinations? The recipe provides
-answers to these questions. For more information, see the Amazon
-Machine Learning Developer Guide.
+After the C<DataSource> has been created, it's ready for use in
+evaluations and batch predictions. If you plan to use the C<DataSource>
+to train an C<MLModel>, the C<DataSource> also requires a recipe. A
+recipe describes how each input variable will be used in training an
+C<MLModel>. Will the variable be included or excluded from training?
+Will the variable be manipulated; for example, will it be combined with
+another variable or will it be split apart into word combinations? The
+recipe provides answers to these questions.
 
-
-
-
-
-
-
-
+You can't change an existing datasource, but you can copy and modify
+the settings from an existing Amazon Redshift datasource to create a
+new datasource. To do so, call C<GetDataSource> for an existing
+datasource and copy the values to a C<CreateDataSource> call. Change
+the settings that you want to change and make sure that all required
+fields have the appropriate values.
 
 
-
-=head2 CreateDataSourceFromS3(DataSourceId => Str, DataSpec => Paws::MachineLearning::S3DataSpec, [ComputeStatistics => Bool, DataSourceName => Str])
+=head2 CreateDataSourceFromS3(DataSourceId => Str, DataSpec => L<Paws::MachineLearning::S3DataSpec>, [ComputeStatistics => Bool, DataSourceName => Str])
 
 Each argument is described in detail in: L<Paws::MachineLearning::CreateDataSourceFromS3>
 
 Returns: a L<Paws::MachineLearning::CreateDataSourceFromS3Output> instance
 
-  
-
-Creates a C<DataSource> object. A C<DataSource> references data that
-can be used to perform CreateMLModel, CreateEvaluation, or
-CreateBatchPrediction operations.
+  Creates a C<DataSource> object. A C<DataSource> references data that
+can be used to perform C<CreateMLModel>, C<CreateEvaluation>, or
+C<CreateBatchPrediction> operations.
 
 C<CreateDataSourceFromS3> is an asynchronous operation. In response to
 C<CreateDataSourceFromS3>, Amazon Machine Learning (Amazon ML)
 immediately returns and sets the C<DataSource> status to C<PENDING>.
-After the C<DataSource> is created and ready for use, Amazon ML sets
-the C<Status> parameter to C<COMPLETED>. C<DataSource> in C<COMPLETED>
-or C<PENDING> status can only be used to perform CreateMLModel,
-CreateEvaluation or CreateBatchPrediction operations.
+After the C<DataSource> has been created and is ready for use, Amazon
+ML sets the C<Status> parameter to C<COMPLETED>. C<DataSource> in the
+C<COMPLETED> or C<PENDING> state can be used to perform only
+C<CreateMLModel>, C<CreateEvaluation> or C<CreateBatchPrediction>
+operations.
 
-If Amazon ML cannot accept the input source, it sets the C<Status>
+If Amazon ML can't accept the input source, it sets the C<Status>
 parameter to C<FAILED> and includes an error message in the C<Message>
-attribute of the GetDataSource operation response.
+attribute of the C<GetDataSource> operation response.
 
 The observation data used in a C<DataSource> should be ready to use;
 that is, it should have a consistent structure, and missing data values
 should be kept to a minimum. The observation data must reside in one or
-more CSV files in an Amazon Simple Storage Service (Amazon S3) bucket,
-along with a schema that describes the data items by name and type. The
-same schema must be used for all of the data files referenced by the
-C<DataSource>.
+more .csv files in an Amazon Simple Storage Service (Amazon S3)
+location, along with a schema that describes the data items by name and
+type. The same schema must be used for all of the data files referenced
+by the C<DataSource>.
 
 After the C<DataSource> has been created, it's ready to use in
 evaluations and batch predictions. If you plan to use the C<DataSource>
-to train an C<MLModel>, the C<DataSource> requires another item: a
-recipe. A recipe describes the observation variables that participate
-in training an C<MLModel>. A recipe describes how each input variable
-will be used in training. Will the variable be included or excluded
-from training? Will the variable be manipulated, for example, combined
-with another variable, or split apart into word combinations? The
-recipe provides answers to these questions. For more information, see
-the Amazon Machine Learning Developer Guide.
-
-
-
-
-
-
-
-
-
+to train an C<MLModel>, the C<DataSource> also needs a recipe. A recipe
+describes how each input variable will be used in training an
+C<MLModel>. Will the variable be included or excluded from training?
+Will the variable be manipulated; for example, will it be combined with
+another variable or will it be split apart into word combinations? The
+recipe provides answers to these questions.
 
 
 =head2 CreateEvaluation(EvaluationDataSourceId => Str, EvaluationId => Str, MLModelId => Str, [EvaluationName => Str])
@@ -354,16 +436,14 @@ Each argument is described in detail in: L<Paws::MachineLearning::CreateEvaluati
 
 Returns: a L<Paws::MachineLearning::CreateEvaluationOutput> instance
 
-  
-
-Creates a new C<Evaluation> of an C<MLModel>. An C<MLModel> is
+  Creates a new C<Evaluation> of an C<MLModel>. An C<MLModel> is
 evaluated on a set of observations associated to a C<DataSource>. Like
 a C<DataSource> for an C<MLModel>, the C<DataSource> for an
-C<Evaluation> contains values for the Target Variable. The
+C<Evaluation> contains values for the C<Target Variable>. The
 C<Evaluation> compares the predicted result for each observation to the
 actual outcome and provides a summary so that you know how effective
 the C<MLModel> functions on the test data. Evaluation generates a
-relevant performance metric such as BinaryAUC, RegressionRMSE or
+relevant performance metric, such as BinaryAUC, RegressionRMSE or
 MulticlassAvgFScore based on the corresponding C<MLModelType>:
 C<BINARY>, C<REGRESSION> or C<MULTICLASS>.
 
@@ -373,56 +453,36 @@ returns and sets the evaluation status to C<PENDING>. After the
 C<Evaluation> is created and ready for use, Amazon ML sets the status
 to C<COMPLETED>.
 
-You can use the GetEvaluation operation to check progress of the
+You can use the C<GetEvaluation> operation to check progress of the
 evaluation during the creation operation.
 
 
-
-
-
-
-
-
-
-
-
-=head2 CreateMLModel(MLModelId => Str, MLModelType => Str, TrainingDataSourceId => Str, [MLModelName => Str, Parameters => Paws::MachineLearning::TrainingParameters, Recipe => Str, RecipeUri => Str])
+=head2 CreateMLModel(MLModelId => Str, MLModelType => Str, TrainingDataSourceId => Str, [MLModelName => Str, Parameters => L<Paws::MachineLearning::TrainingParameters>, Recipe => Str, RecipeUri => Str])
 
 Each argument is described in detail in: L<Paws::MachineLearning::CreateMLModel>
 
 Returns: a L<Paws::MachineLearning::CreateMLModelOutput> instance
 
-  
-
-Creates a new C<MLModel> using the data files and the recipe as
+  Creates a new C<MLModel> using the C<DataSource> and the recipe as
 information sources.
 
-An C<MLModel> is nearly immutable. Users can only update the
+An C<MLModel> is nearly immutable. Users can update only the
 C<MLModelName> and the C<ScoreThreshold> in an C<MLModel> without
 creating a new C<MLModel>.
 
 C<CreateMLModel> is an asynchronous operation. In response to
 C<CreateMLModel>, Amazon Machine Learning (Amazon ML) immediately
 returns and sets the C<MLModel> status to C<PENDING>. After the
-C<MLModel> is created and ready for use, Amazon ML sets the status to
-C<COMPLETED>.
+C<MLModel> has been created and ready is for use, Amazon ML sets the
+status to C<COMPLETED>.
 
-You can use the GetMLModel operation to check progress of the
+You can use the C<GetMLModel> operation to check the progress of the
 C<MLModel> during the creation operation.
 
-CreateMLModel requires a C<DataSource> with computed statistics, which
-can be created by setting C<ComputeStatistics> to C<true> in
-CreateDataSourceFromRDS, CreateDataSourceFromS3, or
-CreateDataSourceFromRedshift operations.
-
-
-
-
-
-
-
-
-
+C<CreateMLModel> requires a C<DataSource> with computed statistics,
+which can be created by setting C<ComputeStatistics> to C<true> in
+C<CreateDataSourceFromRDS>, C<CreateDataSourceFromS3>, or
+C<CreateDataSourceFromRedshift> operations.
 
 
 =head2 CreateRealtimeEndpoint(MLModelId => Str)
@@ -431,20 +491,9 @@ Each argument is described in detail in: L<Paws::MachineLearning::CreateRealtime
 
 Returns: a L<Paws::MachineLearning::CreateRealtimeEndpointOutput> instance
 
-  
-
-Creates a real-time endpoint for the C<MLModel>. The endpoint contains
+  Creates a real-time endpoint for the C<MLModel>. The endpoint contains
 the URI of the C<MLModel>; that is, the location to send real-time
 prediction requests for the specified C<MLModel>.
-
-
-
-
-
-
-
-
-
 
 
 =head2 DeleteBatchPrediction(BatchPredictionId => Str)
@@ -453,25 +502,15 @@ Each argument is described in detail in: L<Paws::MachineLearning::DeleteBatchPre
 
 Returns: a L<Paws::MachineLearning::DeleteBatchPredictionOutput> instance
 
-  
-
-Assigns the DELETED status to a C<BatchPrediction>, rendering it
+  Assigns the DELETED status to a C<BatchPrediction>, rendering it
 unusable.
 
 After using the C<DeleteBatchPrediction> operation, you can use the
 GetBatchPrediction operation to verify that the status of the
 C<BatchPrediction> changed to DELETED.
 
-The result of the C<DeleteBatchPrediction> operation is irreversible.
-
-
-
-
-
-
-
-
-
+B<Caution:> The result of the C<DeleteBatchPrediction> operation is
+irreversible.
 
 
 =head2 DeleteDataSource(DataSourceId => Str)
@@ -480,24 +519,14 @@ Each argument is described in detail in: L<Paws::MachineLearning::DeleteDataSour
 
 Returns: a L<Paws::MachineLearning::DeleteDataSourceOutput> instance
 
-  
-
-Assigns the DELETED status to a C<DataSource>, rendering it unusable.
+  Assigns the DELETED status to a C<DataSource>, rendering it unusable.
 
 After using the C<DeleteDataSource> operation, you can use the
 GetDataSource operation to verify that the status of the C<DataSource>
 changed to DELETED.
 
-The results of the C<DeleteDataSource> operation are irreversible.
-
-
-
-
-
-
-
-
-
+B<Caution:> The results of the C<DeleteDataSource> operation are
+irreversible.
 
 
 =head2 DeleteEvaluation(EvaluationId => Str)
@@ -506,25 +535,14 @@ Each argument is described in detail in: L<Paws::MachineLearning::DeleteEvaluati
 
 Returns: a L<Paws::MachineLearning::DeleteEvaluationOutput> instance
 
-  
-
-Assigns the C<DELETED> status to an C<Evaluation>, rendering it
+  Assigns the C<DELETED> status to an C<Evaluation>, rendering it
 unusable.
 
 After invoking the C<DeleteEvaluation> operation, you can use the
-GetEvaluation operation to verify that the status of the C<Evaluation>
-changed to C<DELETED>.
+C<GetEvaluation> operation to verify that the status of the
+C<Evaluation> changed to C<DELETED>.
 
 The results of the C<DeleteEvaluation> operation are irreversible.
-
-
-
-
-
-
-
-
-
 
 
 =head2 DeleteMLModel(MLModelId => Str)
@@ -533,24 +551,14 @@ Each argument is described in detail in: L<Paws::MachineLearning::DeleteMLModel>
 
 Returns: a L<Paws::MachineLearning::DeleteMLModelOutput> instance
 
-  
+  Assigns the C<DELETED> status to an C<MLModel>, rendering it unusable.
 
-Assigns the DELETED status to an C<MLModel>, rendering it unusable.
+After using the C<DeleteMLModel> operation, you can use the
+C<GetMLModel> operation to verify that the status of the C<MLModel>
+changed to DELETED.
 
-After using the C<DeleteMLModel> operation, you can use the GetMLModel
-operation to verify that the status of the C<MLModel> changed to
-DELETED.
-
-The result of the C<DeleteMLModel> operation is irreversible.
-
-
-
-
-
-
-
-
-
+B<Caution:> The result of the C<DeleteMLModel> operation is
+irreversible.
 
 
 =head2 DeleteRealtimeEndpoint(MLModelId => Str)
@@ -559,18 +567,19 @@ Each argument is described in detail in: L<Paws::MachineLearning::DeleteRealtime
 
 Returns: a L<Paws::MachineLearning::DeleteRealtimeEndpointOutput> instance
 
-  
-
-Deletes a real time endpoint of an C<MLModel>.
+  Deletes a real time endpoint of an C<MLModel>.
 
 
+=head2 DeleteTags(ResourceId => Str, ResourceType => Str, TagKeys => ArrayRef[Str|Undef])
 
+Each argument is described in detail in: L<Paws::MachineLearning::DeleteTags>
 
+Returns: a L<Paws::MachineLearning::DeleteTagsOutput> instance
 
+  Deletes the specified tags associated with an ML object. After this
+operation is complete, you can't recover deleted tags.
 
-
-
-
+If you specify a tag that doesn't exist, Amazon ML ignores it.
 
 
 =head2 DescribeBatchPredictions([EQ => Str, FilterVariable => Str, GE => Str, GT => Str, LE => Str, Limit => Int, LT => Str, NE => Str, NextToken => Str, Prefix => Str, SortOrder => Str])
@@ -579,19 +588,8 @@ Each argument is described in detail in: L<Paws::MachineLearning::DescribeBatchP
 
 Returns: a L<Paws::MachineLearning::DescribeBatchPredictionsOutput> instance
 
-  
-
-Returns a list of C<BatchPrediction> operations that match the search
+  Returns a list of C<BatchPrediction> operations that match the search
 criteria in the request.
-
-
-
-
-
-
-
-
-
 
 
 =head2 DescribeDataSources([EQ => Str, FilterVariable => Str, GE => Str, GT => Str, LE => Str, Limit => Int, LT => Str, NE => Str, NextToken => Str, Prefix => Str, SortOrder => Str])
@@ -600,19 +598,8 @@ Each argument is described in detail in: L<Paws::MachineLearning::DescribeDataSo
 
 Returns: a L<Paws::MachineLearning::DescribeDataSourcesOutput> instance
 
-  
-
-Returns a list of C<DataSource> that match the search criteria in the
+  Returns a list of C<DataSource> that match the search criteria in the
 request.
-
-
-
-
-
-
-
-
-
 
 
 =head2 DescribeEvaluations([EQ => Str, FilterVariable => Str, GE => Str, GT => Str, LE => Str, Limit => Int, LT => Str, NE => Str, NextToken => Str, Prefix => Str, SortOrder => Str])
@@ -621,19 +608,8 @@ Each argument is described in detail in: L<Paws::MachineLearning::DescribeEvalua
 
 Returns: a L<Paws::MachineLearning::DescribeEvaluationsOutput> instance
 
-  
-
-Returns a list of C<DescribeEvaluations> that match the search criteria
+  Returns a list of C<DescribeEvaluations> that match the search criteria
 in the request.
-
-
-
-
-
-
-
-
-
 
 
 =head2 DescribeMLModels([EQ => Str, FilterVariable => Str, GE => Str, GT => Str, LE => Str, Limit => Int, LT => Str, NE => Str, NextToken => Str, Prefix => Str, SortOrder => Str])
@@ -642,19 +618,17 @@ Each argument is described in detail in: L<Paws::MachineLearning::DescribeMLMode
 
 Returns: a L<Paws::MachineLearning::DescribeMLModelsOutput> instance
 
-  
-
-Returns a list of C<MLModel> that match the search criteria in the
+  Returns a list of C<MLModel> that match the search criteria in the
 request.
 
 
+=head2 DescribeTags(ResourceId => Str, ResourceType => Str)
 
+Each argument is described in detail in: L<Paws::MachineLearning::DescribeTags>
 
+Returns: a L<Paws::MachineLearning::DescribeTagsOutput> instance
 
-
-
-
-
+  Describes one or more of the tags for your Amazon ML object.
 
 
 =head2 GetBatchPrediction(BatchPredictionId => Str)
@@ -663,19 +637,8 @@ Each argument is described in detail in: L<Paws::MachineLearning::GetBatchPredic
 
 Returns: a L<Paws::MachineLearning::GetBatchPredictionOutput> instance
 
-  
-
-Returns a C<BatchPrediction> that includes detailed metadata, status,
+  Returns a C<BatchPrediction> that includes detailed metadata, status,
 and data file information for a C<Batch Prediction> request.
-
-
-
-
-
-
-
-
-
 
 
 =head2 GetDataSource(DataSourceId => Str, [Verbose => Bool])
@@ -684,23 +647,12 @@ Each argument is described in detail in: L<Paws::MachineLearning::GetDataSource>
 
 Returns: a L<Paws::MachineLearning::GetDataSourceOutput> instance
 
-  
-
-Returns a C<DataSource> that includes metadata and data file
+  Returns a C<DataSource> that includes metadata and data file
 information, as well as the current status of the C<DataSource>.
 
 C<GetDataSource> provides results in normal or verbose format. The
 verbose format adds the schema description and the list of files
 pointed to by the DataSource to the normal format.
-
-
-
-
-
-
-
-
-
 
 
 =head2 GetEvaluation(EvaluationId => Str)
@@ -709,19 +661,8 @@ Each argument is described in detail in: L<Paws::MachineLearning::GetEvaluation>
 
 Returns: a L<Paws::MachineLearning::GetEvaluationOutput> instance
 
-  
-
-Returns an C<Evaluation> that includes metadata as well as the current
+  Returns an C<Evaluation> that includes metadata as well as the current
 status of the C<Evaluation>.
-
-
-
-
-
-
-
-
-
 
 
 =head2 GetMLModel(MLModelId => Str, [Verbose => Bool])
@@ -730,45 +671,23 @@ Each argument is described in detail in: L<Paws::MachineLearning::GetMLModel>
 
 Returns: a L<Paws::MachineLearning::GetMLModelOutput> instance
 
-  
-
-Returns an C<MLModel> that includes detailed metadata, and data source
-information as well as the current status of the C<MLModel>.
+  Returns an C<MLModel> that includes detailed metadata, data source
+information, and the current status of the C<MLModel>.
 
 C<GetMLModel> provides results in normal or verbose format.
 
 
-
-
-
-
-
-
-
-
-
-=head2 Predict(MLModelId => Str, PredictEndpoint => Str, Record => Paws::MachineLearning::Record)
+=head2 Predict(MLModelId => Str, PredictEndpoint => Str, Record => L<Paws::MachineLearning::Record>)
 
 Each argument is described in detail in: L<Paws::MachineLearning::Predict>
 
 Returns: a L<Paws::MachineLearning::PredictOutput> instance
 
-  
+  Generates a prediction for the observation using the specified C<ML
+Model>.
 
-Generates a prediction for the observation using the specified
-C<MLModel>.
-
-Not all response parameters will be populated because this is dependent
-on the type of requested model.
-
-
-
-
-
-
-
-
-
+Not all response parameters will be populated. Whether a response
+parameter is populated depends on the type of model requested.
 
 
 =head2 UpdateBatchPrediction(BatchPredictionId => Str, BatchPredictionName => Str)
@@ -777,21 +696,10 @@ Each argument is described in detail in: L<Paws::MachineLearning::UpdateBatchPre
 
 Returns: a L<Paws::MachineLearning::UpdateBatchPredictionOutput> instance
 
-  
+  Updates the C<BatchPredictionName> of a C<BatchPrediction>.
 
-Updates the C<BatchPredictionName> of a C<BatchPrediction>.
-
-You can use the GetBatchPrediction operation to view the contents of
+You can use the C<GetBatchPrediction> operation to view the contents of
 the updated data element.
-
-
-
-
-
-
-
-
-
 
 
 =head2 UpdateDataSource(DataSourceId => Str, DataSourceName => Str)
@@ -800,21 +708,10 @@ Each argument is described in detail in: L<Paws::MachineLearning::UpdateDataSour
 
 Returns: a L<Paws::MachineLearning::UpdateDataSourceOutput> instance
 
-  
+  Updates the C<DataSourceName> of a C<DataSource>.
 
-Updates the C<DataSourceName> of a C<DataSource>.
-
-You can use the GetDataSource operation to view the contents of the
+You can use the C<GetDataSource> operation to view the contents of the
 updated data element.
-
-
-
-
-
-
-
-
-
 
 
 =head2 UpdateEvaluation(EvaluationId => Str, EvaluationName => Str)
@@ -823,21 +720,10 @@ Each argument is described in detail in: L<Paws::MachineLearning::UpdateEvaluati
 
 Returns: a L<Paws::MachineLearning::UpdateEvaluationOutput> instance
 
-  
+  Updates the C<EvaluationName> of an C<Evaluation>.
 
-Updates the C<EvaluationName> of an C<Evaluation>.
-
-You can use the GetEvaluation operation to view the contents of the
+You can use the C<GetEvaluation> operation to view the contents of the
 updated data element.
-
-
-
-
-
-
-
-
-
 
 
 =head2 UpdateMLModel(MLModelId => Str, [MLModelName => Str, ScoreThreshold => Num])
@@ -846,18 +732,64 @@ Each argument is described in detail in: L<Paws::MachineLearning::UpdateMLModel>
 
 Returns: a L<Paws::MachineLearning::UpdateMLModelOutput> instance
 
-  
+  Updates the C<MLModelName> and the C<ScoreThreshold> of an C<MLModel>.
 
-Updates the C<MLModelName> and the C<ScoreThreshold> of an C<MLModel>.
-
-You can use the GetMLModel operation to view the contents of the
+You can use the C<GetMLModel> operation to view the contents of the
 updated data element.
 
 
 
 
+=head1 PAGINATORS
+
+Paginator methods are helpers that repetively call methods that return partial results
+
+=head2 DescribeAllBatchPredictions(sub { },[EQ => Str, FilterVariable => Str, GE => Str, GT => Str, LE => Str, Limit => Int, LT => Str, NE => Str, NextToken => Str, Prefix => Str, SortOrder => Str])
+
+=head2 DescribeAllBatchPredictions([EQ => Str, FilterVariable => Str, GE => Str, GT => Str, LE => Str, Limit => Int, LT => Str, NE => Str, NextToken => Str, Prefix => Str, SortOrder => Str])
 
 
+If passed a sub as first parameter, it will call the sub for each element found in :
+
+ - Results, passing the object as the first parameter, and the string 'Results' as the second parameter 
+
+If not, it will return a a L<Paws::MachineLearning::DescribeBatchPredictionsOutput> instance with all the C<param>s;  from all the responses. Please take into account that this mode can potentially consume vasts ammounts of memory.
+
+
+=head2 DescribeAllDataSources(sub { },[EQ => Str, FilterVariable => Str, GE => Str, GT => Str, LE => Str, Limit => Int, LT => Str, NE => Str, NextToken => Str, Prefix => Str, SortOrder => Str])
+
+=head2 DescribeAllDataSources([EQ => Str, FilterVariable => Str, GE => Str, GT => Str, LE => Str, Limit => Int, LT => Str, NE => Str, NextToken => Str, Prefix => Str, SortOrder => Str])
+
+
+If passed a sub as first parameter, it will call the sub for each element found in :
+
+ - Results, passing the object as the first parameter, and the string 'Results' as the second parameter 
+
+If not, it will return a a L<Paws::MachineLearning::DescribeDataSourcesOutput> instance with all the C<param>s;  from all the responses. Please take into account that this mode can potentially consume vasts ammounts of memory.
+
+
+=head2 DescribeAllEvaluations(sub { },[EQ => Str, FilterVariable => Str, GE => Str, GT => Str, LE => Str, Limit => Int, LT => Str, NE => Str, NextToken => Str, Prefix => Str, SortOrder => Str])
+
+=head2 DescribeAllEvaluations([EQ => Str, FilterVariable => Str, GE => Str, GT => Str, LE => Str, Limit => Int, LT => Str, NE => Str, NextToken => Str, Prefix => Str, SortOrder => Str])
+
+
+If passed a sub as first parameter, it will call the sub for each element found in :
+
+ - Results, passing the object as the first parameter, and the string 'Results' as the second parameter 
+
+If not, it will return a a L<Paws::MachineLearning::DescribeEvaluationsOutput> instance with all the C<param>s;  from all the responses. Please take into account that this mode can potentially consume vasts ammounts of memory.
+
+
+=head2 DescribeAllMLModels(sub { },[EQ => Str, FilterVariable => Str, GE => Str, GT => Str, LE => Str, Limit => Int, LT => Str, NE => Str, NextToken => Str, Prefix => Str, SortOrder => Str])
+
+=head2 DescribeAllMLModels([EQ => Str, FilterVariable => Str, GE => Str, GT => Str, LE => Str, Limit => Int, LT => Str, NE => Str, NextToken => Str, Prefix => Str, SortOrder => Str])
+
+
+If passed a sub as first parameter, it will call the sub for each element found in :
+
+ - Results, passing the object as the first parameter, and the string 'Results' as the second parameter 
+
+If not, it will return a a L<Paws::MachineLearning::DescribeMLModelsOutput> instance with all the C<param>s;  from all the responses. Please take into account that this mode can potentially consume vasts ammounts of memory.
 
 
 

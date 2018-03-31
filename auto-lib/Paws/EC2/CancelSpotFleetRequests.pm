@@ -1,8 +1,8 @@
 
-package Paws::EC2::CancelSpotFleetRequests {
+package Paws::EC2::CancelSpotFleetRequests;
   use Moose;
   has DryRun => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'dryRun' );
-  has SpotFleetRequestIds => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'spotFleetRequestId' , required => 1);
+  has SpotFleetRequestIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'spotFleetRequestId' , required => 1);
   has TerminateInstances => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'terminateInstances' , required => 1);
 
   use MooseX::ClassAttribute;
@@ -10,7 +10,6 @@ package Paws::EC2::CancelSpotFleetRequests {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'CancelSpotFleetRequests');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::EC2::CancelSpotFleetRequestsResponse');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method CancelSpotFleet
 Amazon Elastic Compute Cloud service. Use the attributes of this class
 as arguments to method CancelSpotFleetRequests.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to CancelSpotFleetRequests.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to CancelSpotFleetRequests.
 
 As an example:
 
@@ -35,9 +34,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 DryRun => Bool
 
-  
+=head2 DryRun => Bool
 
 Checks whether you have the required permissions for the action,
 without actually making the request, and provides an error response. If
@@ -46,42 +44,16 @@ C<DryRunOperation>. Otherwise, it is C<UnauthorizedOperation>.
 
 
 
-
-
-
-
-
-
-
-=head2 B<REQUIRED> SpotFleetRequestIds => ArrayRef[Str]
-
-  
+=head2 B<REQUIRED> SpotFleetRequestIds => ArrayRef[Str|Undef]
 
 The IDs of the Spot fleet requests.
 
 
 
-
-
-
-
-
-
-
 =head2 B<REQUIRED> TerminateInstances => Bool
-
-  
 
 Indicates whether to terminate instances for a Spot fleet request if it
 is canceled successfully.
-
-
-
-
-
-
-
-
 
 
 

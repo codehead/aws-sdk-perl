@@ -1,10 +1,9 @@
 
-package Paws::Support::RefreshTrustedAdvisorCheckResponse {
+package Paws::Support::RefreshTrustedAdvisorCheckResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has status => (is => 'ro', isa => 'Paws::Support::TrustedAdvisorCheckRefreshStatus', required => 1);
+  has Status => (is => 'ro', isa => 'Paws::Support::TrustedAdvisorCheckRefreshStatus', traits => ['NameInRequest'], request_name => 'status' , required => 1);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,21 +13,14 @@ Paws::Support::RefreshTrustedAdvisorCheckResponse
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> status => Paws::Support::TrustedAdvisorCheckRefreshStatus
 
-  
+=head2 B<REQUIRED> Status => L<Paws::Support::TrustedAdvisorCheckRefreshStatus>
 
 The current refresh status for a check, including the amount of time
 until the check is eligible for refresh.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

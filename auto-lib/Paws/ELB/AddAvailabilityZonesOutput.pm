@@ -1,10 +1,9 @@
 
-package Paws::ELB::AddAvailabilityZonesOutput {
+package Paws::ELB::AddAvailabilityZonesOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has AvailabilityZones => (is => 'ro', isa => 'ArrayRef[Str]');
+  has AvailabilityZones => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::ELB::AddAvailabilityZonesOutput
 
 =head1 ATTRIBUTES
 
-=head2 AvailabilityZones => ArrayRef[Str]
 
-  
+=head2 AvailabilityZones => ArrayRef[Str|Undef]
 
 The updated list of Availability Zones for the load balancer.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

@@ -1,23 +1,23 @@
 
-package Paws::SimpleWorkflow::StartWorkflowExecution {
+package Paws::SimpleWorkflow::StartWorkflowExecution;
   use Moose;
-  has childPolicy => (is => 'ro', isa => 'Str');
-  has domain => (is => 'ro', isa => 'Str', required => 1);
-  has executionStartToCloseTimeout => (is => 'ro', isa => 'Str');
-  has input => (is => 'ro', isa => 'Str');
-  has tagList => (is => 'ro', isa => 'ArrayRef[Str]');
-  has taskList => (is => 'ro', isa => 'Paws::SimpleWorkflow::TaskList');
-  has taskPriority => (is => 'ro', isa => 'Str');
-  has taskStartToCloseTimeout => (is => 'ro', isa => 'Str');
-  has workflowId => (is => 'ro', isa => 'Str', required => 1);
-  has workflowType => (is => 'ro', isa => 'Paws::SimpleWorkflow::WorkflowType', required => 1);
+  has ChildPolicy => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'childPolicy' );
+  has Domain => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'domain' , required => 1);
+  has ExecutionStartToCloseTimeout => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'executionStartToCloseTimeout' );
+  has Input => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'input' );
+  has LambdaRole => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'lambdaRole' );
+  has TagList => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'tagList' );
+  has TaskList => (is => 'ro', isa => 'Paws::SimpleWorkflow::TaskList', traits => ['NameInRequest'], request_name => 'taskList' );
+  has TaskPriority => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'taskPriority' );
+  has TaskStartToCloseTimeout => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'taskStartToCloseTimeout' );
+  has WorkflowId => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'workflowId' , required => 1);
+  has WorkflowType => (is => 'ro', isa => 'Paws::SimpleWorkflow::WorkflowType', traits => ['NameInRequest'], request_name => 'workflowType' , required => 1);
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'StartWorkflowExecution');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::SimpleWorkflow::Run');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -32,7 +32,7 @@ This class represents the parameters used for calling the method StartWorkflowEx
 Amazon Simple Workflow Service service. Use the attributes of this class
 as arguments to method StartWorkflowExecution.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to StartWorkflowExecution.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to StartWorkflowExecution.
 
 As an example:
 
@@ -42,9 +42,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 childPolicy => Str
 
-  
+=head2 ChildPolicy => Str
 
 If set, specifies the policy to use for the child workflow executions
 of this workflow execution if it is terminated, by calling the
@@ -56,57 +55,45 @@ The supported child policies are:
 
 =over
 
-=item * B<TERMINATE:> the child executions will be terminated.
+=item *
 
-=item * B<REQUEST_CANCEL:> a request to cancel will be attempted for
-each child execution by recording a C<WorkflowExecutionCancelRequested>
+C<TERMINATE> E<ndash> The child executions are terminated.
+
+=item *
+
+C<REQUEST_CANCEL> E<ndash> A request to cancel is attempted for each
+child execution by recording a C<WorkflowExecutionCancelRequested>
 event in its history. It is up to the decider to take appropriate
 actions when it receives an execution history with this event.
 
-=item * B<ABANDON:> no action will be taken. The child executions will
-continue to run.
+=item *
+
+C<ABANDON> E<ndash> No action is taken. The child executions continue
+to run.
 
 =back
 
 A child policy for this workflow execution must be specified either as
 a default for the workflow type or through this parameter. If neither
 this parameter is set nor a default child policy was specified at
-registration time then a fault will be returned.
+registration time then a fault is returned.
 
+Valid values are: C<"TERMINATE">, C<"REQUEST_CANCEL">, C<"ABANDON">
 
-
-
-
-
-
-
-
-
-=head2 B<REQUIRED> domain => Str
-
-  
+=head2 B<REQUIRED> Domain => Str
 
 The name of the domain in which the workflow execution is created.
 
 
 
-
-
-
-
-
-
-
-=head2 executionStartToCloseTimeout => Str
-
-  
+=head2 ExecutionStartToCloseTimeout => Str
 
 The total duration for this workflow execution. This overrides the
 defaultExecutionStartToCloseTimeout specified when registering the
 workflow type.
 
 The duration is specified in seconds; an integer greater than or equal
-to 0. Exceeding this limit will cause the workflow execution to time
+to C<0>. Exceeding this limit causes the workflow execution to time
 out. Unlike some of the other timeout parameters in Amazon SWF, you
 cannot specify a value of "NONE" for this timeout; there is a one-year
 max limit on the time that a workflow execution can run.
@@ -118,16 +105,7 @@ is specified, a fault is returned.
 
 
 
-
-
-
-
-
-
-
-=head2 input => Str
-
-  
+=head2 Input => Str
 
 The input for the workflow execution. This is a free form string which
 should be meaningful to the workflow you are starting. This C<input> is
@@ -136,16 +114,20 @@ C<WorkflowExecutionStarted> history event.
 
 
 
+=head2 LambdaRole => Str
+
+The IAM role to attach to this workflow execution.
+
+Executions of this workflow type need IAM roles to invoke Lambda
+functions. If you don't attach an IAM role, any attempt to schedule a
+Lambda task fails. This results in a C<ScheduleLambdaFunctionFailed>
+history event. For more information, see
+http://docs.aws.amazon.com/amazonswf/latest/developerguide/lambda-task.html
+in the I<Amazon SWF Developer Guide>.
 
 
 
-
-
-
-
-=head2 tagList => ArrayRef[Str]
-
-  
+=head2 TagList => ArrayRef[Str|Undef]
 
 The list of tags to associate with the workflow execution. You can
 specify a maximum of 5 tags. You can list workflow executions with a
@@ -154,16 +136,7 @@ ListClosedWorkflowExecutions and specifying a TagFilter.
 
 
 
-
-
-
-
-
-
-
-=head2 taskList => Paws::SimpleWorkflow::TaskList
-
-  
+=head2 TaskList => L<Paws::SimpleWorkflow::TaskList>
 
 The task list to use for the decision tasks generated for this workflow
 execution. This overrides the C<defaultTaskList> specified when
@@ -172,75 +145,48 @@ registering the workflow type.
 A task list for this workflow execution must be specified either as a
 default for the workflow type or through this parameter. If neither
 this parameter is set nor a default task list was specified at
-registration time then a fault will be returned.
+registration time then a fault is returned.
 
 The specified string must not start or end with whitespace. It must not
 contain a C<:> (colon), C</> (slash), C<|> (vertical bar), or any
-control characters (\u0000-\u001f | \u007f - \u009f). Also, it must not
-contain the literal string quotarnquot.
+control characters (C<\u0000-\u001f> | C<\u007f-\u009f>). Also, it must
+not contain the literal string C<arn>.
 
 
 
+=head2 TaskPriority => Str
 
-
-
-
-
-
-
-=head2 taskPriority => Str
-
-  
-
-The task priority to use for this workflow execution. This will
-override any default priority that was assigned when the workflow type
-was registered. If not set, then the default task priority for the
-workflow type will be used. Valid values are integers that range from
-Java's C<Integer.MIN_VALUE> (-2147483648) to C<Integer.MAX_VALUE>
+The task priority to use for this workflow execution. This overrides
+any default priority that was assigned when the workflow type was
+registered. If not set, then the default task priority for the workflow
+type is used. Valid values are integers that range from Java's
+C<Integer.MIN_VALUE> (-2147483648) to C<Integer.MAX_VALUE>
 (2147483647). Higher numbers indicate higher priority.
 
 For more information about setting task priority, see Setting Task
-Priority in the I<Amazon Simple Workflow Developer Guide>.
+Priority in the I<Amazon SWF Developer Guide>.
 
 
 
-
-
-
-
-
-
-
-=head2 taskStartToCloseTimeout => Str
-
-  
+=head2 TaskStartToCloseTimeout => Str
 
 Specifies the maximum duration of decision tasks for this workflow
 execution. This parameter overrides the
 C<defaultTaskStartToCloseTimout> specified when registering the
 workflow type using RegisterWorkflowType.
 
-The duration is specified in seconds; an integer greater than or equal
-to 0. The value "NONE" can be used to specify unlimited duration.
+The duration is specified in seconds, an integer greater than or equal
+to C<0>. You can use C<NONE> to specify unlimited duration.
 
 A task start-to-close timeout for this workflow execution must be
 specified either as a default for the workflow type or through this
 parameter. If neither this parameter is set nor a default task
 start-to-close timeout was specified at registration time then a fault
-will be returned.
+is returned.
 
 
 
-
-
-
-
-
-
-
-=head2 B<REQUIRED> workflowId => Str
-
-  
+=head2 B<REQUIRED> WorkflowId => Str
 
 The user defined identifier associated with the workflow execution. You
 can use this to associate a custom identifier with the workflow
@@ -250,31 +196,14 @@ open workflow executions with the same C<workflowId> at the same time.
 
 The specified string must not start or end with whitespace. It must not
 contain a C<:> (colon), C</> (slash), C<|> (vertical bar), or any
-control characters (\u0000-\u001f | \u007f - \u009f). Also, it must not
-contain the literal string quotarnquot.
+control characters (C<\u0000-\u001f> | C<\u007f-\u009f>). Also, it must
+not contain the literal string C<arn>.
 
 
 
-
-
-
-
-
-
-
-=head2 B<REQUIRED> workflowType => Paws::SimpleWorkflow::WorkflowType
-
-  
+=head2 B<REQUIRED> WorkflowType => L<Paws::SimpleWorkflow::WorkflowType>
 
 The type of the workflow to start.
-
-
-
-
-
-
-
-
 
 
 

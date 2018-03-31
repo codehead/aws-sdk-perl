@@ -1,19 +1,18 @@
 
-package Paws::SimpleWorkflow::TerminateWorkflowExecution {
+package Paws::SimpleWorkflow::TerminateWorkflowExecution;
   use Moose;
-  has childPolicy => (is => 'ro', isa => 'Str');
-  has details => (is => 'ro', isa => 'Str');
-  has domain => (is => 'ro', isa => 'Str', required => 1);
-  has reason => (is => 'ro', isa => 'Str');
-  has runId => (is => 'ro', isa => 'Str');
-  has workflowId => (is => 'ro', isa => 'Str', required => 1);
+  has ChildPolicy => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'childPolicy' );
+  has Details => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'details' );
+  has Domain => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'domain' , required => 1);
+  has Reason => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'reason' );
+  has RunId => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'runId' );
+  has WorkflowId => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'workflowId' , required => 1);
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'TerminateWorkflowExecution');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -28,7 +27,7 @@ This class represents the parameters used for calling the method TerminateWorkfl
 Amazon Simple Workflow Service service. Use the attributes of this class
 as arguments to method TerminateWorkflowExecution.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to TerminateWorkflowExecution.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to TerminateWorkflowExecution.
 
 As an example:
 
@@ -38,9 +37,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 childPolicy => Str
 
-  
+=head2 ChildPolicy => Str
 
 If set, specifies the policy to use for the child workflow executions
 of the workflow execution being terminated. This policy overrides the
@@ -51,106 +49,58 @@ The supported child policies are:
 
 =over
 
-=item * B<TERMINATE:> the child executions will be terminated.
+=item *
 
-=item * B<REQUEST_CANCEL:> a request to cancel will be attempted for
-each child execution by recording a C<WorkflowExecutionCancelRequested>
+C<TERMINATE> E<ndash> The child executions are terminated.
+
+=item *
+
+C<REQUEST_CANCEL> E<ndash> A request to cancel is attempted for each
+child execution by recording a C<WorkflowExecutionCancelRequested>
 event in its history. It is up to the decider to take appropriate
 actions when it receives an execution history with this event.
 
-=item * B<ABANDON:> no action will be taken. The child executions will
-continue to run.
+=item *
+
+C<ABANDON> E<ndash> No action is taken. The child executions continue
+to run.
 
 =back
 
 A child policy for this workflow execution must be specified either as
 a default for the workflow type or through this parameter. If neither
 this parameter is set nor a default child policy was specified at
-registration time then a fault will be returned.
+registration time then a fault is returned.
+
+Valid values are: C<"TERMINATE">, C<"REQUEST_CANCEL">, C<"ABANDON">
+
+=head2 Details => Str
+
+Details for terminating the workflow execution.
 
 
 
-
-
-
-
-
-
-
-=head2 details => Str
-
-  
-
-I<Optional.> Details for terminating the workflow execution.
-
-
-
-
-
-
-
-
-
-
-=head2 B<REQUIRED> domain => Str
-
-  
+=head2 B<REQUIRED> Domain => Str
 
 The domain of the workflow execution to terminate.
 
 
 
+=head2 Reason => Str
+
+A descriptive reason for terminating the workflow execution.
 
 
 
-
-
-
-
-=head2 reason => Str
-
-  
-
-I<Optional.> A descriptive reason for terminating the workflow
-execution.
-
-
-
-
-
-
-
-
-
-
-=head2 runId => Str
-
-  
+=head2 RunId => Str
 
 The runId of the workflow execution to terminate.
 
 
 
-
-
-
-
-
-
-
-=head2 B<REQUIRED> workflowId => Str
-
-  
+=head2 B<REQUIRED> WorkflowId => Str
 
 The workflowId of the workflow execution to terminate.
-
-
-
-
-
-
-
-
 
 
 

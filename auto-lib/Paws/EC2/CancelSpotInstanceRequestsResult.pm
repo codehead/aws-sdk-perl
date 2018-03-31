@@ -1,10 +1,9 @@
 
-package Paws::EC2::CancelSpotInstanceRequestsResult {
+package Paws::EC2::CancelSpotInstanceRequestsResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has CancelledSpotInstanceRequests => (is => 'ro', isa => 'ArrayRef[Paws::EC2::CancelledSpotInstanceRequest]', xmlname => 'spotInstanceRequestSet', traits => ['Unwrapped',]);
+  has CancelledSpotInstanceRequests => (is => 'ro', isa => 'ArrayRef[Paws::EC2::CancelledSpotInstanceRequest]', request_name => 'spotInstanceRequestSet', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::EC2::CancelSpotInstanceRequestsResult
 
 =head1 ATTRIBUTES
 
-=head2 CancelledSpotInstanceRequests => ArrayRef[Paws::EC2::CancelledSpotInstanceRequest]
 
-  
+=head2 CancelledSpotInstanceRequests => ArrayRef[L<Paws::EC2::CancelledSpotInstanceRequest>]
 
-One or more Spot Instance requests.
-
+One or more Spot instance requests.
 
 
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

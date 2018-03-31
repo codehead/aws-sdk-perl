@@ -1,10 +1,9 @@
 
-package Paws::CodeDeploy::CreateDeploymentOutput {
+package Paws::CodeDeploy::CreateDeploymentOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has deploymentId => (is => 'ro', isa => 'Str');
+  has DeploymentId => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'deploymentId' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::CodeDeploy::CreateDeploymentOutput
 
 =head1 ATTRIBUTES
 
-=head2 deploymentId => Str
 
-  
+=head2 DeploymentId => Str
 
 A unique deployment ID.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

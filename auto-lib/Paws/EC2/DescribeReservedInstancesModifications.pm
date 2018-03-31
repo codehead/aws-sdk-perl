@@ -1,16 +1,15 @@
 
-package Paws::EC2::DescribeReservedInstancesModifications {
+package Paws::EC2::DescribeReservedInstancesModifications;
   use Moose;
   has Filters => (is => 'ro', isa => 'ArrayRef[Paws::EC2::Filter]', traits => ['NameInRequest'], request_name => 'Filter' );
   has NextToken => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'nextToken' );
-  has ReservedInstancesModificationIds => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'ReservedInstancesModificationId' );
+  has ReservedInstancesModificationIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'ReservedInstancesModificationId' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeReservedInstancesModifications');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::EC2::DescribeReservedInstancesModificationsResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method DescribeReserve
 Amazon Elastic Compute Cloud service. Use the attributes of this class
 as arguments to method DescribeReservedInstancesModifications.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeReservedInstancesModifications.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeReservedInstancesModifications.
 
 As an example:
 
@@ -35,9 +34,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 Filters => ArrayRef[Paws::EC2::Filter]
 
-  
+=head2 Filters => ArrayRef[L<Paws::EC2::Filter>]
 
 One or more filters.
 
@@ -109,40 +107,15 @@ updated.
 
 
 
-
-
-
-
-
-
 =head2 NextToken => Str
-
-  
 
 The token to retrieve the next page of results.
 
 
 
-
-
-
-
-
-
-
-=head2 ReservedInstancesModificationIds => ArrayRef[Str]
-
-  
+=head2 ReservedInstancesModificationIds => ArrayRef[Str|Undef]
 
 IDs for the submitted modification request.
-
-
-
-
-
-
-
-
 
 
 

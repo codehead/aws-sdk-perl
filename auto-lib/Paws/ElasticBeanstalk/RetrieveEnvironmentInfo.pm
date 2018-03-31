@@ -1,5 +1,5 @@
 
-package Paws::ElasticBeanstalk::RetrieveEnvironmentInfo {
+package Paws::ElasticBeanstalk::RetrieveEnvironmentInfo;
   use Moose;
   has EnvironmentId => (is => 'ro', isa => 'Str');
   has EnvironmentName => (is => 'ro', isa => 'Str');
@@ -10,7 +10,6 @@ package Paws::ElasticBeanstalk::RetrieveEnvironmentInfo {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'RetrieveEnvironmentInfo');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::ElasticBeanstalk::RetrieveEnvironmentInfoResultMessage');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'RetrieveEnvironmentInfoResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method RetrieveEnviron
 AWS Elastic Beanstalk service. Use the attributes of this class
 as arguments to method RetrieveEnvironmentInfo.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to RetrieveEnvironmentInfo.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to RetrieveEnvironmentInfo.
 
 As an example:
 
@@ -35,9 +34,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 EnvironmentId => Str
 
-  
+=head2 EnvironmentId => Str
 
 The ID of the data's environment.
 
@@ -50,16 +48,7 @@ C<MissingRequiredParameter> error.
 
 
 
-
-
-
-
-
-
-
 =head2 EnvironmentName => Str
-
-  
 
 The name of the data's environment.
 
@@ -72,28 +61,11 @@ C<MissingRequiredParameter> error.
 
 
 
-
-
-
-
-
-
-
 =head2 B<REQUIRED> InfoType => Str
-
-  
 
 The type of information to retrieve.
 
-
-
-
-
-
-
-
-
-
+Valid values are: C<"tail">, C<"bundle">
 
 
 =head1 SEE ALSO

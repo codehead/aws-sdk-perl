@@ -1,10 +1,9 @@
 
-package Paws::RDS::CopyDBSnapshotResult {
+package Paws::RDS::CopyDBSnapshotResult;
   use Moose;
-  with 'Paws::API::ResultParser';
   has DBSnapshot => (is => 'ro', isa => 'Paws::RDS::DBSnapshot');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,9 +14,13 @@ Paws::RDS::CopyDBSnapshotResult
 
 =head1 ATTRIBUTES
 
-=head2 DBSnapshot => Paws::RDS::DBSnapshot
 
-  
+=head2 DBSnapshot => L<Paws::RDS::DBSnapshot>
+
+
+
+
+=head2 _request_id => Str
 
 
 =cut

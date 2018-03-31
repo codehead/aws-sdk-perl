@@ -1,16 +1,15 @@
 
-package Paws::EC2::DescribeSubnets {
+package Paws::EC2::DescribeSubnets;
   use Moose;
   has DryRun => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'dryRun' );
   has Filters => (is => 'ro', isa => 'ArrayRef[Paws::EC2::Filter]', traits => ['NameInRequest'], request_name => 'Filter' );
-  has SubnetIds => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'SubnetId' );
+  has SubnetIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'SubnetId' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeSubnets');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::EC2::DescribeSubnetsResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method DescribeSubnets
 Amazon Elastic Compute Cloud service. Use the attributes of this class
 as arguments to method DescribeSubnets.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeSubnets.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeSubnets.
 
 As an example:
 
@@ -35,9 +34,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 DryRun => Bool
 
-  
+=head2 DryRun => Bool
 
 Checks whether you have the required permissions for the action,
 without actually making the request, and provides an error response. If
@@ -46,16 +44,7 @@ C<DryRunOperation>. Otherwise, it is C<UnauthorizedOperation>.
 
 
 
-
-
-
-
-
-
-
-=head2 Filters => ArrayRef[Paws::EC2::Filter]
-
-  
+=head2 Filters => ArrayRef[L<Paws::EC2::Filter>]
 
 One or more filters.
 
@@ -68,21 +57,36 @@ also use C<availability-zone> as the filter name.
 
 =item *
 
-C<available-ip-address-count> - The number of IP addresses in the
+C<available-ip-address-count> - The number of IPv4 addresses in the
 subnet that are available.
 
 =item *
 
-C<cidrBlock> - The CIDR block of the subnet. The CIDR block you specify
-must exactly match the subnet's CIDR block for information to be
-returned for the subnet. You can also use C<cidr> or C<cidr-block> as
-the filter names.
+C<cidrBlock> - The IPv4 CIDR block of the subnet. The CIDR block you
+specify must exactly match the subnet's CIDR block for information to
+be returned for the subnet. You can also use C<cidr> or C<cidr-block>
+as the filter names.
 
 =item *
 
 C<defaultForAz> - Indicates whether this is the default subnet for the
 Availability Zone. You can also use C<default-for-az> as the filter
 name.
+
+=item *
+
+C<ipv6-cidr-block-association.ipv6-cidr-block> - An IPv6 CIDR block
+associated with the subnet.
+
+=item *
+
+C<ipv6-cidr-block-association.association-id> - An association ID for
+an IPv6 CIDR block associated with the subnet.
+
+=item *
+
+C<ipv6-cidr-block-association.state> - The state of an IPv6 CIDR block
+associated with the subnet.
 
 =item *
 
@@ -95,7 +99,10 @@ C<subnet-id> - The ID of the subnet.
 =item *
 
 C<tag>:I<key>=I<value> - The key/value combination of a tag assigned to
-the resource.
+the resource. Specify the key of the tag in the filter name and the
+value of the tag in the filter value. For example, for the tag
+Purpose=X, specify C<tag:Purpose> for the filter name and C<X> for the
+filter value.
 
 =item *
 
@@ -121,27 +128,11 @@ C<vpc-id> - The ID of the VPC for the subnet.
 
 
 
-
-
-
-
-
-
-=head2 SubnetIds => ArrayRef[Str]
-
-  
+=head2 SubnetIds => ArrayRef[Str|Undef]
 
 One or more subnet IDs.
 
 Default: Describes all your subnets.
-
-
-
-
-
-
-
-
 
 
 

@@ -1,17 +1,16 @@
 
-package Paws::Lambda::InvokeAsync {
+package Paws::Lambda::InvokeAsync;
   use Moose;
-  has FunctionName => (is => 'ro', isa => 'Str', traits => ['ParamInURI'], uri_name => 'FunctionName' , required => 1);
+  has FunctionName => (is => 'ro', isa => 'Str', traits => ['ParamInURI'], uri_name => 'FunctionName', required => 1);
   has InvokeArgs => (is => 'ro', isa => 'Str', required => 1);
 
   use MooseX::ClassAttribute;
-
+  class_has _stream_param => (is => 'ro', default => 'InvokeArgs');
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'InvokeAsync');
   class_has _api_uri  => (isa => 'Str', is => 'ro', default => '/2014-11-13/functions/{FunctionName}/invoke-async/');
   class_has _api_method  => (isa => 'Str', is => 'ro', default => 'POST');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::Lambda::InvokeAsyncResponse');
-  class_has _result_key => (isa => 'Str', is => 'ro', default => 'InvokeAsyncResult');
-}
+  class_has _result_key => (isa => 'Str', is => 'ro');
 1;
 
 ### main pod documentation begin ###
@@ -26,7 +25,7 @@ This class represents the parameters used for calling the method InvokeAsync on 
 AWS Lambda service. Use the attributes of this class
 as arguments to method InvokeAsync.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to InvokeAsync.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to InvokeAsync.
 
 As an example:
 
@@ -36,34 +35,18 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
+
 =head2 B<REQUIRED> FunctionName => Str
 
-  
-
-The Lambda function name.
-
-
-
-
-
-
-
+The Lambda function name. Note that the length constraint applies only
+to the ARN. If you specify only the function name, it is limited to 64
+characters in length.
 
 
 
 =head2 B<REQUIRED> InvokeArgs => Str
 
-  
-
 JSON that you want to provide to your Lambda function as input.
-
-
-
-
-
-
-
-
 
 
 

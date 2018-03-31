@@ -1,10 +1,9 @@
 
-package Paws::EC2::DescribeConversionTasksResult {
+package Paws::EC2::DescribeConversionTasksResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has ConversionTasks => (is => 'ro', isa => 'ArrayRef[Paws::EC2::ConversionTask]', xmlname => 'conversionTasks', traits => ['Unwrapped',]);
+  has ConversionTasks => (is => 'ro', isa => 'ArrayRef[Paws::EC2::ConversionTask]', request_name => 'conversionTasks', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::EC2::DescribeConversionTasksResult
 
 =head1 ATTRIBUTES
 
-=head2 ConversionTasks => ArrayRef[Paws::EC2::ConversionTask]
 
-  
+=head2 ConversionTasks => ArrayRef[L<Paws::EC2::ConversionTask>]
 
 Information about the conversion tasks.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

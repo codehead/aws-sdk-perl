@@ -1,5 +1,5 @@
 
-package Paws::IAM::UpdateAccountPasswordPolicy {
+package Paws::IAM::UpdateAccountPasswordPolicy;
   use Moose;
   has AllowUsersToChangePassword => (is => 'ro', isa => 'Bool');
   has HardExpiry => (is => 'ro', isa => 'Bool');
@@ -14,9 +14,8 @@ package Paws::IAM::UpdateAccountPasswordPolicy {
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'UpdateAccountPasswordPolicy');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -31,7 +30,7 @@ This class represents the parameters used for calling the method UpdateAccountPa
 AWS Identity and Access Management service. Use the attributes of this class
 as arguments to method UpdateAccountPasswordPolicy.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to UpdateAccountPasswordPolicy.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to UpdateAccountPasswordPolicy.
 
 As an example:
 
@@ -41,28 +40,18 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 AllowUsersToChangePassword => Bool
 
-  
+=head2 AllowUsersToChangePassword => Bool
 
 Allows all IAM users in your account to use the AWS Management Console
 to change their own passwords. For more information, see Letting IAM
-Users Change Their Own Passwords in the I<Using IAM> guide.
+Users Change Their Own Passwords in the I<IAM User Guide>.
 
 Default value: false
 
 
 
-
-
-
-
-
-
-
 =head2 HardExpiry => Bool
-
-  
 
 Prevents IAM users from setting a new password after their password has
 expired.
@@ -71,16 +60,7 @@ Default value: false
 
 
 
-
-
-
-
-
-
-
 =head2 MaxPasswordAge => Int
-
-  
 
 The number of days that an IAM user password is valid. The default
 value of 0 means IAM user passwords never expire.
@@ -89,16 +69,7 @@ Default value: 0
 
 
 
-
-
-
-
-
-
-
 =head2 MinimumPasswordLength => Int
-
-  
 
 The minimum number of characters allowed in an IAM user password.
 
@@ -106,16 +77,7 @@ Default value: 6
 
 
 
-
-
-
-
-
-
-
 =head2 PasswordReusePrevention => Int
-
-  
 
 Specifies the number of previous passwords that IAM users are prevented
 from reusing. The default value of 0 means IAM users are not prevented
@@ -125,16 +87,7 @@ Default value: 0
 
 
 
-
-
-
-
-
-
-
 =head2 RequireLowercaseCharacters => Bool
-
-  
 
 Specifies whether IAM user passwords must contain at least one
 lowercase character from the ISO basic Latin alphabet (a to z).
@@ -143,16 +96,7 @@ Default value: false
 
 
 
-
-
-
-
-
-
-
 =head2 RequireNumbers => Bool
-
-  
 
 Specifies whether IAM user passwords must contain at least one numeric
 character (0 to 9).
@@ -161,49 +105,23 @@ Default value: false
 
 
 
-
-
-
-
-
-
-
 =head2 RequireSymbols => Bool
-
-  
 
 Specifies whether IAM user passwords must contain at least one of the
 following non-alphanumeric characters:
 
-! @ 
+! @ # $ % ^ & * ( ) _ + - = [ ] { } | '
 
 Default value: false
-
-
-
-
-
-
-
 
 
 
 =head2 RequireUppercaseCharacters => Bool
 
-  
-
 Specifies whether IAM user passwords must contain at least one
 uppercase character from the ISO basic Latin alphabet (A to Z).
 
 Default value: false
-
-
-
-
-
-
-
-
 
 
 

@@ -1,7 +1,7 @@
 
-package Paws::OpsWorks::DescribeApps {
+package Paws::OpsWorks::DescribeApps;
   use Moose;
-  has AppIds => (is => 'ro', isa => 'ArrayRef[Str]');
+  has AppIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
   has StackId => (is => 'ro', isa => 'Str');
 
   use MooseX::ClassAttribute;
@@ -9,7 +9,6 @@ package Paws::OpsWorks::DescribeApps {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeApps');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::OpsWorks::DescribeAppsResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -24,7 +23,7 @@ This class represents the parameters used for calling the method DescribeApps on
 AWS OpsWorks service. Use the attributes of this class
 as arguments to method DescribeApps.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeApps.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeApps.
 
 As an example:
 
@@ -34,9 +33,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 AppIds => ArrayRef[Str]
 
-  
+=head2 AppIds => ArrayRef[Str|Undef]
 
 An array of app IDs for the apps to be described. If you use this
 parameter, C<DescribeApps> returns a description of the specified apps.
@@ -44,27 +42,10 @@ Otherwise, it returns a description of every app.
 
 
 
-
-
-
-
-
-
-
 =head2 StackId => Str
-
-  
 
 The app stack ID. If you use this parameter, C<DescribeApps> returns a
 description of the apps in the specified stack.
-
-
-
-
-
-
-
-
 
 
 

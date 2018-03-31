@@ -1,10 +1,9 @@
 
-package Paws::CognitoSync::DescribeDatasetResponse {
+package Paws::CognitoSync::DescribeDatasetResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has Dataset => (is => 'ro', isa => 'Paws::CognitoSync::Dataset');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,9 +14,8 @@ Paws::CognitoSync::DescribeDatasetResponse
 
 =head1 ATTRIBUTES
 
-=head2 Dataset => Paws::CognitoSync::Dataset
 
-  
+=head2 Dataset => L<Paws::CognitoSync::Dataset>
 
 Meta data for a collection of data for an identity. An identity can
 have multiple datasets. A dataset can be general or associated with a
@@ -26,13 +24,7 @@ automatically created if they don't exist. Data is synced by dataset,
 and a dataset can hold up to 1MB of key-value pairs.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

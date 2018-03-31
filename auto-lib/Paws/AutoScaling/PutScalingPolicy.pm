@@ -1,19 +1,24 @@
 
-package Paws::AutoScaling::PutScalingPolicy {
+package Paws::AutoScaling::PutScalingPolicy;
   use Moose;
-  has AdjustmentType => (is => 'ro', isa => 'Str', required => 1);
+  has AdjustmentType => (is => 'ro', isa => 'Str');
   has AutoScalingGroupName => (is => 'ro', isa => 'Str', required => 1);
   has Cooldown => (is => 'ro', isa => 'Int');
+  has EstimatedInstanceWarmup => (is => 'ro', isa => 'Int');
+  has MetricAggregationType => (is => 'ro', isa => 'Str');
+  has MinAdjustmentMagnitude => (is => 'ro', isa => 'Int');
   has MinAdjustmentStep => (is => 'ro', isa => 'Int');
   has PolicyName => (is => 'ro', isa => 'Str', required => 1);
-  has ScalingAdjustment => (is => 'ro', isa => 'Int', required => 1);
+  has PolicyType => (is => 'ro', isa => 'Str');
+  has ScalingAdjustment => (is => 'ro', isa => 'Int');
+  has StepAdjustments => (is => 'ro', isa => 'ArrayRef[Paws::AutoScaling::StepAdjustment]');
+  has TargetTrackingConfiguration => (is => 'ro', isa => 'Paws::AutoScaling::TargetTrackingConfiguration');
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'PutScalingPolicy');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::AutoScaling::PolicyARNType');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'PutScalingPolicyResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -28,7 +33,7 @@ This class represents the parameters used for calling the method PutScalingPolic
 Auto Scaling service. Use the attributes of this class
 as arguments to method PutScalingPolicy.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to PutScalingPolicy.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to PutScalingPolicy.
 
 As an example:
 
@@ -38,112 +43,120 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> AdjustmentType => Str
 
-  
+=head2 AdjustmentType => Str
 
-Specifies whether the C<ScalingAdjustment> is an absolute number or a
-percentage of the current capacity. Valid values are
-C<ChangeInCapacity>, C<ExactCapacity>, and C<PercentChangeInCapacity>.
+The adjustment type. The valid values are C<ChangeInCapacity>,
+C<ExactCapacity>, and C<PercentChangeInCapacity>.
 
-For more information, see Dynamic Scaling in the I<Auto Scaling
-Developer Guide>.
+This parameter is supported if the policy type is C<SimpleScaling> or
+C<StepScaling>.
 
-
-
-
-
-
-
+For more information, see Dynamic Scaling in the I<Auto Scaling User
+Guide>.
 
 
 
 =head2 B<REQUIRED> AutoScalingGroupName => Str
 
-  
-
 The name or ARN of the group.
-
-
-
-
-
-
-
 
 
 
 =head2 Cooldown => Int
 
-  
-
 The amount of time, in seconds, after a scaling activity completes and
-before the next scaling activity can start.
+before the next scaling activity can start. If this parameter is not
+specified, the default cooldown period for the group applies.
 
-For more information, see Understanding Auto Scaling Cooldowns in the
-I<Auto Scaling Developer Guide>.
+This parameter is supported if the policy type is C<SimpleScaling>.
 
-
-
-
-
+For more information, see Auto Scaling Cooldowns in the I<Auto Scaling
+User Guide>.
 
 
+
+=head2 EstimatedInstanceWarmup => Int
+
+The estimated time, in seconds, until a newly launched instance can
+contribute to the CloudWatch metrics. The default is to use the value
+specified for the default cooldown period for the group.
+
+This parameter is supported if the policy type is C<StepScaling> or
+C<TargetTrackingScaling>.
+
+
+
+=head2 MetricAggregationType => Str
+
+The aggregation type for the CloudWatch metrics. The valid values are
+C<Minimum>, C<Maximum>, and C<Average>. If the aggregation type is
+null, the value is treated as C<Average>.
+
+This parameter is supported if the policy type is C<StepScaling>.
+
+
+
+=head2 MinAdjustmentMagnitude => Int
+
+The minimum number of instances to scale. If the value of
+C<AdjustmentType> is C<PercentChangeInCapacity>, the scaling policy
+changes the C<DesiredCapacity> of the Auto Scaling group by at least
+this many instances. Otherwise, the error is C<ValidationError>.
+
+This parameter is supported if the policy type is C<SimpleScaling> or
+C<StepScaling>.
 
 
 
 =head2 MinAdjustmentStep => Int
 
-  
-
-Used with C<AdjustmentType> with the value C<PercentChangeInCapacity>,
-the scaling policy changes the C<DesiredCapacity> of the Auto Scaling
-group by at least the number of instances specified in the value.
-
-You will get a C<ValidationError> if you use C<MinAdjustmentStep> on a
-policy with an C<AdjustmentType> other than C<PercentChangeInCapacity>.
-
-
-
-
-
-
-
+Available for backward compatibility. Use C<MinAdjustmentMagnitude>
+instead.
 
 
 
 =head2 B<REQUIRED> PolicyName => Str
 
-  
-
 The name of the policy.
 
 
 
+=head2 PolicyType => Str
+
+The policy type. The valid values are C<SimpleScaling>, C<StepScaling>,
+and C<TargetTrackingScaling>. If the policy type is null, the value is
+treated as C<SimpleScaling>.
 
 
 
+=head2 ScalingAdjustment => Int
+
+The amount by which to scale, based on the specified adjustment type. A
+positive value adds to the current capacity while a negative number
+removes from the current capacity.
+
+This parameter is required if the policy type is C<SimpleScaling> and
+not supported otherwise.
 
 
 
+=head2 StepAdjustments => ArrayRef[L<Paws::AutoScaling::StepAdjustment>]
 
-=head2 B<REQUIRED> ScalingAdjustment => Int
+A set of adjustments that enable you to scale based on the size of the
+alarm breach.
 
-  
-
-The number of instances by which to scale. C<AdjustmentType> determines
-the interpretation of this number (e.g., as an absolute number or as a
-percentage of the existing Auto Scaling group size). A positive
-increment adds to the current capacity and a negative value removes
-from the current capacity.
+This parameter is required if the policy type is C<StepScaling> and not
+supported otherwise.
 
 
 
+=head2 TargetTrackingConfiguration => L<Paws::AutoScaling::TargetTrackingConfiguration>
 
+A target tracking policy.
 
-
-
-
+This parameter is required if the policy type is
+C<TargetTrackingScaling> and not supported otherwise.
 
 
 

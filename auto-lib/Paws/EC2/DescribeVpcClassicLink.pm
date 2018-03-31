@@ -1,16 +1,15 @@
 
-package Paws::EC2::DescribeVpcClassicLink {
+package Paws::EC2::DescribeVpcClassicLink;
   use Moose;
   has DryRun => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'dryRun' );
   has Filters => (is => 'ro', isa => 'ArrayRef[Paws::EC2::Filter]', traits => ['NameInRequest'], request_name => 'Filter' );
-  has VpcIds => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'VpcId' );
+  has VpcIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'VpcId' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeVpcClassicLink');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::EC2::DescribeVpcClassicLinkResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method DescribeVpcClas
 Amazon Elastic Compute Cloud service. Use the attributes of this class
 as arguments to method DescribeVpcClassicLink.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeVpcClassicLink.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeVpcClassicLink.
 
 As an example:
 
@@ -35,9 +34,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 DryRun => Bool
 
-  
+=head2 DryRun => Bool
 
 Checks whether you have the required permissions for the action,
 without actually making the request, and provides an error response. If
@@ -46,16 +44,7 @@ C<DryRunOperation>. Otherwise, it is C<UnauthorizedOperation>.
 
 
 
-
-
-
-
-
-
-
-=head2 Filters => ArrayRef[Paws::EC2::Filter]
-
-  
+=head2 Filters => ArrayRef[L<Paws::EC2::Filter>]
 
 One or more filters.
 
@@ -69,7 +58,10 @@ C<is-classic-link-enabled> - Whether the VPC is enabled for ClassicLink
 =item *
 
 C<tag>:I<key>=I<value> - The key/value combination of a tag assigned to
-the resource.
+the resource. Specify the key of the tag in the filter name and the
+value of the tag in the filter value. For example, for the tag
+Purpose=X, specify C<tag:Purpose> for the filter name and C<X> for the
+filter value.
 
 =item *
 
@@ -91,25 +83,9 @@ is independent of the C<tag-key> filter.
 
 
 
-
-
-
-
-
-
-=head2 VpcIds => ArrayRef[Str]
-
-  
+=head2 VpcIds => ArrayRef[Str|Undef]
 
 One or more VPCs for which you want to describe the ClassicLink status.
-
-
-
-
-
-
-
-
 
 
 

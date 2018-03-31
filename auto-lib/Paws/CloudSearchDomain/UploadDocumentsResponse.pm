@@ -1,13 +1,12 @@
 
-package Paws::CloudSearchDomain::UploadDocumentsResponse {
+package Paws::CloudSearchDomain::UploadDocumentsResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has adds => (is => 'ro', isa => 'Num');
-  has deletes => (is => 'ro', isa => 'Num');
-  has status => (is => 'ro', isa => 'Str');
-  has warnings => (is => 'ro', isa => 'ArrayRef[Paws::CloudSearchDomain::DocumentServiceWarning]');
+  has Adds => (is => 'ro', isa => 'Int', traits => ['NameInRequest'], request_name => 'adds');
+  has Deletes => (is => 'ro', isa => 'Int', traits => ['NameInRequest'], request_name => 'deletes');
+  has Status => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'status');
+  has Warnings => (is => 'ro', isa => 'ArrayRef[Paws::CloudSearchDomain::DocumentServiceWarning]', traits => ['NameInRequest'], request_name => 'warnings');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -18,63 +17,29 @@ Paws::CloudSearchDomain::UploadDocumentsResponse
 
 =head1 ATTRIBUTES
 
-=head2 adds => Num
 
-  
+=head2 Adds => Int
 
 The number of documents that were added to the search domain.
 
 
-
-
-
-
-
-
-
-=head2 deletes => Num
-
-  
+=head2 Deletes => Int
 
 The number of documents that were deleted from the search domain.
 
 
-
-
-
-
-
-
-
-=head2 status => Str
-
-  
+=head2 Status => Str
 
 The status of an C<UploadDocumentsRequest>.
 
 
-
-
-
-
-
-
-
-=head2 warnings => ArrayRef[Paws::CloudSearchDomain::DocumentServiceWarning]
-
-  
+=head2 Warnings => ArrayRef[L<Paws::CloudSearchDomain::DocumentServiceWarning>]
 
 Any warnings returned by the document service about the documents being
 uploaded.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

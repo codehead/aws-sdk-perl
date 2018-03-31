@@ -1,16 +1,16 @@
 
-package Paws::CodeDeploy::ListDeploymentInstances {
+package Paws::CodeDeploy::ListDeploymentInstances;
   use Moose;
-  has deploymentId => (is => 'ro', isa => 'Str', required => 1);
-  has instanceStatusFilter => (is => 'ro', isa => 'ArrayRef[Str]');
-  has nextToken => (is => 'ro', isa => 'Str');
+  has DeploymentId => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'deploymentId' , required => 1);
+  has InstanceStatusFilter => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'instanceStatusFilter' );
+  has InstanceTypeFilter => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'instanceTypeFilter' );
+  has NextToken => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'nextToken' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'ListDeploymentInstances');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::CodeDeploy::ListDeploymentInstancesOutput');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +25,7 @@ This class represents the parameters used for calling the method ListDeploymentI
 AWS CodeDeploy service. Use the attributes of this class
 as arguments to method ListDeploymentInstances.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to ListDeploymentInstances.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to ListDeploymentInstances.
 
 As an example:
 
@@ -35,73 +35,62 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> deploymentId => Str
 
-  
+=head2 B<REQUIRED> DeploymentId => Str
 
 The unique ID of a deployment.
 
 
 
+=head2 InstanceStatusFilter => ArrayRef[Str|Undef]
 
-
-
-
-
-
-
-=head2 instanceStatusFilter => ArrayRef[Str]
-
-  
-
-A subset of instances to list, by status:
+A subset of instances to list by status:
 
 =over
 
-=item * Pending: Include in the resulting list those instances with
-pending deployments.
+=item *
 
-=item * InProgress: Include in the resulting list those instances with
-in-progress deployments.
+Pending: Include those instance with pending deployments.
 
-=item * Succeeded: Include in the resulting list those instances with
-succeeded deployments.
+=item *
 
-=item * Failed: Include in the resulting list those instances with
-failed deployments.
+InProgress: Include those instance where deployments are still in
+progress.
 
-=item * Skipped: Include in the resulting list those instances with
-skipped deployments.
+=item *
 
-=item * Unknown: Include in the resulting list those instances with
-deployments in an unknown state.
+Succeeded: Include those instances with successful deployments.
+
+=item *
+
+Failed: Include those instance with failed deployments.
+
+=item *
+
+Skipped: Include those instance with skipped deployments.
+
+=item *
+
+Unknown: Include those instance with deployments in an unknown state.
 
 =back
 
 
 
 
+=head2 InstanceTypeFilter => ArrayRef[Str|Undef]
+
+The set of instances in a blue/green deployment, either those in the
+original environment ("BLUE") or those in the replacement environment
+("GREEN"), for which you want to view instance information.
 
 
 
+=head2 NextToken => Str
 
-
-
-=head2 nextToken => Str
-
-  
-
-An identifier that was returned from the previous list deployment
-instances call, which can be used to return the next set of deployment
-instances in the list.
-
-
-
-
-
-
-
-
+An identifier returned from the previous list deployment instances
+call. It can be used to return the next set of deployment instances in
+the list.
 
 
 

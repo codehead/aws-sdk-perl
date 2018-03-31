@@ -1,10 +1,9 @@
 
-package Paws::EC2::DescribeAccountAttributesResult {
+package Paws::EC2::DescribeAccountAttributesResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has AccountAttributes => (is => 'ro', isa => 'ArrayRef[Paws::EC2::AccountAttribute]', xmlname => 'accountAttributeSet', traits => ['Unwrapped',]);
+  has AccountAttributes => (is => 'ro', isa => 'ArrayRef[Paws::EC2::AccountAttribute]', request_name => 'accountAttributeSet', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::EC2::DescribeAccountAttributesResult
 
 =head1 ATTRIBUTES
 
-=head2 AccountAttributes => ArrayRef[Paws::EC2::AccountAttribute]
 
-  
+=head2 AccountAttributes => ArrayRef[L<Paws::EC2::AccountAttribute>]
 
 Information about one or more account attributes.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

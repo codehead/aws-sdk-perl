@@ -1,11 +1,10 @@
 
-package Paws::RDS::DBInstanceMessage {
+package Paws::RDS::DBInstanceMessage;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has DBInstances => (is => 'ro', isa => 'ArrayRef[Paws::RDS::DBInstance]', xmlname => 'DBInstance', traits => ['Unwrapped',]);
+  has DBInstances => (is => 'ro', isa => 'ArrayRef[Paws::RDS::DBInstance]', request_name => 'DBInstance', traits => ['NameInRequest',]);
   has Marker => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -16,36 +15,20 @@ Paws::RDS::DBInstanceMessage
 
 =head1 ATTRIBUTES
 
-=head2 DBInstances => ArrayRef[Paws::RDS::DBInstance]
 
-  
+=head2 DBInstances => ArrayRef[L<Paws::RDS::DBInstance>]
 
 A list of DBInstance instances.
 
 
-
-
-
-
-
-
-
 =head2 Marker => Str
-
-  
 
 An optional pagination token provided by a previous request. If this
 parameter is specified, the response includes only records beyond the
 marker, up to the value specified by C<MaxRecords> .
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

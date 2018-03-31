@@ -1,10 +1,9 @@
 
-package Paws::DirectConnect::Connections {
+package Paws::DirectConnect::Connections;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has connections => (is => 'ro', isa => 'ArrayRef[Paws::DirectConnect::Connection]');
+  has Connections => (is => 'ro', isa => 'ArrayRef[Paws::DirectConnect::Connection]', traits => ['NameInRequest'], request_name => 'connections' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::DirectConnect::Connections
 
 =head1 ATTRIBUTES
 
-=head2 connections => ArrayRef[Paws::DirectConnect::Connection]
 
-  
+=head2 Connections => ArrayRef[L<Paws::DirectConnect::Connection>]
 
 A list of connections.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

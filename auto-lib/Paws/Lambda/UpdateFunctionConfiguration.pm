@@ -1,21 +1,26 @@
 
-package Paws::Lambda::UpdateFunctionConfiguration {
+package Paws::Lambda::UpdateFunctionConfiguration;
   use Moose;
+  has DeadLetterConfig => (is => 'ro', isa => 'Paws::Lambda::DeadLetterConfig');
   has Description => (is => 'ro', isa => 'Str');
-  has FunctionName => (is => 'ro', isa => 'Str', traits => ['ParamInURI'], uri_name => 'FunctionName' , required => 1);
+  has Environment => (is => 'ro', isa => 'Paws::Lambda::Environment');
+  has FunctionName => (is => 'ro', isa => 'Str', traits => ['ParamInURI'], uri_name => 'FunctionName', required => 1);
   has Handler => (is => 'ro', isa => 'Str');
+  has KMSKeyArn => (is => 'ro', isa => 'Str');
   has MemorySize => (is => 'ro', isa => 'Int');
   has Role => (is => 'ro', isa => 'Str');
+  has Runtime => (is => 'ro', isa => 'Str');
   has Timeout => (is => 'ro', isa => 'Int');
+  has TracingConfig => (is => 'ro', isa => 'Paws::Lambda::TracingConfig');
+  has VpcConfig => (is => 'ro', isa => 'Paws::Lambda::VpcConfig');
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'UpdateFunctionConfiguration');
-  class_has _api_uri  => (isa => 'Str', is => 'ro', default => '/2015-03-31/functions/{FunctionName}/versions/HEAD/configuration');
+  class_has _api_uri  => (isa => 'Str', is => 'ro', default => '/2015-03-31/functions/{FunctionName}/configuration');
   class_has _api_method  => (isa => 'Str', is => 'ro', default => 'PUT');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::Lambda::FunctionConfiguration');
-  class_has _result_key => (isa => 'Str', is => 'ro', default => 'UpdateFunctionConfigurationResult');
-}
+  class_has _result_key => (isa => 'Str', is => 'ro');
 1;
 
 ### main pod documentation begin ###
@@ -30,7 +35,7 @@ This class represents the parameters used for calling the method UpdateFunctionC
 AWS Lambda service. Use the attributes of this class
 as arguments to method UpdateFunctionConfiguration.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to UpdateFunctionConfiguration.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to UpdateFunctionConfiguration.
 
 As an example:
 
@@ -40,64 +45,58 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 Description => Str
 
-  
+=head2 DeadLetterConfig => L<Paws::Lambda::DeadLetterConfig>
+
+The parent object that contains the target ARN (Amazon Resource Name)
+of an Amazon SQS queue or Amazon SNS topic.
+
+
+
+=head2 Description => Str
 
 A short user-defined function description. AWS Lambda does not use this
 value. Assign a meaningful description as you see fit.
 
 
 
+=head2 Environment => L<Paws::Lambda::Environment>
 
-
-
-
+The parent object that contains your environment's configuration
+settings.
 
 
 
 =head2 B<REQUIRED> FunctionName => Str
 
-  
-
 The name of the Lambda function.
 
-You can specify an unqualified function name (for example, "Thumbnail")
-or you can specify Amazon Resource Name (ARN) of the function (for
-example, "arn:aws:lambda:us-west-2:account-id:function:ThumbNail"). AWS
-Lambda also allows you to specify only the account ID qualifier (for
-example, "account-id:Thumbnail"). Note that the length constraint
-applies only to the ARN. If you specify only the function name, it is
-limited to 64 character in length.
-
-
-
-
-
-
-
+You can specify a function name (for example, C<Thumbnail>) or you can
+specify Amazon Resource Name (ARN) of the function (for example,
+C<arn:aws:lambda:us-west-2:account-id:function:ThumbNail>). AWS Lambda
+also allows you to specify a partial ARN (for example,
+C<account-id:Thumbnail>). Note that the length constraint applies only
+to the ARN. If you specify only the function name, it is limited to 64
+character in length.
 
 
 
 =head2 Handler => Str
 
-  
-
 The function that Lambda calls to begin executing your function. For
-Node.js, it is the I<module-name.export> value in your function.
+Node.js, it is the C<module-name.export> value in your function.
 
 
 
+=head2 KMSKeyArn => Str
 
-
-
-
+The Amazon Resource Name (ARN) of the KMS key used to encrypt your
+function's environment variables. If you elect to use the AWS Lambda
+default service key, pass in an empty string ("") for this parameter.
 
 
 
 =head2 MemorySize => Int
-
-  
 
 The amount of memory, in MB, your Lambda function is given. AWS Lambda
 uses this memory size to infer the amount of CPU allocated to your
@@ -108,32 +107,35 @@ The value must be a multiple of 64 MB.
 
 
 
-
-
-
-
-
-
-
 =head2 Role => Str
-
-  
 
 The Amazon Resource Name (ARN) of the IAM role that Lambda will assume
 when it executes your function.
 
 
 
+=head2 Runtime => Str
 
+The runtime environment for the Lambda function.
 
+To use the Python runtime v3.6, set the value to "python3.6". To use
+the Python runtime v2.7, set the value to "python2.7". To use the
+Node.js runtime v6.10, set the value to "nodejs6.10". To use the
+Node.js runtime v4.3, set the value to "nodejs4.3". To use the Python
+runtime v3.6, set the value to "python3.6".
 
+Node v0.10.42 is currently marked as deprecated. You must migrate
+existing functions to the newer Node.js runtime versions available on
+AWS Lambda (nodejs4.3 or nodejs6.10) as soon as possible. You can
+request a one-time extension until June 30, 2017 by going to the Lambda
+console and following the instructions provided. Failure to do so will
+result in an invalid parameter error being returned. Note that you will
+have to follow this procedure for each region that contains functions
+written in the Node v0.10.42 runtime.
 
-
-
+Valid values are: C<"nodejs">, C<"nodejs4.3">, C<"nodejs6.10">, C<"java8">, C<"python2.7">, C<"python3.6">, C<"dotnetcore1.0">, C<"nodejs4.3-edge">
 
 =head2 Timeout => Int
-
-  
 
 The function execution time at which AWS Lambda should terminate the
 function. Because the execution time has cost implications, we
@@ -142,9 +144,13 @@ default is 3 seconds.
 
 
 
+=head2 TracingConfig => L<Paws::Lambda::TracingConfig>
+
+The parent object that contains your function's tracing settings.
 
 
 
+=head2 VpcConfig => L<Paws::Lambda::VpcConfig>
 
 
 

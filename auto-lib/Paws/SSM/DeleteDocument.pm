@@ -1,5 +1,5 @@
 
-package Paws::SSM::DeleteDocument {
+package Paws::SSM::DeleteDocument;
   use Moose;
   has Name => (is => 'ro', isa => 'Str', required => 1);
 
@@ -8,7 +8,6 @@ package Paws::SSM::DeleteDocument {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DeleteDocument');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::SSM::DeleteDocumentResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -20,10 +19,10 @@ Paws::SSM::DeleteDocument - Arguments for method DeleteDocument on Paws::SSM
 =head1 DESCRIPTION
 
 This class represents the parameters used for calling the method DeleteDocument on the 
-Amazon Simple Systems Management Service service. Use the attributes of this class
+Amazon Simple Systems Manager (SSM) service. Use the attributes of this class
 as arguments to method DeleteDocument.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DeleteDocument.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DeleteDocument.
 
 As an example:
 
@@ -33,19 +32,10 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
+
 =head2 B<REQUIRED> Name => Str
 
-  
-
-The name of the configuration document.
-
-
-
-
-
-
-
-
+The name of the document.
 
 
 

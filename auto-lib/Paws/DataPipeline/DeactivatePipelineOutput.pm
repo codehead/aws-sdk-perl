@@ -1,9 +1,8 @@
 
-package Paws::DataPipeline::DeactivatePipelineOutput {
+package Paws::DataPipeline::DeactivatePipelineOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -13,6 +12,8 @@ Paws::DataPipeline::DeactivatePipelineOutput
 
 =head1 ATTRIBUTES
 
+
+=head2 _request_id => Str
 
 
 =cut

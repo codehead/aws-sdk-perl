@@ -1,10 +1,9 @@
 
-package Paws::RedShift::CreateClusterParameterGroupResult {
+package Paws::RedShift::CreateClusterParameterGroupResult;
   use Moose;
-  with 'Paws::API::ResultParser';
   has ClusterParameterGroup => (is => 'ro', isa => 'Paws::RedShift::ClusterParameterGroup');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,9 +14,13 @@ Paws::RedShift::CreateClusterParameterGroupResult
 
 =head1 ATTRIBUTES
 
-=head2 ClusterParameterGroup => Paws::RedShift::ClusterParameterGroup
 
-  
+=head2 ClusterParameterGroup => L<Paws::RedShift::ClusterParameterGroup>
+
+
+
+
+=head2 _request_id => Str
 
 
 =cut

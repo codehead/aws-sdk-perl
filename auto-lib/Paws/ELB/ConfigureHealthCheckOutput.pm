@@ -1,10 +1,9 @@
 
-package Paws::ELB::ConfigureHealthCheckOutput {
+package Paws::ELB::ConfigureHealthCheckOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
   has HealthCheck => (is => 'ro', isa => 'Paws::ELB::HealthCheck');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::ELB::ConfigureHealthCheckOutput
 
 =head1 ATTRIBUTES
 
-=head2 HealthCheck => Paws::ELB::HealthCheck
 
-  
+=head2 HealthCheck => L<Paws::ELB::HealthCheck>
 
 The updated health check.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

@@ -1,5 +1,5 @@
 
-package Paws::Kinesis::SplitShard {
+package Paws::Kinesis::SplitShard;
   use Moose;
   has NewStartingHashKey => (is => 'ro', isa => 'Str', required => 1);
   has ShardToSplit => (is => 'ro', isa => 'Str', required => 1);
@@ -8,9 +8,8 @@ package Paws::Kinesis::SplitShard {
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'SplitShard');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method SplitShard on t
 Amazon Kinesis service. Use the attributes of this class
 as arguments to method SplitShard.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to SplitShard.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to SplitShard.
 
 As an example:
 
@@ -35,9 +34,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> NewStartingHashKey => Str
 
-  
+=head2 B<REQUIRED> NewStartingHashKey => Str
 
 A hash key value for the starting hash key of one of the child shards
 created by the split. The hash key range for a given shard constitutes
@@ -50,41 +48,15 @@ the other child shard.
 
 
 
-
-
-
-
-
-
-
 =head2 B<REQUIRED> ShardToSplit => Str
-
-  
 
 The shard ID of the shard to split.
 
 
 
-
-
-
-
-
-
-
 =head2 B<REQUIRED> StreamName => Str
 
-  
-
 The name of the stream for the shard split.
-
-
-
-
-
-
-
-
 
 
 

@@ -1,10 +1,9 @@
 
-package Paws::EC2::CreateSubnetResult {
+package Paws::EC2::CreateSubnetResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has Subnet => (is => 'ro', isa => 'Paws::EC2::Subnet', xmlname => 'subnet', traits => ['Unwrapped',]);
+  has Subnet => (is => 'ro', isa => 'Paws::EC2::Subnet', request_name => 'subnet', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::EC2::CreateSubnetResult
 
 =head1 ATTRIBUTES
 
-=head2 Subnet => Paws::EC2::Subnet
 
-  
+=head2 Subnet => L<Paws::EC2::Subnet>
 
 Information about the subnet.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

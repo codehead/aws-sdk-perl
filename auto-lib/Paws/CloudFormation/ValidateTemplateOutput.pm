@@ -1,13 +1,13 @@
 
-package Paws::CloudFormation::ValidateTemplateOutput {
+package Paws::CloudFormation::ValidateTemplateOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has Capabilities => (is => 'ro', isa => 'ArrayRef[Str]');
+  has Capabilities => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
   has CapabilitiesReason => (is => 'ro', isa => 'Str');
+  has DeclaredTransforms => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
   has Description => (is => 'ro', isa => 'Str');
   has Parameters => (is => 'ro', isa => 'ArrayRef[Paws::CloudFormation::TemplateParameter]');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -18,68 +18,41 @@ Paws::CloudFormation::ValidateTemplateOutput
 
 =head1 ATTRIBUTES
 
-=head2 Capabilities => ArrayRef[Str]
 
-  
+=head2 Capabilities => ArrayRef[Str|Undef]
 
-The capabilities found within the template. Currently, AWS
-CloudFormation supports only the CAPABILITY_IAM capability. If your
-template contains IAM resources, you must specify the CAPABILITY_IAM
-value for this parameter when you use the CreateStack or UpdateStack
-actions with your template; otherwise, those actions return an
-InsufficientCapabilities error.
+The capabilities found within the template. If your template contains
+IAM resources, you must specify the CAPABILITY_IAM or
+CAPABILITY_NAMED_IAM value for this parameter when you use the
+CreateStack or UpdateStack actions with your template; otherwise, those
+actions return an InsufficientCapabilities error.
 
-
-
-
-
-
-
+For more information, see Acknowledging IAM Resources in AWS
+CloudFormation Templates.
 
 
 =head2 CapabilitiesReason => Str
-
-  
 
 The list of resources that generated the values in the C<Capabilities>
 response element.
 
 
+=head2 DeclaredTransforms => ArrayRef[Str|Undef]
 
-
-
-
-
+A list of the transforms that are declared in the template.
 
 
 =head2 Description => Str
 
-  
-
 The description found within the template.
 
 
-
-
-
-
-
-
-
-=head2 Parameters => ArrayRef[Paws::CloudFormation::TemplateParameter]
-
-  
+=head2 Parameters => ArrayRef[L<Paws::CloudFormation::TemplateParameter>]
 
 A list of C<TemplateParameter> structures.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

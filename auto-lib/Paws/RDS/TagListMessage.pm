@@ -1,10 +1,9 @@
 
-package Paws::RDS::TagListMessage {
+package Paws::RDS::TagListMessage;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has TagList => (is => 'ro', isa => 'ArrayRef[Paws::RDS::Tag]', xmlname => 'Tag', traits => ['Unwrapped',]);
+  has TagList => (is => 'ro', isa => 'ArrayRef[Paws::RDS::Tag]', request_name => 'Tag', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::RDS::TagListMessage
 
 =head1 ATTRIBUTES
 
-=head2 TagList => ArrayRef[Paws::RDS::Tag]
 
-  
+=head2 TagList => ArrayRef[L<Paws::RDS::Tag>]
 
 List of tags returned by the ListTagsForResource operation.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

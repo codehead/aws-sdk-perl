@@ -1,10 +1,9 @@
 
-package Paws::SES::VerifyDomainDkimResponse {
+package Paws::SES::VerifyDomainDkimResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has DkimTokens => (is => 'ro', isa => 'ArrayRef[Str]', required => 1);
+  has DkimTokens => (is => 'ro', isa => 'ArrayRef[Str|Undef]', required => 1);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,9 +14,8 @@ Paws::SES::VerifyDomainDkimResponse
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> DkimTokens => ArrayRef[Str]
 
-  
+=head2 B<REQUIRED> DkimTokens => ArrayRef[Str|Undef]
 
 A set of character strings that represent the domain's identity. If the
 identity is an email address, the tokens represent the domain of that
@@ -34,13 +32,7 @@ For more information about creating DNS records using DKIM tokens, go
 to the Amazon SES Developer Guide.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

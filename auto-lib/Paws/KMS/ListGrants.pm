@@ -1,5 +1,5 @@
 
-package Paws::KMS::ListGrants {
+package Paws::KMS::ListGrants;
   use Moose;
   has KeyId => (is => 'ro', isa => 'Str', required => 1);
   has Limit => (is => 'ro', isa => 'Int');
@@ -10,7 +10,6 @@ package Paws::KMS::ListGrants {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'ListGrants');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::KMS::ListGrantsResponse');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method ListGrants on t
 AWS Key Management Service service. Use the attributes of this class
 as arguments to method ListGrants.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to ListGrants.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to ListGrants.
 
 As an example:
 
@@ -35,66 +34,44 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> KeyId => Str
 
-  
+=head2 B<REQUIRED> KeyId => Str
 
 A unique identifier for the customer master key. This value can be a
 globally unique identifier or the fully specified ARN to a key.
 
 =over
 
-=item * Key ARN Example -
+=item *
+
+Key ARN Example -
 arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
 
-=item * Globally Unique Key ID Example -
-12345678-1234-1234-1234-123456789012
+=item *
+
+Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012
 
 =back
 
 
 
 
-
-
-
-
-
-
 =head2 Limit => Int
 
-  
+Use this parameter to specify the maximum number of items to return.
+When this value is present, AWS KMS does not return more than the
+specified number of items, but it might return fewer.
 
-Specify this parameter only when paginating results to indicate the
-maximum number of grants you want listed in the response. If there are
-additional grants beyond the maximum you specify, the C<Truncated>
-response element will be set to C<true.>
-
-
-
-
-
-
-
+This value is optional. If you include a value, it must be between 1
+and 100, inclusive. If you do not include a value, it defaults to 50.
 
 
 
 =head2 Marker => Str
 
-  
-
-Use this parameter only when paginating results, and only in a
-subsequent request after you've received a response where the results
-are truncated. Set it to the value of the C<NextMarker> in the response
-you just received.
-
-
-
-
-
-
-
-
+Use this parameter in a subsequent request after you receive a response
+with truncated results. Set it to the value of C<NextMarker> from the
+truncated response you just received.
 
 
 

@@ -1,10 +1,9 @@
 
-package Paws::MachineLearning::DeleteBatchPredictionOutput {
+package Paws::MachineLearning::DeleteBatchPredictionOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
   has BatchPredictionId => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,22 +13,15 @@ Paws::MachineLearning::DeleteBatchPredictionOutput
 
 =head1 ATTRIBUTES
 
-=head2 BatchPredictionId => Str
 
-  
+=head2 BatchPredictionId => Str
 
 A user-supplied ID that uniquely identifies the C<BatchPrediction>.
 This value should be identical to the value of the C<BatchPredictionID>
 in the request.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

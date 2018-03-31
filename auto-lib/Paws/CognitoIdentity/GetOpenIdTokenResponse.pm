@@ -1,11 +1,10 @@
 
-package Paws::CognitoIdentity::GetOpenIdTokenResponse {
+package Paws::CognitoIdentity::GetOpenIdTokenResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has IdentityId => (is => 'ro', isa => 'Str');
   has Token => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -15,35 +14,19 @@ Paws::CognitoIdentity::GetOpenIdTokenResponse
 
 =head1 ATTRIBUTES
 
-=head2 IdentityId => Str
 
-  
+=head2 IdentityId => Str
 
 A unique identifier in the format REGION:GUID. Note that the IdentityId
 returned may not match the one passed on input.
 
 
-
-
-
-
-
-
-
 =head2 Token => Str
-
-  
 
 An OpenID token, valid for 15 minutes.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

@@ -1,10 +1,9 @@
 
-package Paws::CloudHSM::CreateLunaClientResponse {
+package Paws::CloudHSM::CreateLunaClientResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has ClientArn => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::CloudHSM::CreateLunaClientResponse
 
 =head1 ATTRIBUTES
 
-=head2 ClientArn => Str
 
-  
+=head2 ClientArn => Str
 
 The ARN of the client.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

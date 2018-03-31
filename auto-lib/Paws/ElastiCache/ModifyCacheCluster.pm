@@ -1,20 +1,21 @@
 
-package Paws::ElastiCache::ModifyCacheCluster {
+package Paws::ElastiCache::ModifyCacheCluster;
   use Moose;
   has ApplyImmediately => (is => 'ro', isa => 'Bool');
   has AutoMinorVersionUpgrade => (is => 'ro', isa => 'Bool');
   has AZMode => (is => 'ro', isa => 'Str');
   has CacheClusterId => (is => 'ro', isa => 'Str', required => 1);
-  has CacheNodeIdsToRemove => (is => 'ro', isa => 'ArrayRef[Str]');
+  has CacheNodeIdsToRemove => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
+  has CacheNodeType => (is => 'ro', isa => 'Str');
   has CacheParameterGroupName => (is => 'ro', isa => 'Str');
-  has CacheSecurityGroupNames => (is => 'ro', isa => 'ArrayRef[Str]');
+  has CacheSecurityGroupNames => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
   has EngineVersion => (is => 'ro', isa => 'Str');
-  has NewAvailabilityZones => (is => 'ro', isa => 'ArrayRef[Str]');
+  has NewAvailabilityZones => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
   has NotificationTopicArn => (is => 'ro', isa => 'Str');
   has NotificationTopicStatus => (is => 'ro', isa => 'Str');
   has NumCacheNodes => (is => 'ro', isa => 'Int');
   has PreferredMaintenanceWindow => (is => 'ro', isa => 'Str');
-  has SecurityGroupIds => (is => 'ro', isa => 'ArrayRef[Str]');
+  has SecurityGroupIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
   has SnapshotRetentionLimit => (is => 'ro', isa => 'Int');
   has SnapshotWindow => (is => 'ro', isa => 'Str');
 
@@ -23,7 +24,6 @@ package Paws::ElastiCache::ModifyCacheCluster {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'ModifyCacheCluster');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::ElastiCache::ModifyCacheClusterResult');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'ModifyCacheClusterResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -38,7 +38,7 @@ This class represents the parameters used for calling the method ModifyCacheClus
 Amazon ElastiCache service. Use the attributes of this class
 as arguments to method ModifyCacheCluster.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to ModifyCacheCluster.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to ModifyCacheCluster.
 
 As an example:
 
@@ -48,16 +48,15 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 ApplyImmediately => Bool
 
-  
+=head2 ApplyImmediately => Bool
 
 If C<true>, this parameter causes the modifications in this request and
 any pending modifications to be applied, asynchronously and as soon as
-possible, regardless of the I<PreferredMaintenanceWindow> setting for
+possible, regardless of the C<PreferredMaintenanceWindow> setting for
 the cache cluster.
 
-If C<false>, then changes to the cache cluster are applied on the next
+If C<false>, changes to the cache cluster are applied on the next
 maintenance reboot, or the next failure reboot, whichever occurs first.
 
 If you perform a C<ModifyCacheCluster> before a pending modification is
@@ -70,31 +69,13 @@ Default: C<false>
 
 
 
-
-
-
-
-
-
-
 =head2 AutoMinorVersionUpgrade => Bool
-
-  
 
 This parameter is currently disabled.
 
 
 
-
-
-
-
-
-
-
 =head2 AZMode => Str
-
-  
 
 Specifies whether the new nodes in this Memcached cache cluster are all
 created in a single Availability Zone or created across multiple
@@ -109,47 +90,29 @@ has cache nodes in different Availability Zones. If C<cross-az> is
 specified, existing Memcached nodes remain in their current
 Availability Zone.
 
-Only newly created nodes will be located in different Availability
-Zones. For instructions on how to move existing Memcached nodes to
-different Availability Zones, see the B<Availability Zone
-Considerations> section of Cache Node Considerations for Memcached.
+Only newly created nodes are located in different Availability Zones.
+For instructions on how to move existing Memcached nodes to different
+Availability Zones, see the B<Availability Zone Considerations> section
+of Cache Node Considerations for Memcached.
 
-
-
-
-
-
-
-
-
+Valid values are: C<"single-az">, C<"cross-az">
 
 =head2 B<REQUIRED> CacheClusterId => Str
-
-  
 
 The cache cluster identifier. This value is stored as a lowercase
 string.
 
 
 
-
-
-
-
-
-
-
-=head2 CacheNodeIdsToRemove => ArrayRef[Str]
-
-  
+=head2 CacheNodeIdsToRemove => ArrayRef[Str|Undef]
 
 A list of cache node IDs to be removed. A node ID is a numeric
 identifier (0001, 0002, etc.). This parameter is only valid when
-I<NumCacheNodes> is less than the existing number of cache nodes. The
+C<NumCacheNodes> is less than the existing number of cache nodes. The
 number of cache node IDs supplied in this parameter must match the
 difference between the existing number of cache nodes in the cluster or
 pending cache nodes, whichever is greater, and the value of
-I<NumCacheNodes> in the request.
+C<NumCacheNodes> in the request.
 
 For example: If you have 3 active cache nodes, 7 pending cache nodes,
 and the number of cache nodes in this C<ModifyCacheCluser> call is 5,
@@ -157,76 +120,53 @@ you must list 2 (7 - 5) cache node IDs to remove.
 
 
 
+=head2 CacheNodeType => Str
 
-
-
-
+A valid cache node type that you want to scale this cache cluster up
+to.
 
 
 
 =head2 CacheParameterGroupName => Str
 
-  
-
 The name of the cache parameter group to apply to this cache cluster.
 This change is asynchronously applied as soon as possible for
-parameters when the I<ApplyImmediately> parameter is specified as
-I<true> for this request.
+parameters when the C<ApplyImmediately> parameter is specified as
+C<true> for this request.
 
 
 
-
-
-
-
-
-
-
-=head2 CacheSecurityGroupNames => ArrayRef[Str]
-
-  
+=head2 CacheSecurityGroupNames => ArrayRef[Str|Undef]
 
 A list of cache security group names to authorize on this cache
 cluster. This change is asynchronously applied as soon as possible.
 
-This parameter can be used only with clusters that are created outside
-of an Amazon Virtual Private Cloud (VPC).
+You can use this parameter only with clusters that are created outside
+of an Amazon Virtual Private Cloud (Amazon VPC).
 
 Constraints: Must contain no more than 255 alphanumeric characters.
 Must not be "Default".
 
 
 
-
-
-
-
-
-
-
 =head2 EngineVersion => Str
-
-  
 
 The upgraded version of the cache engine to be run on the cache nodes.
 
+B<Important:> You can upgrade to a newer engine version (see Selecting
+a Cache Engine and Version), but you cannot downgrade to an earlier
+engine version. If you want to use an earlier engine version, you must
+delete the existing cache cluster and create it anew with the earlier
+engine version.
 
 
 
+=head2 NewAvailabilityZones => ArrayRef[Str|Undef]
 
+The list of Availability Zones where the new Memcached cache nodes are
+created.
 
-
-
-
-
-=head2 NewAvailabilityZones => ArrayRef[Str]
-
-  
-
-The list of Availability Zones where the new Memcached cache nodes will
-be created.
-
-This parameter is only valid when I<NumCacheNodes> in the request is
+This parameter is only valid when C<NumCacheNodes> in the request is
 greater than the sum of the number of active cache nodes and the number
 of cache nodes pending creation (which may be zero). The number of
 Availability Zones supplied in this list must match the cache nodes
@@ -238,21 +178,23 @@ Scenarios:
 
 =over
 
-=item * B<Scenario 1:> You have 3 active nodes and wish to add 2 nodes.
+=item *
 
-Specify C<NumCacheNodes=5> (3 + 2) and optionally specify two
-Availability Zones for the two new nodes.
+B<Scenario 1:> You have 3 active nodes and wish to add 2 nodes. Specify
+C<NumCacheNodes=5> (3 + 2) and optionally specify two Availability
+Zones for the two new nodes.
 
-=item * B<Scenario 2:> You have 3 active nodes and 2 nodes pending
-creation (from the scenario 1 call) and want to add 1 more node.
+=item *
 
-Specify C<NumCacheNodes=6> ((3 + 2) + 1)
+B<Scenario 2:> You have 3 active nodes and 2 nodes pending creation
+(from the scenario 1 call) and want to add 1 more node. Specify
+C<NumCacheNodes=6> ((3 + 2) + 1) and optionally specify an Availability
+Zone for the new node.
 
-and optionally specify an Availability Zone for the new node.
+=item *
 
-=item * B<Scenario 3:> You want to cancel all pending actions.
-
-Specify C<NumCacheNodes=3> to cancel all pending actions.
+B<Scenario 3:> You want to cancel all pending operations. Specify
+C<NumCacheNodes=3> to cancel all pending operations.
 
 =back
 
@@ -269,111 +211,127 @@ Memcached.
 
 B<Impact of new add/remove requests upon pending requests>
 
-Scenarios
+=over
 
-Pending action
-
-New Request
-
-Results
+=item *
 
 Scenario-1
 
-Delete
+=over
 
-Delete
+=item *
 
-The new delete, pending or immediate, replaces the pending delete.
+Pending Action: Delete
+
+=item *
+
+New Request: Delete
+
+=item *
+
+Result: The new delete, pending or immediate, replaces the pending
+delete.
+
+=back
+
+=item *
 
 Scenario-2
 
-Delete
+=over
 
-Create
+=item *
 
-The new create, pending or immediate, replaces the pending delete.
+Pending Action: Delete
+
+=item *
+
+New Request: Create
+
+=item *
+
+Result: The new create, pending or immediate, replaces the pending
+delete.
+
+=back
+
+=item *
 
 Scenario-3
 
-Create
+=over
 
-Delete
+=item *
 
-The new delete, pending or immediate, replaces the pending create.
+Pending Action: Create
+
+=item *
+
+New Request: Delete
+
+=item *
+
+Result: The new delete, pending or immediate, replaces the pending
+create.
+
+=back
+
+=item *
 
 Scenario-4
 
-Create
+=over
 
-Create
+=item *
 
-The new create is added to the pending create.
+Pending Action: Create
 
-B<Important:>
+=item *
 
-If the new create request is B<Apply Immediately - Yes>, all creates
-are performed immediately. If the new create request is B<Apply
-Immediately - No>, all creates are pending.
+New Request: Create
 
-Example:
-C<NewAvailabilityZones.member.1=us-west-2a&NewAvailabilityZones.member.2=us-west-2b&NewAvailabilityZones.member.3=us-west-2c>
+=item *
 
+Result: The new create is added to the pending create.
 
+B<Important:> If the new create request is B<Apply Immediately - Yes>,
+all creates are performed immediately. If the new create request is
+B<Apply Immediately - No>, all creates are pending.
 
+=back
 
-
-
+=back
 
 
 
 
 =head2 NotificationTopicArn => Str
 
-  
-
 The Amazon Resource Name (ARN) of the Amazon SNS topic to which
-notifications will be sent.
+notifications are sent.
 
 The Amazon SNS topic owner must be same as the cache cluster owner.
 
 
 
-
-
-
-
-
-
-
 =head2 NotificationTopicStatus => Str
 
-  
-
 The status of the Amazon SNS notification topic. Notifications are sent
-only if the status is I<active>.
+only if the status is C<active>.
 
 Valid values: C<active> | C<inactive>
 
 
 
-
-
-
-
-
-
-
 =head2 NumCacheNodes => Int
-
-  
 
 The number of cache nodes that the cache cluster should have. If the
 value for C<NumCacheNodes> is greater than the sum of the number of
 current cache nodes and the number of cache nodes pending creation
-(which may be zero), then more nodes will be added. If the value is
-less than the number of existing cache nodes, then nodes will be
-removed. If the value is equal to the number of current cache nodes,
-then any pending add or remove requests are canceled.
+(which may be zero), more nodes are added. If the value is less than
+the number of existing cache nodes, nodes are removed. If the value is
+equal to the number of current cache nodes, any pending add or remove
+requests are canceled.
 
 If you are removing cache nodes, you must use the
 C<CacheNodeIdsToRemove> parameter to provide the IDs of the specific
@@ -382,131 +340,99 @@ cache nodes to remove.
 For clusters running Redis, this value must be 1. For clusters running
 Memcached, this value must be between 1 and 20.
 
-B<Note:>
-
 Adding or removing Memcached cache nodes can be applied immediately or
-as a pending action. See C<ApplyImmediately>.
+as a pending operation (see C<ApplyImmediately>).
 
-A pending action to modify the number of cache nodes in a cluster
+A pending operation to modify the number of cache nodes in a cluster
 during its maintenance window, whether by adding or removing nodes in
 accordance with the scale out architecture, is not queued. The
 customer's latest request to add or remove nodes to the cluster
-overrides any previous pending actions to modify the number of cache
+overrides any previous pending operations to modify the number of cache
 nodes in the cluster. For example, a request to remove 2 nodes would
-override a previous pending action to remove 3 nodes. Similarly, a
-request to add 2 nodes would override a previous pending action to
+override a previous pending operation to remove 3 nodes. Similarly, a
+request to add 2 nodes would override a previous pending operation to
 remove 3 nodes and vice versa. As Memcached cache nodes may now be
 provisioned in different Availability Zones with flexible cache node
 placement, a request to add nodes does not automatically override a
-previous pending action to add nodes. The customer can modify the
-previous pending action to add more nodes or explicitly cancel the
-pending request and retry the new request. To cancel pending actions to
-modify the number of cache nodes in a cluster, use the
-C<ModifyCacheCluster> request and set I<NumCacheNodes> equal to the
+previous pending operation to add nodes. The customer can modify the
+previous pending operation to add more nodes or explicitly cancel the
+pending request and retry the new request. To cancel pending operations
+to modify the number of cache nodes in a cluster, use the
+C<ModifyCacheCluster> request and set C<NumCacheNodes> equal to the
 number of cache nodes currently in the cache cluster.
-
-
-
-
-
-
-
 
 
 
 =head2 PreferredMaintenanceWindow => Str
 
-  
-
-Specifies the weekly time range during which maintenance on the cache
-cluster is performed. It is specified as a range in the format
+Specifies the weekly time range during which maintenance on the cluster
+is performed. It is specified as a range in the format
 ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window
-is a 60 minute period. Valid values for C<ddd> are:
+is a 60 minute period.
+
+Valid values for C<ddd> are:
 
 =over
 
-=item * C<sun>
+=item *
 
-=item * C<mon>
+C<sun>
 
-=item * C<tue>
+=item *
 
-=item * C<wed>
+C<mon>
 
-=item * C<thu>
+=item *
 
-=item * C<fri>
+C<tue>
 
-=item * C<sat>
+=item *
+
+C<wed>
+
+=item *
+
+C<thu>
+
+=item *
+
+C<fri>
+
+=item *
+
+C<sat>
 
 =back
 
-Example: C<sun:05:00-sun:09:00>
+Example: C<sun:23:00-mon:01:30>
 
 
 
-
-
-
-
-
-
-
-=head2 SecurityGroupIds => ArrayRef[Str]
-
-  
+=head2 SecurityGroupIds => ArrayRef[Str|Undef]
 
 Specifies the VPC Security Groups associated with the cache cluster.
 
 This parameter can be used only with clusters that are created in an
-Amazon Virtual Private Cloud (VPC).
-
-
-
-
-
-
-
+Amazon Virtual Private Cloud (Amazon VPC).
 
 
 
 =head2 SnapshotRetentionLimit => Int
 
-  
-
-The number of days for which ElastiCache will retain automatic cache
+The number of days for which ElastiCache retains automatic cache
 cluster snapshots before deleting them. For example, if you set
-I<SnapshotRetentionLimit> to 5, then a snapshot that was taken today
-will be retained for 5 days before being deleted.
+C<SnapshotRetentionLimit> to 5, a snapshot that was taken today is
+retained for 5 days before being deleted.
 
-B<Important>
-
-If the value of SnapshotRetentionLimit is set to zero (0), backups are
-turned off.
-
-
-
-
-
-
-
+If the value of C<SnapshotRetentionLimit> is set to zero (0), backups
+are turned off.
 
 
 
 =head2 SnapshotWindow => Str
 
-  
-
-The daily time range (in UTC) during which ElastiCache will begin
-taking a daily snapshot of your cache cluster.
-
-
-
-
-
-
-
-
+The daily time range (in UTC) during which ElastiCache begins taking a
+daily snapshot of your cache cluster.
 
 
 

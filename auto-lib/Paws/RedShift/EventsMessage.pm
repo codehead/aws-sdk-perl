@@ -1,11 +1,10 @@
 
-package Paws::RedShift::EventsMessage {
+package Paws::RedShift::EventsMessage;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has Events => (is => 'ro', isa => 'ArrayRef[Paws::RedShift::Event]', xmlname => 'Event', traits => ['Unwrapped',]);
+  has Events => (is => 'ro', isa => 'ArrayRef[Paws::RedShift::Event]', request_name => 'Event', traits => ['NameInRequest',]);
   has Marker => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -16,23 +15,13 @@ Paws::RedShift::EventsMessage
 
 =head1 ATTRIBUTES
 
-=head2 Events => ArrayRef[Paws::RedShift::Event]
 
-  
+=head2 Events => ArrayRef[L<Paws::RedShift::Event>]
 
-A list of Event instances.
-
-
-
-
-
-
-
+A list of C<Event> instances.
 
 
 =head2 Marker => Str
-
-  
 
 A value that indicates the starting point for the next set of response
 records in a subsequent request. If a value is returned in a response,
@@ -42,13 +31,7 @@ the C<Marker> field is empty, all response records have been retrieved
 for the request.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

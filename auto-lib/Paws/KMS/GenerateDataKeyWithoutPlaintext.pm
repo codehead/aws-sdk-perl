@@ -1,8 +1,8 @@
 
-package Paws::KMS::GenerateDataKeyWithoutPlaintext {
+package Paws::KMS::GenerateDataKeyWithoutPlaintext;
   use Moose;
   has EncryptionContext => (is => 'ro', isa => 'Paws::KMS::EncryptionContextType');
-  has GrantTokens => (is => 'ro', isa => 'ArrayRef[Str]');
+  has GrantTokens => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
   has KeyId => (is => 'ro', isa => 'Str', required => 1);
   has KeySpec => (is => 'ro', isa => 'Str');
   has NumberOfBytes => (is => 'ro', isa => 'Int');
@@ -12,7 +12,6 @@ package Paws::KMS::GenerateDataKeyWithoutPlaintext {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'GenerateDataKeyWithoutPlaintext');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::KMS::GenerateDataKeyWithoutPlaintextResponse');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -27,7 +26,7 @@ This class represents the parameters used for calling the method GenerateDataKey
 AWS Key Management Service service. Use the attributes of this class
 as arguments to method GenerateDataKeyWithoutPlaintext.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to GenerateDataKeyWithoutPlaintext.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to GenerateDataKeyWithoutPlaintext.
 
 As an example:
 
@@ -37,100 +36,72 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 EncryptionContext => Paws::KMS::EncryptionContextType
 
-  
+=head2 EncryptionContext => L<Paws::KMS::EncryptionContextType>
 
-Name:value pair that contains additional data to be authenticated
-during the encryption and decryption processes.
+A set of key-value pairs that represents additional authenticated data.
 
-
-
+For more information, see Encryption Context in the I<AWS Key
+Management Service Developer Guide>.
 
 
 
+=head2 GrantTokens => ArrayRef[Str|Undef]
 
+A list of grant tokens.
 
-
-
-=head2 GrantTokens => ArrayRef[Str]
-
-  
-
-For more information, see Grant Tokens.
-
-
-
-
-
-
-
+For more information, see Grant Tokens in the I<AWS Key Management
+Service Developer Guide>.
 
 
 
 =head2 B<REQUIRED> KeyId => Str
 
-  
+The identifier of the CMK under which to generate and encrypt the data
+encryption key.
 
-A unique identifier for the customer master key. This value can be a
-globally unique identifier, a fully specified ARN to either an alias or
-a key, or an alias name prefixed by "alias/".
+A valid identifier is the unique key ID or the Amazon Resource Name
+(ARN) of the CMK, or the alias name or ARN of an alias that refers to
+the CMK. Examples:
 
 =over
 
-=item * Key ARN Example -
-arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
+=item *
 
-=item * Alias ARN Example -
-arn:aws:kms:us-east-1:123456789012:alias/MyAliasName
+Unique key ID: C<1234abcd-12ab-34cd-56ef-1234567890ab>
 
-=item * Globally Unique Key ID Example -
-12345678-1234-1234-1234-123456789012
+=item *
 
-=item * Alias Name Example - alias/MyAliasName
+CMK ARN:
+C<arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab>
+
+=item *
+
+Alias name: C<alias/ExampleAlias>
+
+=item *
+
+Alias ARN: C<arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias>
 
 =back
 
 
 
 
-
-
-
-
-
-
 =head2 KeySpec => Str
 
-  
+The length of the data encryption key. Use C<AES_128> to generate a
+128-bit symmetric key, or C<AES_256> to generate a 256-bit symmetric
+key.
 
-Value that identifies the encryption algorithm and key size. Currently
-this can be AES_128 or AES_256.
-
-
-
-
-
-
-
-
-
+Valid values are: C<"AES_256">, C<"AES_128">
 
 =head2 NumberOfBytes => Int
 
-  
-
-Integer that contains the number of bytes to generate. Common values
-are 128, 256, 512, 1024 and so on. We recommend that you use the
-C<KeySpec> parameter instead.
-
-
-
-
-
-
-
-
+The length of the data encryption key in bytes. For example, use the
+value 64 to generate a 512-bit data key (64 bytes is 512 bits). For
+common key lengths (128-bit and 256-bit symmetric keys), we recommend
+that you use the C<KeySpec> field instead of this one.
 
 
 

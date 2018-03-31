@@ -1,15 +1,14 @@
 
-package Paws::RDS::RemoveTagsFromResource {
+package Paws::RDS::RemoveTagsFromResource;
   use Moose;
   has ResourceName => (is => 'ro', isa => 'Str', required => 1);
-  has TagKeys => (is => 'ro', isa => 'ArrayRef[Str]', required => 1);
+  has TagKeys => (is => 'ro', isa => 'ArrayRef[Str|Undef]', required => 1);
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'RemoveTagsFromResource');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -24,7 +23,7 @@ This class represents the parameters used for calling the method RemoveTagsFromR
 Amazon Relational Database Service service. Use the attributes of this class
 as arguments to method RemoveTagsFromResource.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to RemoveTagsFromResource.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to RemoveTagsFromResource.
 
 As an example:
 
@@ -34,9 +33,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> ResourceName => Str
 
-  
+=head2 B<REQUIRED> ResourceName => Str
 
 The Amazon RDS resource the tags will be removed from. This value is an
 Amazon Resource Name (ARN). For information about creating an ARN, see
@@ -44,26 +42,9 @@ Constructing an RDS Amazon Resource Name (ARN).
 
 
 
-
-
-
-
-
-
-
-=head2 B<REQUIRED> TagKeys => ArrayRef[Str]
-
-  
+=head2 B<REQUIRED> TagKeys => ArrayRef[Str|Undef]
 
 The tag key (name) of the tag to be removed.
-
-
-
-
-
-
-
-
 
 
 

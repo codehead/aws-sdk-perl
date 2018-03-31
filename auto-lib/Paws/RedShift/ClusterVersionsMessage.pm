@@ -1,11 +1,10 @@
 
-package Paws::RedShift::ClusterVersionsMessage {
+package Paws::RedShift::ClusterVersionsMessage;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has ClusterVersions => (is => 'ro', isa => 'ArrayRef[Paws::RedShift::ClusterVersion]', xmlname => 'ClusterVersion', traits => ['Unwrapped',]);
+  has ClusterVersions => (is => 'ro', isa => 'ArrayRef[Paws::RedShift::ClusterVersion]', request_name => 'ClusterVersion', traits => ['NameInRequest',]);
   has Marker => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -16,23 +15,13 @@ Paws::RedShift::ClusterVersionsMessage
 
 =head1 ATTRIBUTES
 
-=head2 ClusterVersions => ArrayRef[Paws::RedShift::ClusterVersion]
 
-  
+=head2 ClusterVersions => ArrayRef[L<Paws::RedShift::ClusterVersion>]
 
 A list of C<Version> elements.
 
 
-
-
-
-
-
-
-
 =head2 Marker => Str
-
-  
 
 A value that indicates the starting point for the next set of response
 records in a subsequent request. If a value is returned in a response,
@@ -42,13 +31,7 @@ the C<Marker> field is empty, all response records have been retrieved
 for the request.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

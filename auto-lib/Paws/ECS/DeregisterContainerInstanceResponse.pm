@@ -1,10 +1,9 @@
 
-package Paws::ECS::DeregisterContainerInstanceResponse {
+package Paws::ECS::DeregisterContainerInstanceResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has containerInstance => (is => 'ro', isa => 'Paws::ECS::ContainerInstance');
+  has ContainerInstance => (is => 'ro', isa => 'Paws::ECS::ContainerInstance', traits => ['NameInRequest'], request_name => 'containerInstance' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,9 +13,13 @@ Paws::ECS::DeregisterContainerInstanceResponse
 
 =head1 ATTRIBUTES
 
-=head2 containerInstance => Paws::ECS::ContainerInstance
 
-  
+=head2 ContainerInstance => L<Paws::ECS::ContainerInstance>
+
+The container instance that was deregistered.
+
+
+=head2 _request_id => Str
 
 
 =cut

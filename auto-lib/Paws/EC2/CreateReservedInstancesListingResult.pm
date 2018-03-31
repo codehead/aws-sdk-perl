@@ -1,10 +1,9 @@
 
-package Paws::EC2::CreateReservedInstancesListingResult {
+package Paws::EC2::CreateReservedInstancesListingResult;
   use Moose;
-  with 'Paws::API::UnwrappedParser';
-  has ReservedInstancesListings => (is => 'ro', isa => 'ArrayRef[Paws::EC2::ReservedInstancesListing]', xmlname => 'reservedInstancesListingsSet', traits => ['Unwrapped',]);
+  has ReservedInstancesListings => (is => 'ro', isa => 'ArrayRef[Paws::EC2::ReservedInstancesListing]', request_name => 'reservedInstancesListingsSet', traits => ['NameInRequest',]);
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::EC2::CreateReservedInstancesListingResult
 
 =head1 ATTRIBUTES
 
-=head2 ReservedInstancesListings => ArrayRef[Paws::EC2::ReservedInstancesListing]
 
-  
+=head2 ReservedInstancesListings => ArrayRef[L<Paws::EC2::ReservedInstancesListing>]
 
-Information about the Reserved Instances listing.
-
+Information about the Standard Reserved Instance listing.
 
 
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

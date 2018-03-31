@@ -1,9 +1,9 @@
 
-package Paws::Glacier::ListVaults {
+package Paws::Glacier::ListVaults;
   use Moose;
-  has accountId => (is => 'ro', isa => 'Str', traits => ['ParamInURI'], uri_name => 'accountId' , required => 1);
-  has limit => (is => 'ro', isa => 'Str', traits => ['ParamInQuery'], query_name => 'limit' );
-  has marker => (is => 'ro', isa => 'Str', traits => ['ParamInQuery'], query_name => 'marker' );
+  has AccountId => (is => 'ro', isa => 'Str', traits => ['ParamInURI'], uri_name => 'accountId', required => 1);
+  has Limit => (is => 'ro', isa => 'Str', traits => ['ParamInQuery'], query_name => 'limit');
+  has Marker => (is => 'ro', isa => 'Str', traits => ['ParamInQuery'], query_name => 'marker');
 
   use MooseX::ClassAttribute;
 
@@ -11,8 +11,7 @@ package Paws::Glacier::ListVaults {
   class_has _api_uri  => (isa => 'Str', is => 'ro', default => '/{accountId}/vaults');
   class_has _api_method  => (isa => 'Str', is => 'ro', default => 'GET');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::Glacier::ListVaultsOutput');
-  class_has _result_key => (isa => 'Str', is => 'ro', default => 'ListVaultsResult');
-}
+  class_has _result_key => (isa => 'Str', is => 'ro');
 1;
 
 ### main pod documentation begin ###
@@ -27,7 +26,7 @@ This class represents the parameters used for calling the method ListVaults on t
 Amazon Glacier service. Use the attributes of this class
 as arguments to method ListVaults.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to ListVaults.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to ListVaults.
 
 As an example:
 
@@ -37,57 +36,31 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> accountId => Str
 
-  
+=head2 B<REQUIRED> AccountId => Str
 
 The C<AccountId> value is the AWS account ID. This value must match the
 AWS account ID associated with the credentials used to sign the
 request. You can either specify an AWS account ID or optionally a
-single aposC<->apos (hyphen), in which case Amazon Glacier uses the AWS
+single 'C<->' (hyphen), in which case Amazon Glacier uses the AWS
 account ID associated with the credentials used to sign the request. If
-you specify your Account ID, do not include any hyphens (apos-apos) in
-the ID.
+you specify your account ID, do not include any hyphens ('-') in the
+ID.
 
 
 
+=head2 Limit => Str
+
+The maximum number of vaults to be returned. The default limit is 1000.
+The number of vaults returned might be fewer than the specified limit,
+but the number of returned vaults never exceeds the limit.
 
 
 
-
-
-
-
-=head2 limit => Str
-
-  
-
-The maximum number of items returned in the response. If you don't
-specify a value, the List Vaults operation returns up to 1,000 items.
-
-
-
-
-
-
-
-
-
-
-=head2 marker => Str
-
-  
+=head2 Marker => Str
 
 A string used for pagination. The marker specifies the vault ARN after
 which the listing of vaults should begin.
-
-
-
-
-
-
-
-
 
 
 

@@ -1,11 +1,10 @@
 
-package Paws::StorageGateway::UpdateChapCredentialsOutput {
+package Paws::StorageGateway::UpdateChapCredentialsOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
   has InitiatorName => (is => 'ro', isa => 'Str');
   has TargetARN => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -15,36 +14,20 @@ Paws::StorageGateway::UpdateChapCredentialsOutput
 
 =head1 ATTRIBUTES
 
-=head2 InitiatorName => Str
 
-  
+=head2 InitiatorName => Str
 
 The iSCSI initiator that connects to the target. This is the same
 initiator name specified in the request.
 
 
-
-
-
-
-
-
-
 =head2 TargetARN => Str
-
-  
 
 The Amazon Resource Name (ARN) of the target. This is the same target
 specified in the request.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

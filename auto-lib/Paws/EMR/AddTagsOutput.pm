@@ -1,9 +1,8 @@
 
-package Paws::EMR::AddTagsOutput {
+package Paws::EMR::AddTagsOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -13,6 +12,8 @@ Paws::EMR::AddTagsOutput
 
 =head1 ATTRIBUTES
 
+
+=head2 _request_id => Str
 
 
 =cut

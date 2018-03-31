@@ -1,11 +1,10 @@
 
-package Paws::StorageGateway::DescribeTapeArchivesOutput {
+package Paws::StorageGateway::DescribeTapeArchivesOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
   has Marker => (is => 'ro', isa => 'Str');
   has TapeArchives => (is => 'ro', isa => 'ArrayRef[Paws::StorageGateway::TapeArchive]');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -15,9 +14,8 @@ Paws::StorageGateway::DescribeTapeArchivesOutput
 
 =head1 ATTRIBUTES
 
-=head2 Marker => Str
 
-  
+=head2 Marker => Str
 
 An opaque string that indicates the position at which the virtual tapes
 that were fetched for description ended. Use this marker in your next
@@ -26,16 +24,7 @@ shelf (VTS). If there are no more virtual tapes to describe, this field
 does not appear in the response.
 
 
-
-
-
-
-
-
-
-=head2 TapeArchives => ArrayRef[Paws::StorageGateway::TapeArchive]
-
-  
+=head2 TapeArchives => ArrayRef[L<Paws::StorageGateway::TapeArchive>]
 
 An array of virtual tape objects in the virtual tape shelf (VTS). The
 description includes of the Amazon Resource Name(ARN) of the virtual
@@ -44,13 +33,7 @@ tapes. The information returned includes the Amazon Resource Names
 of the description and tape barcode.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

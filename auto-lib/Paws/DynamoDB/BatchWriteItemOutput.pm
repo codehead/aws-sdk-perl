@@ -1,12 +1,11 @@
 
-package Paws::DynamoDB::BatchWriteItemOutput {
+package Paws::DynamoDB::BatchWriteItemOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
   has ConsumedCapacity => (is => 'ro', isa => 'ArrayRef[Paws::DynamoDB::ConsumedCapacity]');
   has ItemCollectionMetrics => (is => 'ro', isa => 'Paws::DynamoDB::ItemCollectionMetricsPerTable');
   has UnprocessedItems => (is => 'ro', isa => 'Paws::DynamoDB::BatchWriteItemRequestMap');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -16,11 +15,10 @@ Paws::DynamoDB::BatchWriteItemOutput
 
 =head1 ATTRIBUTES
 
-=head2 ConsumedCapacity => ArrayRef[Paws::DynamoDB::ConsumedCapacity]
 
-  
+=head2 ConsumedCapacity => ArrayRef[L<Paws::DynamoDB::ConsumedCapacity>]
 
-The capacity units consumed by the operation.
+The capacity units consumed by the entire C<BatchWriteItem> operation.
 
 Each element consists of:
 
@@ -28,29 +26,21 @@ Each element consists of:
 
 =item *
 
-I<TableName> - The table that consumed the provisioned throughput.
+C<TableName> - The table that consumed the provisioned throughput.
 
 =item *
 
-I<CapacityUnits> - The total number of capacity units consumed.
+C<CapacityUnits> - The total number of capacity units consumed.
 
 =back
 
 
 
+=head2 ItemCollectionMetrics => L<Paws::DynamoDB::ItemCollectionMetricsPerTable>
 
-
-
-
-
-
-=head2 ItemCollectionMetrics => Paws::DynamoDB::ItemCollectionMetricsPerTable
-
-  
-
-A list of tables that were processed by I<BatchWriteItem> and, for each
+A list of tables that were processed by C<BatchWriteItem> and, for each
 table, information about any item collections that were affected by
-individual I<DeleteItem> or I<PutItem> operations.
+individual C<DeleteItem> or C<PutItem> operations.
 
 Each entry consists of the following subelements:
 
@@ -58,12 +48,12 @@ Each entry consists of the following subelements:
 
 =item *
 
-I<ItemCollectionKey> - The hash key value of the item collection. This
-is the same as the hash key of the item.
+C<ItemCollectionKey> - The partition key value of the item collection.
+This is the same as the partition key value of the item.
 
 =item *
 
-I<SizeEstimateRange> - An estimate of item collection size, expressed
+C<SizeEstimateRange> - An estimate of item collection size, expressed
 in GB. This is a two-element array containing a lower bound and an
 upper bound for the estimate. The estimate includes the size of all the
 items in the table, plus the size of all attributes projected into all
@@ -77,38 +67,30 @@ the precision or accuracy of the estimate.
 
 
 
-
-
-
-
-
-
-=head2 UnprocessedItems => Paws::DynamoDB::BatchWriteItemRequestMap
-
-  
+=head2 UnprocessedItems => L<Paws::DynamoDB::BatchWriteItemRequestMap>
 
 A map of tables and requests against those tables that were not
-processed. The I<UnprocessedItems> value is in the same form as
-I<RequestItems>, so you can provide this value directly to a subsequent
-I<BatchGetItem> operation. For more information, see I<RequestItems> in
+processed. The C<UnprocessedItems> value is in the same form as
+C<RequestItems>, so you can provide this value directly to a subsequent
+C<BatchGetItem> operation. For more information, see C<RequestItems> in
 the Request Parameters section.
 
-Each I<UnprocessedItems> entry consists of a table name and, for that
-table, a list of operations to perform (I<DeleteRequest> or
-I<PutRequest>).
+Each C<UnprocessedItems> entry consists of a table name and, for that
+table, a list of operations to perform (C<DeleteRequest> or
+C<PutRequest>).
 
 =over
 
 =item *
 
-I<DeleteRequest> - Perform a I<DeleteItem> operation on the specified
-item. The item to be deleted is identified by a I<Key> subelement:
+C<DeleteRequest> - Perform a C<DeleteItem> operation on the specified
+item. The item to be deleted is identified by a C<Key> subelement:
 
 =over
 
 =item *
 
-I<Key> - A map of primary key attribute values that uniquely identify
+C<Key> - A map of primary key attribute values that uniquely identify
 the item. Each entry in this map consists of an attribute name and an
 attribute value.
 
@@ -116,19 +98,19 @@ attribute value.
 
 =item *
 
-I<PutRequest> - Perform a I<PutItem> operation on the specified item.
-The item to be put is identified by an I<Item> subelement:
+C<PutRequest> - Perform a C<PutItem> operation on the specified item.
+The item to be put is identified by an C<Item> subelement:
 
 =over
 
 =item *
 
-I<Item> - A map of attributes and their values. Each entry in this map
+C<Item> - A map of attributes and their values. Each entry in this map
 consists of an attribute name and an attribute value. Attribute values
 must not be null; string and binary type attributes must have lengths
 greater than zero; and set type attributes must not be empty. Requests
 that contain empty values will be rejected with a
-I<ValidationException> exception.
+C<ValidationException> exception.
 
 If you specify any attributes that are part of an index key, then the
 data types for those attributes must match those of the schema in the
@@ -139,16 +121,10 @@ table's attribute definition.
 =back
 
 If there are no unprocessed items remaining, the response contains an
-empty I<UnprocessedItems> map.
+empty C<UnprocessedItems> map.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

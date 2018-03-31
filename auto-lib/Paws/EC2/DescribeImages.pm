@@ -1,18 +1,17 @@
 
-package Paws::EC2::DescribeImages {
+package Paws::EC2::DescribeImages;
   use Moose;
   has DryRun => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'dryRun' );
-  has ExecutableUsers => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'ExecutableBy' );
+  has ExecutableUsers => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'ExecutableBy' );
   has Filters => (is => 'ro', isa => 'ArrayRef[Paws::EC2::Filter]', traits => ['NameInRequest'], request_name => 'Filter' );
-  has ImageIds => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'ImageId' );
-  has Owners => (is => 'ro', isa => 'ArrayRef[Str]', traits => ['NameInRequest'], request_name => 'Owner' );
+  has ImageIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'ImageId' );
+  has Owners => (is => 'ro', isa => 'ArrayRef[Str|Undef]', traits => ['NameInRequest'], request_name => 'Owner' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeImages');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::EC2::DescribeImagesResult');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -27,7 +26,7 @@ This class represents the parameters used for calling the method DescribeImages 
 Amazon Elastic Compute Cloud service. Use the attributes of this class
 as arguments to method DescribeImages.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeImages.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeImages.
 
 As an example:
 
@@ -37,9 +36,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 DryRun => Bool
 
-  
+=head2 DryRun => Bool
 
 Checks whether you have the required permissions for the action,
 without actually making the request, and provides an error response. If
@@ -48,16 +46,7 @@ C<DryRunOperation>. Otherwise, it is C<UnauthorizedOperation>.
 
 
 
-
-
-
-
-
-
-
-=head2 ExecutableUsers => ArrayRef[Str]
-
-  
+=head2 ExecutableUsers => ArrayRef[Str|Undef]
 
 Scopes the images by users with explicit launch permissions. Specify an
 AWS account ID, C<self> (the sender of the request), or C<all> (public
@@ -65,16 +54,7 @@ AMIs).
 
 
 
-
-
-
-
-
-
-
-=head2 Filters => ArrayRef[Paws::EC2::Filter]
-
-  
+=head2 Filters => ArrayRef[L<Paws::EC2::Filter>]
 
 One or more filters.
 
@@ -108,12 +88,17 @@ volume, in GiB.
 =item *
 
 C<block-device-mapping.volume-type> - The volume type of the EBS volume
-(C<gp2> | C<standard> | C<io1>).
+(C<gp2> | C<io1> | C<st1 >| C<sc1> | C<standard>).
 
 =item *
 
 C<description> - The description of the image (provided during image
 creation).
+
+=item *
+
+C<ena-support> - A Boolean that indicates whether enhanced networking
+with ENA is enabled.
 
 =item *
 
@@ -145,7 +130,10 @@ C<name> - The name of the AMI (provided during image creation).
 
 =item *
 
-C<owner-alias> - The AWS account alias (for example, C<amazon>).
+C<owner-alias> - String value from an Amazon-maintained list (C<amazon>
+| C<aws-marketplace> | C<microsoft>) of snapshot owners. Not to be
+confused with the user-configured AWS account alias, which is set from
+the IAM console.
 
 =item *
 
@@ -195,7 +183,10 @@ C<state-reason-message> - The message for the state change.
 =item *
 
 C<tag>:I<key>=I<value> - The key/value combination of a tag assigned to
-the resource.
+the resource. Specify the key of the tag in the filter name and the
+value of the tag in the filter value. For example, for the tag
+Purpose=X, specify C<tag:Purpose> for the filter name and C<X> for the
+filter value.
 
 =item *
 
@@ -222,15 +213,7 @@ C<hvm>).
 
 
 
-
-
-
-
-
-
-=head2 ImageIds => ArrayRef[Str]
-
-  
+=head2 ImageIds => ArrayRef[Str|Undef]
 
 One or more image IDs.
 
@@ -238,30 +221,13 @@ Default: Describes all images available to you.
 
 
 
+=head2 Owners => ArrayRef[Str|Undef]
 
-
-
-
-
-
-
-=head2 Owners => ArrayRef[Str]
-
-  
-
-Filters the images by the owner. Specify an AWS account ID, C<amazon>
-(owner is Amazon), C<aws-marketplace> (owner is AWS Marketplace),
-C<self> (owner is the sender of the request). Omitting this option
-returns all images for which you have launch permissions, regardless of
-ownership.
-
-
-
-
-
-
-
-
+Filters the images by the owner. Specify an AWS account ID, C<self>
+(owner is the sender of the request), or an AWS owner alias (valid
+values are C<amazon> | C<aws-marketplace> | C<microsoft>). Omitting
+this option returns all images for which you have launch permissions,
+regardless of ownership.
 
 
 

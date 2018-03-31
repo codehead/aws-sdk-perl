@@ -1,8 +1,8 @@
 
-package Paws::AutoScaling::DetachInstances {
+package Paws::AutoScaling::DetachInstances;
   use Moose;
   has AutoScalingGroupName => (is => 'ro', isa => 'Str', required => 1);
-  has InstanceIds => (is => 'ro', isa => 'ArrayRef[Str]');
+  has InstanceIds => (is => 'ro', isa => 'ArrayRef[Str|Undef]');
   has ShouldDecrementDesiredCapacity => (is => 'ro', isa => 'Bool', required => 1);
 
   use MooseX::ClassAttribute;
@@ -10,7 +10,6 @@ package Paws::AutoScaling::DetachInstances {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DetachInstances');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::AutoScaling::DetachInstancesAnswer');
   class_has _result_key => (isa => 'Str', is => 'ro', default => 'DetachInstancesResult');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +24,7 @@ This class represents the parameters used for calling the method DetachInstances
 Auto Scaling service. Use the attributes of this class
 as arguments to method DetachInstances.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DetachInstances.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DetachInstances.
 
 As an example:
 
@@ -35,50 +34,23 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> AutoScalingGroupName => Str
 
-  
+=head2 B<REQUIRED> AutoScalingGroupName => Str
 
 The name of the group.
 
 
 
-
-
-
-
-
-
-
-=head2 InstanceIds => ArrayRef[Str]
-
-  
+=head2 InstanceIds => ArrayRef[Str|Undef]
 
 One or more instance IDs.
 
 
 
-
-
-
-
-
-
-
 =head2 B<REQUIRED> ShouldDecrementDesiredCapacity => Bool
-
-  
 
 If C<True>, the Auto Scaling group decrements the desired capacity
 value by the number of instances detached.
-
-
-
-
-
-
-
-
 
 
 

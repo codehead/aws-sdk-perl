@@ -1,16 +1,17 @@
 
-package Paws::AutoScaling::ExecutePolicy {
+package Paws::AutoScaling::ExecutePolicy;
   use Moose;
   has AutoScalingGroupName => (is => 'ro', isa => 'Str');
+  has BreachThreshold => (is => 'ro', isa => 'Num');
   has HonorCooldown => (is => 'ro', isa => 'Bool');
+  has MetricValue => (is => 'ro', isa => 'Num');
   has PolicyName => (is => 'ro', isa => 'Str', required => 1);
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'ExecutePolicy');
-  class_has _returns => (isa => 'Str', is => 'ro');
+  class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::API::Response');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -25,7 +26,7 @@ This class represents the parameters used for calling the method ExecutePolicy o
 Auto Scaling service. Use the attributes of this class
 as arguments to method ExecutePolicy.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to ExecutePolicy.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to ExecutePolicy.
 
 As an example:
 
@@ -35,58 +36,55 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 AutoScalingGroupName => Str
 
-  
+=head2 AutoScalingGroupName => Str
 
 The name or Amazon Resource Name (ARN) of the Auto Scaling group.
 
 
 
+=head2 BreachThreshold => Num
 
+The breach threshold for the alarm.
 
-
-
+This parameter is required if the policy type is C<StepScaling> and not
+supported otherwise.
 
 
 
 =head2 HonorCooldown => Bool
 
-  
+If this parameter is true, Auto Scaling waits for the cooldown period
+to complete before executing the policy. Otherwise, Auto Scaling
+executes the policy without waiting for the cooldown period to
+complete.
 
-Set to C<True> if you want Auto Scaling to wait for the cooldown period
-associated with the Auto Scaling group to complete before executing the
-policy.
+This parameter is not supported if the policy type is C<StepScaling>.
 
-Set to C<False> if you want Auto Scaling to circumvent the cooldown
-period associated with the Auto Scaling group and execute the policy
-before the cooldown period ends.
-
-For more information, see Understanding Auto Scaling Cooldowns in the
-I<Auto Scaling Developer Guide>.
+For more information, see Auto Scaling Cooldowns in the I<Auto Scaling
+User Guide>.
 
 
 
+=head2 MetricValue => Num
 
+The metric value to compare to C<BreachThreshold>. This enables you to
+execute a policy of type C<StepScaling> and determine which step
+adjustment to use. For example, if the breach threshold is 50 and you
+want to use a step adjustment with a lower bound of 0 and an upper
+bound of 10, you can set the metric value to 59.
 
+If you specify a metric value that doesn't correspond to a step
+adjustment for the policy, the call returns an error.
 
-
+This parameter is required if the policy type is C<StepScaling> and not
+supported otherwise.
 
 
 
 =head2 B<REQUIRED> PolicyName => Str
 
-  
-
 The name or ARN of the policy.
-
-
-
-
-
-
-
-
 
 
 

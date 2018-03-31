@@ -1,10 +1,9 @@
 
-package Paws::StorageGateway::DisableGatewayOutput {
+package Paws::StorageGateway::DisableGatewayOutput;
   use Moose;
-  with 'Paws::API::ResultParser';
   has GatewayARN => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,20 +13,13 @@ Paws::StorageGateway::DisableGatewayOutput
 
 =head1 ATTRIBUTES
 
-=head2 GatewayARN => Str
 
-  
+=head2 GatewayARN => Str
 
 The unique Amazon Resource Name of the disabled gateway.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

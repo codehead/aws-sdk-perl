@@ -1,5 +1,5 @@
 
-package Paws::KMS::GetKeyPolicy {
+package Paws::KMS::GetKeyPolicy;
   use Moose;
   has KeyId => (is => 'ro', isa => 'Str', required => 1);
   has PolicyName => (is => 'ro', isa => 'Str', required => 1);
@@ -9,7 +9,6 @@ package Paws::KMS::GetKeyPolicy {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'GetKeyPolicy');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::KMS::GetKeyPolicyResponse');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -24,7 +23,7 @@ This class represents the parameters used for calling the method GetKeyPolicy on
 AWS Key Management Service service. Use the attributes of this class
 as arguments to method GetKeyPolicy.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to GetKeyPolicy.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to GetKeyPolicy.
 
 As an example:
 
@@ -34,46 +33,32 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> KeyId => Str
 
-  
+=head2 B<REQUIRED> KeyId => Str
 
 A unique identifier for the customer master key. This value can be a
 globally unique identifier or the fully specified ARN to a key.
 
 =over
 
-=item * Key ARN Example -
+=item *
+
+Key ARN Example -
 arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
 
-=item * Globally Unique Key ID Example -
-12345678-1234-1234-1234-123456789012
+=item *
+
+Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012
 
 =back
 
 
 
 
-
-
-
-
-
-
 =head2 B<REQUIRED> PolicyName => Str
-
-  
 
 String that contains the name of the policy. Currently, this must be
 "default". Policy names can be discovered by calling ListKeyPolicies.
-
-
-
-
-
-
-
-
 
 
 

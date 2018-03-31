@@ -1,4 +1,4 @@
-package Paws::Net::EC2Caller {
+package Paws::Net::EC2Caller;
   use Moose::Role;
   use HTTP::Request::Common;
   use POSIX qw(strftime); 
@@ -8,20 +8,13 @@ package Paws::Net::EC2Caller {
     return ($self->flattened_arrays)?'%s.%d':'%s.member.%d';
   }
 
-  sub _is_internal_type {
-    my ($self, $att_type) = @_;
-    return ($att_type eq 'Str' or $att_type eq 'Int' or $att_type eq 'Bool' or $att_type eq 'Num');
-  }
-
   # converts the objects that represent the call into parameters that the API can understand
   sub _to_querycaller_params {
     my ($self, $params) = @_;
     my %p;
     foreach my $att (grep { $_ !~ m/^_/ } $params->meta->get_attribute_list) {
       my $key;
-      if ($params->meta->get_attribute($att)->does('Paws::API::Attribute::Trait::Unwrapped')){
-        $key = $params->meta->get_attribute($att)->xmlname;
-      } elsif ($params->meta->get_attribute($att)->does('Paws::Net::Caller::Attribute::Trait::NameInRequest')){
+      if ($params->meta->get_attribute($att)->does('Paws::API::Attribute::Trait::NameInRequest')){
         $key = $params->meta->get_attribute($att)->request_name;
       } else {
         $key = $att;
@@ -34,7 +27,11 @@ package Paws::Net::EC2Caller {
         my $att_type = $params->meta->get_attribute($att)->type_constraint;
 
         if ($self->_is_internal_type($att_type)) {
-          $p{ $key } = $params->{$att};
+          if ($att_type eq 'Bool') {
+            $p{ $key } = ($params->{$att} == 1) ? 'true' : 'false';
+          } else {
+            $p{ $key } = $params->{$att};
+          }
         } elsif ($att_type =~ m/^ArrayRef\[(.*)\]/) {
           if ($self->_is_internal_type("$1")){
             my $i = 1;
@@ -59,6 +56,18 @@ package Paws::Net::EC2Caller {
     return %p;
   }
 
+  sub generate_content_from_parameters {
+    my ($self, $request) = @_;
+
+    $request->headers->content_type('application/x-www-form-urlencoded');
+    my $url = URI->new('http:');
+    $url->query_form($request->parameters);
+    my $content = $url->query;
+    # HTML/4.01 says that line breaks are represented as "CR LF" pairs (i.e., `%0D%0A')
+    $content =~ s/(?<!%0D)%0A/%0D%0A/g if (defined $content);
+    return $content;
+  }
+
   sub prepare_request_for_call {
     my ($self, $call) = @_;
 
@@ -73,12 +82,10 @@ package Paws::Net::EC2Caller {
                            $self->_to_querycaller_params($call) 
     });
 
-    $request->generate_content_from_parameters;
+    $request->content($self->generate_content_from_parameters($request));
 
     $self->sign($request);
 
     return $request;
   }
-}
-
 1;

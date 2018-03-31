@@ -1,10 +1,9 @@
 
-package Paws::Support::CreateCaseResponse {
+package Paws::Support::CreateCaseResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
-  has caseId => (is => 'ro', isa => 'Str');
+  has CaseId => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'caseId' );
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -14,22 +13,15 @@ Paws::Support::CreateCaseResponse
 
 =head1 ATTRIBUTES
 
-=head2 caseId => Str
 
-  
+=head2 CaseId => Str
 
 The AWS Support case ID requested or returned in the call. The case ID
 is an alphanumeric string formatted as shown in this example:
 case-I<12345678910-2013-c4c1d2bf33c5cf47>
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

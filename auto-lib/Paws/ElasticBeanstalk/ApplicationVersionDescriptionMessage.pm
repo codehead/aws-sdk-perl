@@ -1,10 +1,9 @@
 
-package Paws::ElasticBeanstalk::ApplicationVersionDescriptionMessage {
+package Paws::ElasticBeanstalk::ApplicationVersionDescriptionMessage;
   use Moose;
-  with 'Paws::API::ResultParser';
   has ApplicationVersion => (is => 'ro', isa => 'Paws::ElasticBeanstalk::ApplicationVersionDescription');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -15,20 +14,13 @@ Paws::ElasticBeanstalk::ApplicationVersionDescriptionMessage
 
 =head1 ATTRIBUTES
 
-=head2 ApplicationVersion => Paws::ElasticBeanstalk::ApplicationVersionDescription
 
-  
+=head2 ApplicationVersion => L<Paws::ElasticBeanstalk::ApplicationVersionDescription>
 
 The ApplicationVersionDescription of the application version.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

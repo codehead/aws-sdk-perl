@@ -1,17 +1,16 @@
 
-package Paws::CloudSearchDomain::UploadDocuments {
+package Paws::CloudSearchDomain::UploadDocuments;
   use Moose;
-  has contentType => (is => 'ro', isa => 'Str', traits => ['ParamInHeader'], header_name => 'Content-Type' , required => 1);
-  has documents => (is => 'ro', isa => 'Str', required => 1);
+  has ContentType => (is => 'ro', isa => 'Str', traits => ['ParamInHeader'], header_name => 'contentType', required => 1);
+  has Documents => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'documents', required => 1);
 
   use MooseX::ClassAttribute;
-
+  class_has _stream_param => (is => 'ro', default => 'Documents');
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'UploadDocuments');
   class_has _api_uri  => (isa => 'Str', is => 'ro', default => '/2013-01-01/documents/batch?format=sdk');
   class_has _api_method  => (isa => 'Str', is => 'ro', default => 'POST');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::CloudSearchDomain::UploadDocumentsResponse');
-  class_has _result_key => (isa => 'Str', is => 'ro', default => 'UploadDocumentsResult');
-}
+  class_has _result_key => (isa => 'Str', is => 'ro');
 1;
 
 ### main pod documentation begin ###
@@ -26,7 +25,7 @@ This class represents the parameters used for calling the method UploadDocuments
 Amazon CloudSearch Domain service. Use the attributes of this class
 as arguments to method UploadDocuments.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to UploadDocuments.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to UploadDocuments.
 
 As an example:
 
@@ -36,9 +35,8 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> contentType => Str
 
-  
+=head2 B<REQUIRED> ContentType => Str
 
 The format of the batch you are uploading. Amazon CloudSearch supports
 two document batch formats:
@@ -52,27 +50,11 @@ two document batch formats:
 =back
 
 
+Valid values are: C<"application/json">, C<"application/xml">
 
-
-
-
-
-
-
-
-=head2 B<REQUIRED> documents => Str
-
-  
+=head2 B<REQUIRED> Documents => Str
 
 A batch of documents formatted in JSON or HTML.
-
-
-
-
-
-
-
-
 
 
 

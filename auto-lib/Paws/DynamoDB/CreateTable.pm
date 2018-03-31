@@ -1,11 +1,12 @@
 
-package Paws::DynamoDB::CreateTable {
+package Paws::DynamoDB::CreateTable;
   use Moose;
   has AttributeDefinitions => (is => 'ro', isa => 'ArrayRef[Paws::DynamoDB::AttributeDefinition]', required => 1);
   has GlobalSecondaryIndexes => (is => 'ro', isa => 'ArrayRef[Paws::DynamoDB::GlobalSecondaryIndex]');
   has KeySchema => (is => 'ro', isa => 'ArrayRef[Paws::DynamoDB::KeySchemaElement]', required => 1);
   has LocalSecondaryIndexes => (is => 'ro', isa => 'ArrayRef[Paws::DynamoDB::LocalSecondaryIndex]');
   has ProvisionedThroughput => (is => 'ro', isa => 'Paws::DynamoDB::ProvisionedThroughput', required => 1);
+  has StreamSpecification => (is => 'ro', isa => 'Paws::DynamoDB::StreamSpecification');
   has TableName => (is => 'ro', isa => 'Str', required => 1);
 
   use MooseX::ClassAttribute;
@@ -13,7 +14,6 @@ package Paws::DynamoDB::CreateTable {
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'CreateTable');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::DynamoDB::CreateTableOutput');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -28,7 +28,7 @@ This class represents the parameters used for calling the method CreateTable on 
 Amazon DynamoDB service. Use the attributes of this class
 as arguments to method CreateTable.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to CreateTable.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to CreateTable.
 
 As an example:
 
@@ -38,25 +38,15 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 B<REQUIRED> AttributeDefinitions => ArrayRef[Paws::DynamoDB::AttributeDefinition]
 
-  
+=head2 B<REQUIRED> AttributeDefinitions => ArrayRef[L<Paws::DynamoDB::AttributeDefinition>]
 
 An array of attributes that describe the key schema for the table and
 indexes.
 
 
 
-
-
-
-
-
-
-
-=head2 GlobalSecondaryIndexes => ArrayRef[Paws::DynamoDB::GlobalSecondaryIndex]
-
-  
+=head2 GlobalSecondaryIndexes => ArrayRef[L<Paws::DynamoDB::GlobalSecondaryIndex>]
 
 One or more global secondary indexes (the maximum is five) to be
 created on the table. Each global secondary index in the array includes
@@ -66,16 +56,16 @@ the following:
 
 =item *
 
-I<IndexName> - The name of the global secondary index. Must be unique
+C<IndexName> - The name of the global secondary index. Must be unique
 only for this table.
 
 =item *
 
-I<KeySchema> - Specifies the key schema for the global secondary index.
+C<KeySchema> - Specifies the key schema for the global secondary index.
 
 =item *
 
-I<Projection> - Specifies attributes that are copied (projected) from
+C<Projection> - Specifies attributes that are copied (projected) from
 the table into the index. These are in addition to the primary key
 attributes and index key attributes, which are automatically projected.
 Each attribute specification is composed of:
@@ -84,7 +74,7 @@ Each attribute specification is composed of:
 
 =item *
 
-I<ProjectionType> - One of the following:
+C<ProjectionType> - One of the following:
 
 =over
 
@@ -96,7 +86,7 @@ index.
 =item *
 
 C<INCLUDE> - Only the specified table attributes are projected into the
-index. The list of projected attributes are in I<NonKeyAttributes>.
+index. The list of projected attributes are in C<NonKeyAttributes>.
 
 =item *
 
@@ -106,9 +96,9 @@ C<ALL> - All of the table attributes are projected into the index.
 
 =item *
 
-I<NonKeyAttributes> - A list of one or more non-key attribute names
+C<NonKeyAttributes> - A list of one or more non-key attribute names
 that are projected into the secondary index. The total count of
-attributes provided in I<NonKeyAttributes>, summed across all of the
+attributes provided in C<NonKeyAttributes>, summed across all of the
 secondary indexes, must not exceed 20. If you project the same
 attribute into two different indexes, this counts as two distinct
 attributes when determining the total.
@@ -117,7 +107,7 @@ attributes when determining the total.
 
 =item *
 
-I<ProvisionedThroughput> - The provisioned throughput settings for the
+C<ProvisionedThroughput> - The provisioned throughput settings for the
 global secondary index, consisting of read and write capacity units.
 
 =back
@@ -125,64 +115,68 @@ global secondary index, consisting of read and write capacity units.
 
 
 
-
-
-
-
-
-
-=head2 B<REQUIRED> KeySchema => ArrayRef[Paws::DynamoDB::KeySchemaElement]
-
-  
+=head2 B<REQUIRED> KeySchema => ArrayRef[L<Paws::DynamoDB::KeySchemaElement>]
 
 Specifies the attributes that make up the primary key for a table or an
-index. The attributes in I<KeySchema> must also be defined in the
-I<AttributeDefinitions> array. For more information, see Data Model in
+index. The attributes in C<KeySchema> must also be defined in the
+C<AttributeDefinitions> array. For more information, see Data Model in
 the I<Amazon DynamoDB Developer Guide>.
 
-Each I<KeySchemaElement> in the array is composed of:
+Each C<KeySchemaElement> in the array is composed of:
 
 =over
 
 =item *
 
-I<AttributeName> - The name of this key attribute.
+C<AttributeName> - The name of this key attribute.
 
 =item *
 
-I<KeyType> - Determines whether the key attribute is C<HASH> or
-C<RANGE>.
+C<KeyType> - The role that the key attribute will assume:
+
+=over
+
+=item *
+
+C<HASH> - partition key
+
+=item *
+
+C<RANGE> - sort key
 
 =back
 
-For a primary key that consists of a hash attribute, you must provide
-exactly one element with a I<KeyType> of C<HASH>.
+=back
 
-For a primary key that consists of hash and range attributes, you must
+The partition key of an item is also known as its I<hash attribute>.
+The term "hash attribute" derives from DynamoDB' usage of an internal
+hash function to evenly distribute data items across partitions, based
+on their partition key values.
+
+The sort key of an item is also known as its I<range attribute>. The
+term "range attribute" derives from the way DynamoDB stores items with
+the same partition key physically close together, in sorted order by
+the sort key value.
+
+For a simple primary key (partition key), you must provide exactly one
+element with a C<KeyType> of C<HASH>.
+
+For a composite primary key (partition key and sort key), you must
 provide exactly two elements, in this order: The first element must
-have a I<KeyType> of C<HASH>, and the second element must have a
-I<KeyType> of C<RANGE>.
+have a C<KeyType> of C<HASH>, and the second element must have a
+C<KeyType> of C<RANGE>.
 
 For more information, see Specifying the Primary Key in the I<Amazon
 DynamoDB Developer Guide>.
 
 
 
-
-
-
-
-
-
-
-=head2 LocalSecondaryIndexes => ArrayRef[Paws::DynamoDB::LocalSecondaryIndex]
-
-  
+=head2 LocalSecondaryIndexes => ArrayRef[L<Paws::DynamoDB::LocalSecondaryIndex>]
 
 One or more local secondary indexes (the maximum is five) to be created
-on the table. Each index is scoped to a given hash key value. There is
-a 10 GB size limit per hash key; otherwise, the size of a local
-secondary index is unconstrained.
+on the table. Each index is scoped to a given partition key value.
+There is a 10 GB size limit per partition key value; otherwise, the
+size of a local secondary index is unconstrained.
 
 Each local secondary index in the array includes the following:
 
@@ -190,18 +184,17 @@ Each local secondary index in the array includes the following:
 
 =item *
 
-I<IndexName> - The name of the local secondary index. Must be unique
+C<IndexName> - The name of the local secondary index. Must be unique
 only for this table.
 
 =item *
 
-I<KeySchema> - Specifies the key schema for the local secondary index.
-The key schema must begin with the same hash key attribute as the
-table.
+C<KeySchema> - Specifies the key schema for the local secondary index.
+The key schema must begin with the same partition key as the table.
 
 =item *
 
-I<Projection> - Specifies attributes that are copied (projected) from
+C<Projection> - Specifies attributes that are copied (projected) from
 the table into the index. These are in addition to the primary key
 attributes and index key attributes, which are automatically projected.
 Each attribute specification is composed of:
@@ -210,7 +203,7 @@ Each attribute specification is composed of:
 
 =item *
 
-I<ProjectionType> - One of the following:
+C<ProjectionType> - One of the following:
 
 =over
 
@@ -222,7 +215,7 @@ index.
 =item *
 
 C<INCLUDE> - Only the specified table attributes are projected into the
-index. The list of projected attributes are in I<NonKeyAttributes>.
+index. The list of projected attributes are in C<NonKeyAttributes>.
 
 =item *
 
@@ -232,9 +225,9 @@ C<ALL> - All of the table attributes are projected into the index.
 
 =item *
 
-I<NonKeyAttributes> - A list of one or more non-key attribute names
+C<NonKeyAttributes> - A list of one or more non-key attribute names
 that are projected into the secondary index. The total count of
-attributes provided in I<NonKeyAttributes>, summed across all of the
+attributes provided in C<NonKeyAttributes>, summed across all of the
 secondary indexes, must not exceed 20. If you project the same
 attribute into two different indexes, this counts as two distinct
 attributes when determining the total.
@@ -246,29 +239,66 @@ attributes when determining the total.
 
 
 
+=head2 B<REQUIRED> ProvisionedThroughput => L<Paws::DynamoDB::ProvisionedThroughput>
+
+Represents the provisioned throughput settings for a specified table or
+index. The settings can be modified using the C<UpdateTable> operation.
+
+For current minimum and maximum provisioned throughput values, see
+Limits in the I<Amazon DynamoDB Developer Guide>.
 
 
 
+=head2 StreamSpecification => L<Paws::DynamoDB::StreamSpecification>
+
+The settings for DynamoDB Streams on the table. These settings consist
+of:
+
+=over
+
+=item *
+
+C<StreamEnabled> - Indicates whether Streams is to be enabled (true) or
+disabled (false).
+
+=item *
+
+C<StreamViewType> - When an item in the table is modified,
+C<StreamViewType> determines what information is written to the table's
+stream. Valid values for C<StreamViewType> are:
+
+=over
+
+=item *
+
+C<KEYS_ONLY> - Only the key attributes of the modified item are written
+to the stream.
+
+=item *
+
+C<NEW_IMAGE> - The entire item, as it appears after it was modified, is
+written to the stream.
+
+=item *
+
+C<OLD_IMAGE> - The entire item, as it appeared before it was modified,
+is written to the stream.
+
+=item *
+
+C<NEW_AND_OLD_IMAGES> - Both the new and the old item images of the
+item are written to the stream.
+
+=back
+
+=back
 
 
 
-=head2 B<REQUIRED> ProvisionedThroughput => Paws::DynamoDB::ProvisionedThroughput
-
-  
 
 =head2 B<REQUIRED> TableName => Str
 
-  
-
 The name of the table to create.
-
-
-
-
-
-
-
-
 
 
 

@@ -1,11 +1,10 @@
 
-package Paws::ElasticTranscoder::CreatePresetResponse {
+package Paws::ElasticTranscoder::CreatePresetResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has Preset => (is => 'ro', isa => 'Paws::ElasticTranscoder::Preset');
   has Warning => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 1;
 
 ### main pod documentation begin ###
@@ -16,24 +15,14 @@ Paws::ElasticTranscoder::CreatePresetResponse
 
 =head1 ATTRIBUTES
 
-=head2 Preset => Paws::ElasticTranscoder::Preset
 
-  
+=head2 Preset => L<Paws::ElasticTranscoder::Preset>
 
 A section of the response body that provides information about the
 preset that is created.
 
 
-
-
-
-
-
-
-
 =head2 Warning => Str
-
-  
 
 If the preset settings don't comply with the standards for the video
 codec but Elastic Transcoder created the preset, this message explains
@@ -42,13 +31,7 @@ Transcoder created the preset because the settings might produce
 acceptable output.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut

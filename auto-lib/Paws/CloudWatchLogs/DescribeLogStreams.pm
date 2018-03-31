@@ -1,19 +1,18 @@
 
-package Paws::CloudWatchLogs::DescribeLogStreams {
+package Paws::CloudWatchLogs::DescribeLogStreams;
   use Moose;
-  has descending => (is => 'ro', isa => 'Bool');
-  has limit => (is => 'ro', isa => 'Int');
-  has logGroupName => (is => 'ro', isa => 'Str', required => 1);
-  has logStreamNamePrefix => (is => 'ro', isa => 'Str');
-  has nextToken => (is => 'ro', isa => 'Str');
-  has orderBy => (is => 'ro', isa => 'Str');
+  has Descending => (is => 'ro', isa => 'Bool', traits => ['NameInRequest'], request_name => 'descending' );
+  has Limit => (is => 'ro', isa => 'Int', traits => ['NameInRequest'], request_name => 'limit' );
+  has LogGroupName => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'logGroupName' , required => 1);
+  has LogStreamNamePrefix => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'logStreamNamePrefix' );
+  has NextToken => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'nextToken' );
+  has OrderBy => (is => 'ro', isa => 'Str', traits => ['NameInRequest'], request_name => 'orderBy' );
 
   use MooseX::ClassAttribute;
 
   class_has _api_call => (isa => 'Str', is => 'ro', default => 'DescribeLogStreams');
   class_has _returns => (isa => 'Str', is => 'ro', default => 'Paws::CloudWatchLogs::DescribeLogStreamsResponse');
   class_has _result_key => (isa => 'Str', is => 'ro');
-}
 1;
 
 ### main pod documentation begin ###
@@ -28,7 +27,7 @@ This class represents the parameters used for calling the method DescribeLogStre
 Amazon CloudWatch Logs service. Use the attributes of this class
 as arguments to method DescribeLogStreams.
 
-You shouln't make instances of this class. Each attribute should be used as a named argument in the call to DescribeLogStreams.
+You shouldn't make instances of this class. Each attribute should be used as a named argument in the call to DescribeLogStreams.
 
 As an example:
 
@@ -38,95 +37,60 @@ Values for attributes that are native types (Int, String, Float, etc) can passed
 
 =head1 ATTRIBUTES
 
-=head2 descending => Bool
 
-  
+=head2 Descending => Bool
 
-If set to true, results are returned in descending order. If you don't
-specify a value or set it to false, results are returned in ascending
-order.
-
+If the value is true, results are returned in descending order. If the
+value is to false, results are returned in ascending order. The default
+value is false.
 
 
 
+=head2 Limit => Int
+
+The maximum number of items returned. If you don't specify a value, the
+default is up to 50 items.
 
 
 
+=head2 B<REQUIRED> LogGroupName => Str
+
+The name of the log group.
 
 
 
-=head2 limit => Int
+=head2 LogStreamNamePrefix => Str
 
-  
+The prefix to match.
 
-The maximum number of items returned in the response. If you don't
-specify a value, the request would return up to 50 items.
-
+iIf C<orderBy> is C<LastEventTime>,you cannot specify this parameter.
 
 
 
+=head2 NextToken => Str
+
+The token for the next set of items to return. (You received this token
+from a previous call.)
 
 
 
+=head2 OrderBy => Str
 
+If the value is C<LogStreamName>, the results are ordered by log stream
+name. If the value is C<LastEventTime>, the results are ordered by the
+event time. The default value is C<LogStreamName>.
 
+If you order the results by event time, you cannot specify the
+C<logStreamNamePrefix> parameter.
 
-=head2 B<REQUIRED> logGroupName => Str
+lastEventTimestamp represents the time of the most recent log event in
+the log stream in CloudWatch Logs. This number is expressed as the
+number of milliseconds after Jan 1, 1970 00:00:00 UTC.
+lastEventTimeStamp updates on an eventual consistency basis. It
+typically updates in less than an hour from ingestion, but may take
+longer in some rare situations.
 
-  
-
-=head2 logStreamNamePrefix => Str
-
-  
-
-Will only return log streams that match the provided
-logStreamNamePrefix. If you don't specify a value, no prefix filter is
-applied.
-
-
-
-
-
-
-
-
-
-
-=head2 nextToken => Str
-
-  
-
-A string token used for pagination that points to the next page of
-results. It must be a value obtained from the response of the previous
-C<DescribeLogStreams> request.
-
-
-
-
-
-
-
-
-
-
-=head2 orderBy => Str
-
-  
-
-Specifies what to order the returned log streams by. Valid arguments
-are 'LogStreamName' or 'LastEventTime'. If you don't specify a value,
-results are ordered by LogStreamName. If 'LastEventTime' is chosen, the
-request cannot also contain a logStreamNamePrefix.
-
-
-
-
-
-
-
-
-
-
+Valid values are: C<"LogStreamName">, C<"LastEventTime">
 
 
 =head1 SEE ALSO

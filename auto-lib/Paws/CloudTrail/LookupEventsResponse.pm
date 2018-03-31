@@ -1,11 +1,10 @@
 
-package Paws::CloudTrail::LookupEventsResponse {
+package Paws::CloudTrail::LookupEventsResponse;
   use Moose;
-  with 'Paws::API::ResultParser';
   has Events => (is => 'ro', isa => 'ArrayRef[Paws::CloudTrail::Event]');
   has NextToken => (is => 'ro', isa => 'Str');
 
-}
+  has _request_id => (is => 'ro', isa => 'Str');
 
 ### main pod documentation begin ###
 
@@ -15,25 +14,15 @@ Paws::CloudTrail::LookupEventsResponse
 
 =head1 ATTRIBUTES
 
-=head2 Events => ArrayRef[Paws::CloudTrail::Event]
 
-  
+=head2 Events => ArrayRef[L<Paws::CloudTrail::Event>]
 
 A list of events returned based on the lookup attributes specified and
 the CloudTrail event. The events list is sorted by time. The most
 recent event is listed first.
 
 
-
-
-
-
-
-
-
 =head2 NextToken => Str
-
-  
 
 The token to use to get the next page of results after a previous API
 call. If the token does not appear, there are no more results to
@@ -43,13 +32,7 @@ AttributeKey of 'Username' with a value of 'root', the call with
 NextToken should include those same parameters.
 
 
-
-
-
-
-
-
-
+=head2 _request_id => Str
 
 
 =cut
